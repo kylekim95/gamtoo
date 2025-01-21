@@ -7,8 +7,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-
-      {children}
+      <body className="container px-8 py-4 min-h-[300px]">
+        {children}
+      </body>
     </html>
   );
 }
