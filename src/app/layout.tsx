@@ -1,5 +1,5 @@
 import "./globals.css";
-
+// 푸쉬 테스트
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -7,9 +7,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="container px-8 py-4 min-h-[300px]">
-        {children}
-      </body>
+      <body className="container px-8 py-4 min-h-[300px]">{children}</body>
     </html>
   );
 }
