@@ -18,6 +18,7 @@ export default function QuizPage() {
     'bg-red-100',
     'bg-red-50'
   ];
+  const dummyImage = 'http://www.cha.go.kr/unisearch/images/treasure/1618146.jpg';
 
   //TODO : Custom Hook
   const refs = useRef(data.map(()=>createRef<HTMLDivElement>()));
@@ -34,7 +35,6 @@ export default function QuizPage() {
         }
       });
     }, { threshold: 0.5 });
-    console.log(refs);
     refs.current.forEach((elem)=>{
       if(elem.current !== null) observer.observe(elem.current);
     });
@@ -46,7 +46,7 @@ export default function QuizPage() {
         <span className='text-[#FF8341] text-[36px] md:text-[48px] font-bold'>문화재 퀴즈</span>
       </div>
       <div className='w-[75vw] flex flex-col items-center'>
-        {data.map((elem, index)=><ProblemCard key={index} ref={refs.current[index]} /> )}
+        {data.map((elem, index)=><ProblemCard key={index} ref={refs.current[index]} url={dummyImage} /> )}
       </div>
     </div>
   )

@@ -2,6 +2,7 @@ import React from 'react'
 
 type ProblemCardProps = {
   ref: React.RefObject<HTMLDivElement | null>;
+  url: string
 }
 
 export default function ProblemCard(props : ProblemCardProps) {
@@ -12,8 +13,11 @@ export default function ProblemCard(props : ProblemCardProps) {
       rounded-lg drop-shadow-xl overflow-hidden
       flex
     ' ref={props.ref}>
-      <div className='w-[10%] h-full bg-slate-300 flex justify-center items-center'>
-        <div className='w-[50px] aspect-square bg-black rounded-full'></div>
+      <div 
+        className={`w-[10%] h-full flex justify-center items-center bg-[#00000080]`}
+        style={{backgroundImage: `url(${props.url})`, backgroundSize:'cover', backgroundPosition: 'center', backgroundBlendMode: 'multiply'}}
+      >
+        <div className='w-[50%] w-max-[50px] bg-black aspect-square rounded-full'></div>
       </div>
       <div className='w-[90%] h-full flex flex-col'>
         <div className='w-full h-[10%] min-h-[50px] flex items-end '>
@@ -27,7 +31,7 @@ export default function ProblemCard(props : ProblemCardProps) {
             <div className='bg-black opacity-75 flex justify-center items-center'><span className='text-sm md:text-lg'>선택지 3</span></div>
             <div className='bg-black opacity-75 flex justify-center items-center'><span className='text-sm md:text-lg'>선택지 4</span></div>
           </div>
-          <div className='w-[30%] aspect-square bg-black rounded-lg'></div>
+          <div className='w-[30%] aspect-square rounded-lg' style={{backgroundImage: `url(${props.url})`, backgroundSize: 'contain'}}></div>
         </div>
       </div>
     </div>
