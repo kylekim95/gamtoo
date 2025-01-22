@@ -30,21 +30,21 @@ export default function LoginPage() {
               <input
                 type="text"
                 placeholder="email"
-                className="px-3 py-2 bg-gray-100 rounded-md placeholder:capitalize placeholder:font-bold placeholder:text-gray-600 focus:outline-none"
+                className="px-3 text-black py-2 bg-gray-100 rounded-md placeholder:capitalize placeholder:font-bold placeholder:text-gray-300 focus:outline-none"
               />
               <input
                 type="password"
                 placeholder="Password"
-                className="px-3 py-2 bg-gray-100 rounded-md placeholder:capitalize placeholder:font-bold placeholder:text-gray-600 focus:outline-none"
+                className="px-3 py-2 text-black bg-gray-100 rounded-md placeholder:capitalize placeholder:font-bold placeholder:text-gray-300 focus:outline-none"
               />
               <input
                 type="submit"
                 value="로그인"
-                className="px-4 py-2 text-lg font-medium text-white bg-[#BF9AF0] rounded-md cursor-pointer hover:bg-blue-600"
+                className="px-4 py-2 text-lg font-medium text-white bg-[#BF9AF0] rounded-md cursor-pointer hover:bg-[#AE7CF1]"
               />
             </form>
             <p className="mt-5 text-sm uppercase text-black">
-              아직 탐투의 회원이 아닌신가요?{'   '}
+              아직 감투의 회원이 아닌신가요?{'   '}
               <button
                 className="font-bold text-[#BF9AF0] hover:underline"
                 onClick={toggle}
@@ -68,27 +68,27 @@ export default function LoginPage() {
               <input
                 type="text"
                 placeholder="email"
-                className="px-3 py-2 bg-gray-100 rounded-md placeholder:capitalize placeholder:font-bold placeholder:text-gray-600 focus:outline-none"
+                className="px-3 py-2 bg-gray-100 text-black rounded-md placeholder:capitalize placeholder:font-bold placeholder:text-gray-300 focus:outline-none"
               />
               <input
                 type="email"
                 placeholder="name"
-                className="px-3 py-2 bg-gray-100 rounded-md placeholder:capitalize placeholder:font-bold placeholder:text-gray-600 focus:outline-none"
+                className="px-3 py-2 bg-gray-100 rounded-md text-black placeholder:capitalize placeholder:font-bold placeholder:text-gray-300 focus:outline-none"
               />
               <input
                 type="password"
                 placeholder="Create Password"
-                className="px-3 py-2 bg-gray-100 rounded-md placeholder:capitalize placeholder:font-bold placeholder:text-gray-600 focus:outline-none"
+                className="px-3 py-2 bg-gray-100 rounded-md text-black placeholder:capitalize placeholder:font-bold placeholder:text-gray-300 focus:outline-none"
               />
               <input
                 type="password"
                 placeholder="Confirm Password"
-                className="px-3 py-2 bg-gray-100 rounded-md placeholder:capitalize placeholder:text-gray-600 focus:outline-none"
+                className="px-3 py-2 bg-gray-100 rounded-md text-black placeholder:capitalize placeholder:text-gray-300 focus:outline-none"
               />
               <input
                 type="submit"
                 value="회원가입"
-                className="px-4 py-2 text-lg font-medium text-white bg-[#EE765E] rounded-md cursor-pointer hover:bg-orange-600"
+                className="px-4 py-2 text-lg font-medium text-white bg-[#EE765E] rounded-md cursor-pointer hover:bg-[#F56042]"
               />
             </form>
             <p className="mt-5 text-sm uppercase text-black">
