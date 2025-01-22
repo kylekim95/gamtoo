@@ -1,13 +1,14 @@
 "use client";
 import BasicMap from "@/app/map/kakaoMap";
 import axios from "axios";
-import { Accordion, AccordionItem as Item, useAccordionState } from "@szhsin/react-accordion";
+import { Accordion, AccordionItem as Item } from "@szhsin/react-accordion";
 import { ChangeEvent, SetStateAction, useEffect, useState } from "react";
 import Image from "next/image";
 import MultiRange from "@/app/map/rangeSlider";
 import SelectBox from "./slelctBox";
 import { SelectProps } from "../../../types/Map";
 import {
+  ControlledAccordion,
   useAccordionProvider
 } from '@szhsin/react-accordion';
 const selectList:SelectProps[] = [
@@ -102,14 +103,18 @@ const AccordionItem = ({ header, ...rest }: any) => (
 );
 export default function MapPage() {
   const [filters, setFilters] = useState<Record<string, string | number |undefined>>({});
+  const [inputItem, setInputItem] = useState<Record<string, string>>({});
   const [item, setItem] = useState([]);
-
-  
-  const { getItemState, toggle, toggleAll } = useAccordionState();
-  console.log(getItemState)
+  const [isOpen, setIsOpen] = useState<boolean>(true);
   const xmlToJsonFilterHandler =(data:any)=>{
     var parseString = require("xml2js").parseString;
-    parseString(data.data, function (err: any, result: any) {
+    parseString(data.data,{explicitArray: false}, function (err: any, result: any) {
+      if(result.result.totalCnt === '0'){
+        alert("검색결과가 없습니다.");
+        
+        return;
+      }
+      console.log(result.result.item)
       setItem(result.result.item);
     });
   }
@@ -140,16 +145,25 @@ export default function MapPage() {
         [name]: value,
       }));
     }
+  
   };
 
   const filterButtonHandler = async () => {
+    console.log(isOpen);
+  
     const cleanedFilters: Record<string, string> = Object.fromEntries(
       Object.entries(filters)
-        .filter(([_, value]) => value !== undefined)
+        .filter(([key, value]) => {
+          if (!isOpen) {
+            return key === "ccbaMnm1" && value !== undefined;
+          }
+          return value !== undefined;
+        })
         .map(([key, value]) => [key, String(value)])
     );
     const params = new URLSearchParams(cleanedFilters);
-    console.log(params.toString())
+    console.log(cleanedFilters);
+  
     const data = await axios.get(
       `http://www.khs.go.kr/cha/SearchKindOpenapiList.do?${params.toString()}`
     );
@@ -163,7 +177,11 @@ export default function MapPage() {
       <BasicMap data={item}>
         <div className="absolute left-10 max-w-96 z-50 top-36 ">
           <div className=" bg-white flex flex-col gap-3 p-8 w-full rounded-3xl shadow-lg">
-            <Accordion transition initialEntered>
+            <Accordion 
+              onStateChange={({current}) => {
+                 setIsOpen(current.isEnter)
+              }}
+            transition initialEntered>
               <AccordionItem header={"카테고리별 검색"}>
                 <div>
                   <div className="w-full flex gap-1 py-2 border-b-1">
@@ -173,9 +191,9 @@ export default function MapPage() {
                     <h4 className="text-xl text-neutral-900 font-bold ">시대 </h4>
                   </div>
                   <MultiRange
-                    fixedMinPrice={1200}
+                    fixedMinPrice={1000}
                     fixedMaxPrice={2025}
-                    min={1200}
+                    min={1000}
                     max={2025}
                     handleValueChange={(minValue, maxValue) =>
                       handleChange({ minValue, maxValue })
