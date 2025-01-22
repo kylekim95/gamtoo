@@ -86,8 +86,8 @@ const FestivalPage = () => {
       <div className="bg-festivalBg pt-12 pb-12 mt-2">
         <div className="w-5/6 m-auto">
           <p className="text-black font-bold text-3xl ml-auto mb-4">인기 행사</p>
-          <div className={"flex"}>
-            <div className="w-1/6 m-auto ml-0">
+          <div className="flex justify-between">
+            <div className="w-1/6 ml-0">
               <Image className="rounded-lg" src={festivalImage} alt={""}/>
               <div className="absolute">
                 <p className="relative -top-10 left-2 italic text-5xl ">1</p>
@@ -95,7 +95,7 @@ const FestivalPage = () => {
               <p className="text-black mt-2 font-semibold text-2xl">{festivalItems[0].subTitle}</p>
               <p className="text-black">{festivalItems[0].subDesc_2}</p>
             </div>
-            <div className="w-1/6 m-auto ml-0">
+            <div className="w-1/6  ml-0">
               <Image className="rounded-lg" src={festivalImage} alt={""}/>
               <div className="absolute">
                 <p className="relative -top-10 left-2 italic text-5xl ">2</p>
@@ -103,7 +103,7 @@ const FestivalPage = () => {
               <p className="text-black mt-2 font-semibold text-2xl">{festivalItems[0].subTitle}</p>
               <p className="text-black">{festivalItems[0].subDesc_2}</p>
             </div>
-            <div className="w-1/6 m-auto ml-0">
+            <div className="w-1/6  ml-0">
               <Image className="rounded-lg" src={festivalImage} alt={""}/>
               <div className="absolute">
                 <p className="relative -top-10 left-2 italic text-5xl ">3</p>
@@ -111,7 +111,7 @@ const FestivalPage = () => {
               <p className="text-black mt-2 font-semibold text-2xl">{festivalItems[0].subTitle}</p>
               <p className="text-black">{festivalItems[0].subDesc_2}</p>
             </div>
-            <div className="w-1/6 m-auto ml-0">
+            <div className="w-1/6  ml-0">
               <Image className="rounded-lg" src={festivalImage} alt={""}/>
               <div className="absolute">
                 <p className="relative -top-10 left-2 italic text-5xl ">4</p>
@@ -119,7 +119,7 @@ const FestivalPage = () => {
               <p className="text-black mt-2 font-semibold text-2xl">{festivalItems[0].subTitle}</p>
               <p className="text-black">{festivalItems[0].subDesc_2}</p>
             </div>
-            <div className="w-1/6 m-auto ml-0">
+            <div className="w-1/6  ml-0">
               <Image className="rounded-lg" src={festivalImage} alt={""}/>
               <div className="absolute">
                 <p className="relative -top-10 left-2 italic text-5xl ">5</p>
