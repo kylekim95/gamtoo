@@ -1,5 +1,4 @@
 import "./globals.css";
-// 푸쉬 테스트
 function GamtooIcon() {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="86" height="67" fill="none">
