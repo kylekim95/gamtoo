@@ -41,11 +41,11 @@ export default function QuizPage() {
   }, [refs]);
 
   return (
-    <div>
+    <div className='flex flex-col items-center'>
       <div className='w-[100vw] h-[200px] bg-[#F0F0F0] flex justify-center items-center'>
-        <span className='text-[#FF8341] text-[48px] font-bold'>문화재 퀴즈</span>
+        <span className='text-[#FF8341] text-[36px] md:text-[48px] font-bold'>문화재 퀴즈</span>
       </div>
-      <div className='w-[100vw] mx-[-32px] flex flex-col items-center'>
+      <div className='w-[75vw] flex flex-col items-center'>
         {data.map((elem, index)=><ProblemCard key={index} ref={refs.current[index]} /> )}
       </div>
     </div>
