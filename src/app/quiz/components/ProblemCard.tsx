@@ -17,7 +17,7 @@ export default function ProblemCard(props : ProblemCardProps) {
       flex
     ' ref={props.ref}>
       <div 
-        className={`w-[10%] h-full flex justify-center items-center bg-[#00000080]`}
+        className={`w-[10%] h-full flex justify-center items-center bg-[#00000080] rounded-lg`}
         style={{backgroundImage: `url(${props.url})`, backgroundSize:'cover', backgroundPosition: 'center', backgroundBlendMode: 'multiply'}}
       >
         {/* <CheckIcon width={40} height={40} color={"#77FF77"}/> */}
