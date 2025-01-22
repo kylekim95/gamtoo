@@ -19,3 +19,42 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+.rdp-root {
+    --rdp-accent-color: indigo; /* Change the accent color to indigo. */
+    --rdp-accent-background-color: #f0f0f0; /* Change the accent background color. */
+    /* Add more CSS variables here. */
+    thead > tr> th{
+        color: #848484;
+    }
+    thead > tr> th:first-child{
+        color: red;
+    }
+    thead > tr> th:last-child{
+        color: blue;
+    }
+    .rdp-caption_label {
+        color: #848484;
+    }
+    /*.rdp-weekdays:last-child{*/
+    /*    color: blue;*/
+    /*}*/
+    .rdp-day {
+        align-items: center;
+        box-shadow: none;
+    }
+    .rdp-day_button {
+        margin:auto;
+        color: #848484;
+        width: 80%;
+        height: 80%;
+        background-color: #EBEBEB;
+        border-radius: 50px;
+        box-shadow: none;
+    }
+    tbody > tr > td:first-child > button{
+        color: red;
+    }
+    tbody > tr > td:last-child > button{
+        color: blue;
+    }
+}
