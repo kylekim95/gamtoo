@@ -23,7 +23,7 @@ interface Item {
 
 
 const FestivalPage = () => {
-  const [festivalItem, setFestivalItem] = React.useState<Item[]>([{
+  const [festivalItems, setFestivalItems] = React.useState<Item[]>([{
     seqNo: "",
     siteCode: "",
     subTitle: "",
@@ -68,7 +68,7 @@ const FestivalPage = () => {
         subDate: e.subDate
       }
     });
-    setFestivalItem(items.splice(0, 50))
+    setFestivalItems(items.splice(0, 50))
   }
   return (
     <div>
