@@ -1,6 +1,8 @@
 "use client"
 import {parseStringPromise} from "xml2js";
 import React from "react";
+import festivalImage from "../../../public/festivalPage_festivalPoster.jpg"
+import Image from "next/image";
 
 interface Item {
   seqNo: string;
@@ -40,40 +42,87 @@ const FestivalPage = () => {
     sido: "",
     gugun: "",
     subDate: ""
-  }])
+  }]);
   React.useEffect(() => {
     testData();
-  })
+    console.log(festivalItems)
+  },[])
   async function testData() {
     const data = await fetch('https://www.cha.go.kr/cha/openapi/selectEventListOpenapi.do?searchYear=2024&searchMonth=6');
     const text = await data.text()
     const result = await parseStringPromise(text);
     const items = result.result.item.map((e: Item) => {
       return {
-        seqNo: e.seqNo,
-        siteCode: e.siteCode,
-        subTitle: e.subTitle,
-        subContent: e.subContent,
-        sDate: e.sDate,
-        eDate: e.eDate,
+        seqNo: e.seqNo[0],
+        siteCode: e.siteCode[0],
+        subTitle: e.subTitle[0],
+        subContent: e.subContent[0],
+        sDate: e.sDate[0],
+        eDate: e.eDate[0],
         groupName: e.groupName,
         contact: e.contact,
-        subDesc: e.subDesc,
+        subDesc: e.subDesc[0],
         subPath: e.subPath,
-        subDesc_2: e.subDesc_2,
-        subDesc_3: e.subDesc_3,
+        subDesc_2: e.subDesc_2[0],
+        subDesc_3: e.subDesc_3[0],
         mainImageTemp: e.mainImageTemp,
-        sido: e.sido,
-        gugun: e.gugun,
-        subDate: e.subDate
+        sido: e.sido[0],
+        gugun: e.gugun[0],
+        subDate: e.subDate[0]
       }
     });
     setFestivalItems(items.splice(0, 50))
   }
   return (
     <div>
-      <h1>Festival List</h1>
-      
+      <div className="bg-festivalBg pt-12 pb-12 mt-2">
+        <div className="w-5/6 m-auto">
+          <p className="text-black font-bold text-3xl ml-auto mb-4">인기 행사</p>
+          <div className={"flex"}>
+            <div className="w-1/6 m-auto ml-0">
+              <Image className="rounded-lg" src={festivalImage} alt={""}/>
+              <div className="absolute">
+                <p className="relative -top-10 left-2 italic text-5xl ">1</p>
+              </div>
+              <p className="text-black mt-2 font-semibold text-2xl">{festivalItems[0].subTitle}</p>
+              <p className="text-black">{festivalItems[0].subDesc_2}</p>
+            </div>
+            <div className="w-1/6 m-auto ml-0">
+              <Image className="rounded-lg" src={festivalImage} alt={""}/>
+              <div className="absolute">
+                <p className="relative -top-10 left-2 italic text-5xl ">2</p>
+              </div>
+              <p className="text-black mt-2 font-semibold text-2xl">{festivalItems[0].subTitle}</p>
+              <p className="text-black">{festivalItems[0].subDesc_2}</p>
+            </div>
+            <div className="w-1/6 m-auto ml-0">
+              <Image className="rounded-lg" src={festivalImage} alt={""}/>
+              <div className="absolute">
+                <p className="relative -top-10 left-2 italic text-5xl ">3</p>
+              </div>
+              <p className="text-black mt-2 font-semibold text-2xl">{festivalItems[0].subTitle}</p>
+              <p className="text-black">{festivalItems[0].subDesc_2}</p>
+            </div>
+            <div className="w-1/6 m-auto ml-0">
+              <Image className="rounded-lg" src={festivalImage} alt={""}/>
+              <div className="absolute">
+                <p className="relative -top-10 left-2 italic text-5xl ">4</p>
+              </div>
+              <p className="text-black mt-2 font-semibold text-2xl">{festivalItems[0].subTitle}</p>
+              <p className="text-black">{festivalItems[0].subDesc_2}</p>
+            </div>
+            <div className="w-1/6 m-auto ml-0">
+              <Image className="rounded-lg" src={festivalImage} alt={""}/>
+              <div className="absolute">
+                <p className="relative -top-10 left-2 italic text-5xl ">5</p>
+              </div>
+              <p className="text-black mt-2 font-semibold text-2xl">{festivalItems[0].subTitle}</p>
+              <p className="text-black">{festivalItems[0].subDesc_2}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   );
 };
