@@ -52,17 +52,18 @@ export default function BasicMap({
   const [item, setItem] = useState<any>(null);
 
   const getDetailData = async (pos: any) => {
-    const url = `/cha/SearchKindOpenapiDt.do?ccbaKdcd=${pos.ccbaKdcd}&ccbaCtcd=${pos.ccbaCtcd}&ccbaAsno=${pos.ccbaAsno}&ccbaCpno=${pos.ccbaCpno}`;
+    const url = `http://www.khs.go.kr/cha/SearchKindOpenapiDt.do?ccbaKdcd=${pos.ccbaKdcd}&ccbaCtcd=${pos.ccbaCtcd}&ccbaAsno=${pos.ccbaAsno}&ccbaCpno=${pos.ccbaCpno}`;
     const response = await axios.get(url);
     const parseString = require('xml2js').parseString;
- const jsonData = parseString(response.data, function (err: any, result: any) {
-   return result
-});
-    if (jsonData && jsonData.result) {
+  parseString(response.data,{explicitArray: false}, function (err: any, result: any) {
+    if (result && result.result) {
       setOpenOverlayId(pos.no); // pos.no로 설정
-      setItem(jsonData.result); // item 데이터 업데이트
+      setItem(result.result); // item 데이터 업데이트
+      console.log(result);
     }
-    console.log(jsonData.result); // 반환된 데이터를 확인
+});
+
+
   };
 
   return (

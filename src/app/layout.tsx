@@ -1,3 +1,4 @@
+import Script from "next/script";
 import "./globals.css";
 function GamtooIcon() {
   return (
@@ -33,6 +34,10 @@ function GamtooIcon() {
 function Header() {
   return (
     <header className=" flex flex-row justify-between items-end h-30 p-7  bg-[#FFFFFF] min-w-full">
+              <Script
+          src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.KAKAO_MAP_API_KEY}&libraries=services,clusterer&autoload=false`}
+          strategy="beforeInteractive"
+        />
       <div className="left flex ">
         <div className="icon flex gap-5">
           {" "}
