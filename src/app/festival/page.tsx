@@ -3,6 +3,10 @@ import {parseStringPromise} from "xml2js";
 import React from "react";
 import festivalImage from "../../../public/festivalPage_festivalPoster.jpg"
 import Image from "next/image";
+import { parseISO, format } from 'date-fns'
+import { ko } from 'date-fns/locale'
+import {DayPicker, getDefaultClassNames} from 'react-day-picker'
+import 'react-day-picker/dist/style.css'
 
 interface Item {
   seqNo: string;
@@ -43,10 +47,16 @@ const FestivalPage = () => {
     gugun: "",
     subDate: ""
   }]);
+  const defaultClassNames = getDefaultClassNames();
+  const partyDate = parseISO("2024-06-10");
+  console.log("partyDate", partyDate)
+
   React.useEffect(() => {
     testData();
     console.log(festivalItems)
-  },[])
+  },[]);
+
+
   async function testData() {
     const data = await fetch('https://www.cha.go.kr/cha/openapi/selectEventListOpenapi.do?searchYear=2024&searchMonth=6');
     const text = await data.text()
@@ -122,7 +132,19 @@ const FestivalPage = () => {
           </div>
         </div>
       </div>
+      <div>
+        <div className="flex bg-black">
+          <div>
 
+          </div>
+          <DayPicker  mode="single" locale={ko} month={partyDate} classNames={{
+            today: `border-amber-500`, // Add a border to today's date
+            selected: `bg-amber-500 border-amber-500 text-white`, // Highlight the selected day
+            root: `${defaultClassNames.root} shadow-lg p-5`, // Add a shadow to the root element
+            chevron: `${defaultClassNames.chevron} fill-amber-500`
+          }} />
+        </div>
+      </div>
     </div>
   );
 };
