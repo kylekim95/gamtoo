@@ -8,9 +8,9 @@ function GamtooIcon() {
       />
       <path
         fill="#fff"
-        fill-rule="evenodd"
+        fillRule="evenodd"
         d="M17.395 35.356c-.217-1.528-.903-2.978-2.022-4.04a35.693 35.693 0 0 1-5.424-6.583c-2.289-3.603 1.973-6.785 6.095-5.679 7.73 2.075 17.921 2.048 27.335-5.212l.001-.001h.002v.001c9.414 7.26 19.605 7.287 27.335 5.212 4.122-1.106 8.383 2.076 6.095 5.679a35.694 35.694 0 0 1-5.424 6.582c-1.12 1.063-1.805 2.513-2.023 4.041a19.667 19.667 0 0 1-.72 3.151c-.505 1.592-2.009 2.554-3.672 2.695l-20.57 1.744a.078.078 0 0 0-.07.08.078.078 0 0 1-.085.08l-.8-.067a.788.788 0 0 0-.135 0l-.8.068a.078.078 0 0 1-.085-.08.078.078 0 0 0-.071-.08l-20.569-1.745c-1.663-.141-3.167-1.103-3.671-2.695a19.667 19.667 0 0 1-.722-3.15Z"
-        clip-rule="evenodd"
+        clipRule="evenodd"
       />
       <path
         fill="#000"
@@ -18,9 +18,9 @@ function GamtooIcon() {
       />
       <path
         fill="#fff"
-        fill-rule="evenodd"
+        fillRule="evenodd"
         d="M13.52 55.472a3.59 3.59 0 0 0-1.243-2.443c-3.029-2.551-7.44-7.29-9.862-13.02-.988-2.338 1.653-4.172 3.999-3.2 8.94 3.704 23.315 5.937 36.481-3.386.043-.031.07-.08.073-.134l.002-.078a.13.13 0 0 1 .207-.1.128.128 0 0 0 .152 0 .13.13 0 0 1 .207.1l.002.078c.002.053.03.103.073.134 13.166 9.323 27.54 7.09 36.48 3.386 2.346-.972 4.988.862 4 3.2-2.421 5.73-6.834 10.469-9.862 13.02a3.59 3.59 0 0 0-1.244 2.443 20.602 20.602 0 0 1-1.448 5.948c-.377.911-1.266 1.466-2.249 1.546l-24.57 1.995a.107.107 0 0 0-.099.11.107.107 0 0 1-.115.111l-1.159-.094a1.143 1.143 0 0 0-.185 0l-1.158.094a.107.107 0 0 1-.116-.11.107.107 0 0 0-.098-.11l-24.57-1.996c-.983-.08-1.873-.635-2.249-1.546a20.605 20.605 0 0 1-1.448-5.948Z"
-        clip-rule="evenodd"
+        clipRule="evenodd"
       />
       <path
         fill="#000"
@@ -32,17 +32,19 @@ function GamtooIcon() {
 
 function Header() {
   return (
-    <header className=" flex flex-row justify-between items-end h-30 p-7  bg-[#FFFFFF] min-w-full">
-      <div className="left flex ">
-        <div className="icon flex gap-5">
+    <header className="flex justify-between items-center h-[106px] px-9 mb-6 border-b-[1px] border-stone-400 bg-[#FFFFFF] min-w-full">
+      <div className="left mt-1 gap-11 flex ">
+        <div className="icon gap-4 flex">
           {" "}
           <GamtooIcon />
           <div className="flex flex-col text-black">
-            <span className="">감춰진 역사 투어</span>
-            <span className="text-4xl font-bold">감투</span>
+            <span className="text-stone-500 font-semibold text-[12px]">
+              감춰진 역사 투어
+            </span>
+            <span className="text-[40px] font-bold">감투</span>
           </div>
         </div>
-        <div className="router flex items-end gap-8 font-semibold text-base text-black">
+        <div className="router flex items-center gap-7 font-semibold text-2xl mt-2 text-black">
           <span>홈으로</span>
           <span>모든문화재</span>
           <div className="flex flex-row ">
@@ -58,7 +60,7 @@ function Header() {
           <span>Q&A</span>
         </div>
       </div>
-      <div className="right flex gap-5">
+      <div className="right mt-1 flex flex-row items-center gap-5">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
@@ -71,7 +73,7 @@ function Header() {
             clipRule="evenodd"
           />
         </svg>
-        <span className="font-medium text-base text-black">로그인</span>
+        <span className="font-semibold text-2xl text-[#424383]">로그인</span>
       </div>
     </header>
   );
@@ -135,6 +137,7 @@ function Footer() {
     </footer>
   );
 }
+
 export default function RootLayout({
   children,
 }: Readonly<{
