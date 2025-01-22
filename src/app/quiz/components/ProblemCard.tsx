@@ -22,10 +22,10 @@ export default function ProblemCard(props : ProblemCardProps) {
         </div>
         <div className='w-full h-[90%] bg-slate-50 flex place-content-evenly items-center'>
           <div className='w-[55%] aspect-[16/9] rounded-lg overflow-hidden grid grid-cols-2 gap-1'>
-            <div className='bg-black opacity-75 flex justify-center items-center'><span>선택지 1</span></div>
-            <div className='bg-black opacity-75 flex justify-center items-center'><span>선택지 2</span></div>
-            <div className='bg-black opacity-75 flex justify-center items-center'><span>선택지 3</span></div>
-            <div className='bg-black opacity-75 flex justify-center items-center'><span>선택지 4</span></div>
+            <div className='bg-black opacity-75 flex justify-center items-center'><span className='text-sm md:text-lg'>선택지 1</span></div>
+            <div className='bg-black opacity-75 flex justify-center items-center'><span className='text-sm md:text-lg'>선택지 2</span></div>
+            <div className='bg-black opacity-75 flex justify-center items-center'><span className='text-sm md:text-lg'>선택지 3</span></div>
+            <div className='bg-black opacity-75 flex justify-center items-center'><span className='text-sm md:text-lg'>선택지 4</span></div>
           </div>
           <div className='w-[30%] aspect-square bg-black rounded-lg'></div>
         </div>
