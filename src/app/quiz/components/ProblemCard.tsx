@@ -1,5 +1,8 @@
 import React from 'react'
 
+import CheckIcon from './svg/Checked'
+import CrossedIcon from './svg/Crossed'
+
 type ProblemCardProps = {
   ref: React.RefObject<HTMLDivElement | null>;
   url: string
@@ -17,10 +20,11 @@ export default function ProblemCard(props : ProblemCardProps) {
         className={`w-[10%] h-full flex justify-center items-center bg-[#00000080]`}
         style={{backgroundImage: `url(${props.url})`, backgroundSize:'cover', backgroundPosition: 'center', backgroundBlendMode: 'multiply'}}
       >
-        <div className='w-[50%] w-max-[50px] bg-black aspect-square rounded-full'></div>
+        {/* <CheckIcon width={40} height={40} color={"#77FF77"}/> */}
+        <CrossedIcon width={40} height={40} color={"#FF2222"}/>
       </div>
       <div className='w-[90%] h-full flex flex-col'>
-        <div className='w-full h-[10%] min-h-[50px] flex items-end '>
+        <div className='w-full h-[10%] min-h-[50px] flex items-center'>
           <span className='text-xl md:text-2xl text-black ml-2'>Q1.</span>
           <span className='text-sm md:text-lg text-black ml-2'>사진 속 문화재의 이름은?</span>
         </div>
