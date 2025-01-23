@@ -52,11 +52,11 @@ export default function QuizPage() {
             <div className='w-full flex flex-col items-center'>
               {data.map((elem, index)=><ProblemCard key={index} ref={refs.current[index]} url={dummyImage} /> )}
             </div>
-            <div className='w-full aspect-[6/1] flex justify-center items-center gap-10'>
-              <div className='h-[50%] aspect-square bg-black rounded-full flex justify-center items-center opacity-75 hover:bg-red-700 transition-colors'>
+            <div className='w-full aspect-[6/1] flex justify-center items-center gap-10 m-2'>
+              <div className='h-[50%] min-h-[125px] aspect-square bg-black rounded-full flex justify-center items-center opacity-75 hover:bg-red-700 transition-colors'>
                 <span className=''>처음으로</span>
               </div>
-              <div className='h-[50%] aspect-square bg-black rounded-full flex justify-center items-center opacity-75 hover:bg-blue-700 transition-colors'>
+              <div className='h-[50%] min-h-[125px] aspect-square bg-black rounded-full flex justify-center items-center opacity-75 hover:bg-blue-700 transition-colors'>
                 <span className=''>제출하기</span>
               </div>
             </div>
