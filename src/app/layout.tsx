@@ -1,5 +1,9 @@
 import Script from "next/script";
 import "./globals.css";
+
+import QuizPage from "./quiz/page";
+import QuizRanking from "./quizRanking/page";
+
 function GamtooIcon() {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="86" height="67" fill="none">
