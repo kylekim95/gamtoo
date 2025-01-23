@@ -25,21 +25,55 @@ export default function LoginPage() {
   const toggle = () => {
     setIsActive(!isActive);
   };
+  function handleLoginValueChange(field: string, e: React.ChangeEvent<HTMLInputElement>) {
+    setLoginInput((state) => ({
+      ...state,
+      [field]: e.target.value
+    }));
+  }
   function handleSignupValueChange(field: string, e: React.ChangeEvent<HTMLInputElement>) {
     setSignupInput((state) => ({
       ...state,
       [field]: e.target.value
     }));
   }
+  async function handleLoginSubmit() {
+    if(loginInput.email.length < 6 || loginInput.password.length <= 4){
+      alert("짧다")
+      return;
+    }
+    console.log(`${process.env.NEXT_PUBLIC_BASIC_URL}/login`, {
+      email: loginInput.email,
+      password: loginInput.password
+    })
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASIC_URL}/login`,{
+      method: "POST",
+      headers: {
+        "Content-type": "application/json"
+      },
+      body: JSON.stringify({
+        email: signupInput.email,
+        fullName: signupInput.fullName,
+        password: signupInput.password
+      })
+    });
+    const data = await response.json();
+    console.log(data);
+  }
   async function handleSignupSubmit() {
     if(signupInput.passwordCheck !== signupInput.password) {
       alert("비밀번호를 확인해주세요!");
       return;
     }
-    if(signupInput.email.length < 6 || signupInput.fullName.length < 4 || signupInput.password.length <= 4){
+    if(signupInput.email.length < 6 || signupInput.fullName.length < 3 || signupInput.password.length <= 4){
       alert("짧다")
       return;
     }
+    console.log(`${process.env.NEXT_PUBLIC_BASIC_URL}/signup`, {
+      email: signupInput.email,
+      fullName: signupInput.fullName,
+      password: signupInput.password
+    })
     const response = await fetch(`${process.env.NEXT_PUBLIC_BASIC_URL}/signup`,{
       method: "POST",
       headers: {
@@ -50,8 +84,9 @@ export default function LoginPage() {
         fullName: signupInput.fullName,
         password: signupInput.password
       })
-    }).then((res) => {res.json()});
-    console.log(response);
+    });
+    const data = await response.json();
+    console.log(data);
     // setIsActive(!isActive);
   }
   return (
@@ -73,16 +108,19 @@ export default function LoginPage() {
               <input
                 type="text"
                 placeholder="email"
+                onChange={(e) => {handleLoginValueChange("email",e)}}
                 className="px-3 text-black py-2 bg-gray-100 rounded-md placeholder:capitalize placeholder:font-bold placeholder:text-gray-300 focus:outline-none"
               />
               <input
                 type="password"
                 placeholder="Password"
+                onChange={(e) => {handleLoginValueChange("password",e)}}
                 className="px-3 py-2 text-black bg-gray-100 rounded-md placeholder:capitalize placeholder:font-bold placeholder:text-gray-300 focus:outline-none"
               />
               <input
                 type="button"
                 value="로그인"
+                onClick={handleLoginSubmit}
                 className="px-4 py-2 text-lg font-medium text-white bg-[#BF9AF0] rounded-md cursor-pointer hover:bg-[#AE7CF1]"
               />
             </form>
