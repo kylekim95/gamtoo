@@ -1,6 +1,7 @@
 import React from 'react';
 
 export default function Detail() {
+	const items = ["항목 1", "항목 2", "항목 3", "항목 4", "항목 5", "항목 6", "항목 7"];
     return (
         <div>
             <div className="relative">
@@ -40,8 +41,9 @@ export default function Detail() {
                 <div className="w-2/3 bg-white border-2 border-solid border-black p-4 h-[500px] mt-[4.5vh] mr-16 ml-20">
                     <h1 className="text-black text-xl font-semibold">ABOUT</h1>
                     <h1 className="text-black text-4xl font-semibold">국가유산 설명</h1> <hr/>
-                    <p className="text-black text-xl font-medium">남한강의 아름다운 경관과 잘 어우러져 있는 통일신라시대의 석탑으로, 당시에 세워진 석탑 중 가장 규모가 크며, 우리나라의 중앙부에 위치한다고 해서 중앙탑(中央塔)이라고도 부르는 이 탑은 2단의 기단(基壇) 위에 7층의 탑신(塔身)을 올린 모습이다.높은 탑신을 받치기 위해 넓게 시작되는 기단은 각 면마다 여러 개의 기둥 모양을 새겨 놓았고, 탑신부의 각 층 몸돌 역시 모서리마다 기둥 모양의 조각을 두었다. 몸돌을 덮고 있는 지붕돌은 네 귀퉁이 끝이 경쾌하게 치켜올려 있어 자칫 무겁게 보일 수 있는 탑에 활기를 주고 있으며, 밑면에는 5단씩의 받침을 새겨 놓았다. 탑 정상의 머리장식은 보통 하나의 받침돌 위에 머리장식이 얹어지는 신라 석탑의 전형적인 양식에서 벗어나, 이중으로 포개어진 똑같은 모양의 받침돌이 머리장식을 받쳐주고 있다.기단에서의 기둥조각 배치, 탑신의 몸돌과 지붕돌의 짜임수법으로 보아 통일신라 후기인 8세기 후반에 세웠을 것으로 추측된다. 1917년 탑을 보수할 때 6층 몸돌과 기단 밑에서 사리장치와 유물이 발견되었는데, 특히 6층 몸돌에서 발견된 거울이 고려시대의 것으로 밝혀져 탑 조성 이후 고려시대에 와서 2차 봉안이 있었던 것으로 보인다.전체적으로 규모가 커서 웅장하기는 하나 너비에 비해 지나치게 높은 듯 하여 안정감은 덜하며, 세부수법이 약화되고 있어, 일제당시 보수하면서 일부 변형되었다는 논란이 있다.</p>
-                </div>
+                    <p className="text-black text-xl font-medium">남한강의 아름다운 경관과 잘 어우러져 있는 통일신라시대의 석탑으로, 당시에 세워진 석탑 중 가장 규모가 크며, 우리나라의 중앙부에 위치한다고 해서 중앙탑(中央塔)이라고도 부르는 이 탑은 2단의 기단(基壇) 위에 7층의 탑신(塔身)을 올린 모습이다.</p>
+										<p className="text-black text-xl font-medium">높은 탑신을 받치기 위해 넓게 시작되는 기단은 각 면마다 여러 개의 기둥 모양을 새겨 놓았고, 탑신부의 각 층 몸돌 역시 모서리마다 기둥 모양의 조각을 두었다. 몸돌을 덮고 있는 지붕돌은 네 귀퉁이 끝이 경쾌하게 치켜올려 있어 자칫 무겁게 보일 수 있는 탑에 활기를 주고 있으며, 밑면에는 5단씩의 받침을 새겨 놓았다. 탑 정상의 머리장식은 보통 하나의 받침돌 위에 머리장식이 얹어지는 신라 석탑의 전형적인 양식에서 벗어나, 이중으로 포개어진 똑같은 모양의 받침돌이 머리장식을 받쳐주고 있다.기단에서의 기둥조각 배치, 탑신의 몸돌과 지붕돌의 짜임수법으로 보아 통일신라 후기인 8세기 후반에 세웠을 것으로 추측된다. 1917년 탑을 보수할 때 6층 몸돌과 기단 밑에서 사리장치와 유물이 발견되었는데, 특히 6층 몸돌에서 발견된 거울이 고려시대의 것으로 밝혀져 탑 조성 이후 고려시대에 와서 2차 봉안이 있었던 것으로 보인다.전체적으로 규모가 커서 웅장하기는 하나 너비에 비해 지나치게 높은 듯 하여 안정감은 덜하며, 세부수법이 약화되고 있어, 일제당시 보수하면서 일부 변형되었다는 논란이 있다.</p>
+							  </div>
 
                 {/* 오른쪽 콘텐츠 */}
                 <div className="w-1/3 bg-white border-2 border-solid border-black p-4 h-[500px] mt-[4.5vh] mr-20">
@@ -49,23 +51,65 @@ export default function Detail() {
                     <h1 className="text-black text-4xl font-semibold">국가유산 정보</h1> <hr/>
 
                     {/* 세로로 배치되는 항목들 */}
-                    <div className="w-full flex flex-col mt-4 space-y-4">
-                        <div className="text-black text-xl">항목 1</div>
-                        <div className="text-black text-xl">항목 2</div>
-                        <div className="text-black text-xl">항목 3</div>
-                        <div className="text-black text-xl">항목 4</div>
-                        <div className="text-black text-xl">항목 5</div>
-                        <div className="text-black text-xl">항목 6</div>
-                        <div className="text-black text-xl">항목 7</div>
-                    </div>
+                    <div className="w-full flex flex-row mt-9 space-x-28 ml-7">
+    {/* 첫 번째 items */}
+    <div className="flex flex-col space-y-6">
+        {items.map((item, index) => (
+            <div key={index} className="text-black text-xl">
+                {item}
+            </div>
+        ))}
+    </div>
+
+    {/* 두 번째 items */}
+    <div className="flex flex-col space-y-6">
+        {items.map((item, index) => (
+            <div key={index} className="text-black text-xl">
+                {item}
+            </div>
+        ))}
+    </div>
+</div>
+
+											
                 </div>
             </div>
 
-            {/* 나머지 콘텐츠 */}
-            <h1 className="mt-4 ml-[3vh] text-black text-4xl font-semibold">국가유산 위치</h1>
-            <h1 className="mt-4 text-black text-4xl font-semibold">댓글</h1>
-            <h1 className="mt-4 text-black text-4xl font-semibold">관련 영상보기</h1>
-            <h1 className="mt-4 text-black text-4xl font-semibold">이미지 더보기</h1>
+
+          {/* 국가유산 위치 */}
+					<div className="w-full border-2 border-solid border-black p-6 mt-6 overflow-x-auto">
+					<h1 className="text-black text-xl font-semibold ml-20">INFORMATION</h1>			
+    <h1 className="text-black text-4xl font-semibold mb-4 ml-20">국가유산 위치</h1>
+	  {/* 위치 내용 */}
+    <div className="w-[89vw] h-80 ml-[4%] bg-gray-200 border-2 border-solid border-black flex items-center justify-center max-w-full">
+        <p className="text-black text-xl font-medium">여기에 지도가 들어갑니다.</p>
+    </div>
+</div>
+<div className="relative w-full flex">
+    {/* 왼쪽 콘텐츠 */}
+    <div className="w-2/3 bg-white border-2 border-solid border-black p-4 h-[450px] mt-[4.5vh] mr-16 ml-20">
+        <h1 className="text-black text-xl font-semibold">COMMENTS</h1>
+        <h1 className="text-black text-4xl font-semibold">댓글</h1>
+        <hr />
+        <p className="text-black text-xl font-medium">여기에 댓글이 표시됩니다.</p>
+    </div>
+
+    {/* 오른쪽 콘텐츠 */}
+    <div className="w-1/3 bg-white border-2 border-solid border-black p-4 h-[430px] mt-[4.5vh] mr-20">
+        <h1 className="text-black text-xl font-semibold">VIDEO</h1>
+        <h1 className="text-black text-4xl font-semibold">관련 영상보기</h1> 
+        <hr />
+        <p className="text-black text-xl font-medium">여기에 관련 영상이 표시됩니다.</p>
+    </div>
+</div>
+<div className="w-full border-2 border-solid border-black p-6 mt-6 overflow-x-auto h-[60vh]">
+    <h1 className="text-black text-xl font-semibold ml-20">SEE MORE</h1>            
+    <h1 className="text-black text-4xl font-semibold mb-4 ml-20">이미지 더보기</h1> 
+    {/* 이미지 더보기 콘텐츠 */}
+    <div className="w-[89vw] h-80 ml-[4%] bg-gray-200 border-2 border-solid border-black flex items-center justify-center max-w-full">
+        <p className="text-black text-xl font-medium">여기에 이미지 갤러리가 들어갑니다.</p>
+    </div>
+</div>
         </div>
     );
 }
