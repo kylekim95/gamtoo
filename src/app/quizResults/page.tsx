@@ -13,7 +13,7 @@ export default function QuizRanking() {
       >
         <div className='w-[100%] lg:w-[50%] flex flex-col items-center'>
           <ChumSungDaeIcon width={50} height={50} color={"#FFFFFF"}/>
-          <span className='text-white font-bold mb-5 mt-1'>시험 결과</span>
+          <span className='text-white font-bold mb-5 mt-1 text-2xl'>시험 결과</span>
           <QuizResultsCard />
         </div>
       </div>

@@ -46,10 +46,10 @@ export default function QuizResultsCard() {
       <div className='flex flex-col items-center bg-[#FFFFFF] w-full min-w-[600px] aspect-[1/1.2] px-5 py-3 rounded-lg'>
         <span className='text-black self-start text-xs mb-1'>정답을 클릭해서 해당 문화재의 상세 정보를 확인하세요!</span>
         <Table<DataType> data={dummyData} spacing={[1,6,2,2,2]} desc={dummyDesc} />
-        <div className='w-full h-8 border-b'>
-          <span className=''></span>
+        <div className='w-full h-8 border-b flex items-center'>
+          <span className='text-black text-sm font-bold'>{"유저 ID"} : {0}점</span>
         </div>
-        <div className='self-end mt-[-25px] -rotate-12 rounded-full overflow-hidden'>{ <GagsiMaskIcon width={150} height={150} color={"#FF2222"}/> }</div>
+        <div className='self-end mt-[-25px] -rotate-12 rounded-full overflow-hidden'>{ <GagsiMaskIcon width={150} height={150} color={"#FF4444"}/> }</div>
       </div>
     </div>
   )
