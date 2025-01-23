@@ -1,33 +1,40 @@
 import React from 'react'
 
+import CheckedIcon from '../../../components/quiz/svg/CheckedIcon'
+import CrossedIcon from '../../../components/quiz/svg/CrossedIcon'
+
 type ProblemCardProps = {
   ref: React.RefObject<HTMLDivElement | null>;
+  url: string
 }
 
 export default function ProblemCard(props : ProblemCardProps) {
   return (
     <div className='
-      w-[900px] h-[350px] m-2
+      w-full max-w-[900px] min-w-[600px] aspect-[2.5/1] m-2
       transition-opacity duration-300 ease-in-out
-      bg-slate-100 rounded-lg drop-shadow-lg
+      rounded-lg drop-shadow-2xl overflow-hidden
+      flex
     ' ref={props.ref}>
-      <div className='h-full flex'>
-        <div className='h-full w-[100px] bg-slate-300 flex justify-center items-center rounded-l-xl'>
-          <div className='h-[50px] w-[50px] bg-slate-500'></div>
+      <div 
+        className={`w-[10%] h-full flex justify-center items-center bg-[#00000080] rounded-lg`}
+        style={{backgroundImage: `url(${props.url})`, backgroundSize:'cover', backgroundPosition: 'center', backgroundBlendMode: 'multiply'}}
+      >
+        {/* <CheckIcon width={40} height={40} color={"#77FF77"}/> */}
+        <CrossedIcon width={40} height={40} color={"#FF2222"}/>
+      </div>
+      <div className='w-[90%] h-full flex flex-col bg-slate-50'>
+        <div className='w-full h-[10%] min-h-[50px] flex items-end ml-5'>
+          <span className='text-xl md:text-2xl text-black ml-2'>Q1.</span>
+          <span className='text-sm md:text-lg text-black ml-2'>사진 속 문화재의 이름은?</span>
         </div>
-        <div className='h-full w-[800px] shrink  flex flex-col justify-center'>
-          <div className='w-full h-[50px] flex items-end'>
-            <span className='text-black align-text-bottom text-4xl ml-2'>Q1</span>
-            <span className='text-black align-text-bottom text-xl ml-2'>그림 속 문화유산의 이름은?</span>
-          </div>
-          <div className='w-full h-[300px]  flex items-center place-content-evenly'>
-            <div className='w-[200] h-[200px] bg-black rounded-lg'>문제 이미지</div>
-            <div className='w-[400px] h-[80%] grid grid-cols-2 gap-1'>
-              <div className='bg-slate-700 rounded-lg'></div>
-              <div className='bg-slate-700 rounded-lg'></div>
-              <div className='bg-slate-700 rounded-lg'></div>
-              <div className='bg-slate-700 rounded-lg'></div>
-            </div>
+        <div className='w-full h-[90%] flex place-content-evenly items-center'>
+          <div className='w-[30%] aspect-square rounded-lg' style={{backgroundImage: `url(${props.url})`, backgroundSize: 'contain'}}></div>
+          <div className='w-[55%] aspect-[16/9] rounded-lg overflow-hidden grid grid-cols-2 gap-1'>
+            <div className='bg-black opacity-75 flex justify-center items-center transition-colors ease-in-out hover:bg-red-700'><span className='text-sm md:text-lg'>선택지 1</span></div>
+            <div className='bg-black opacity-75 flex justify-center items-center transition-colors ease-in-out hover:bg-blue-700'><span className='text-sm md:text-lg'>선택지 2</span></div>
+            <div className='bg-black opacity-75 flex justify-center items-center transition-colors ease-in-out hover:bg-yellow-700'><span className='text-sm md:text-lg'>선택지 3</span></div>
+            <div className='bg-black opacity-75 flex justify-center items-center transition-colors ease-in-out hover:bg-green-700'><span className='text-sm md:text-lg'>선택지 4</span></div>
           </div>
         </div>
       </div>
