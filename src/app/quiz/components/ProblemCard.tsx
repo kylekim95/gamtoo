@@ -1,7 +1,7 @@
 import React from 'react'
 
-import CheckedIcon from './svg/CheckedIcon'
-import CrossedIcon from './svg/CrossedIcon'
+import CheckedIcon from '../../../components/quiz/svg/CheckedIcon'
+import CrossedIcon from '../../../components/quiz/svg/CrossedIcon'
 
 type ProblemCardProps = {
   ref: React.RefObject<HTMLDivElement | null>;

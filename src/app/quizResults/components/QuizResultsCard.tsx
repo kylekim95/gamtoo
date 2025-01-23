@@ -1,7 +1,7 @@
 import React from 'react'
 
-import Table from './Table'
-import GagsiMaskIcon from './svg/GagsiMaskIcon';
+import Table from '../../../components/quiz/Table'
+import GagsiMaskIcon from '../../../components/quiz/svg/GagsiMaskIcon';
 
 type DataType = {
   id: string,

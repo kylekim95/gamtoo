@@ -1,8 +1,8 @@
 import React from 'react'
 
-import ChumSungDaeIcon from './components/svg/ChumSungDaeIcon';
+import ChumSungDaeIcon from '../../components/quiz/svg/ChumSungDaeIcon';
 import QuizResultsCard from './components/QuizResultsCard';
-import GyeongBokGungIcon from './components/svg/GyeongBokGungIcon'
+import GyeongBokGungIcon from '../../components/quiz/svg/GyeongBokGungIcon'
 
 export default function QuizRanking() {
   return (
