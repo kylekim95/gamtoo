@@ -1,4 +1,4 @@
-import React, { RefObject, useRef, createRef, useState } from 'react'
+import React, { useRef, createRef, useState } from 'react'
 
 type ProblemCardProps = {
   id: string;

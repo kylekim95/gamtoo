@@ -41,7 +41,7 @@ export default function QuizPage() {
     {id:"18", problem:"이것은 문제입니다. 이것은 문제입니까?", answer:1, url:dummyImage, selection:['선택지1', '선택지2', '선택지3', '선택지4']},
     {id:"19", problem:"이것은 문제입니다. 이것은 문제입니까?", answer:1, url:dummyImage, selection:['선택지1', '선택지2', '선택지3', '선택지4']},
     {id:"20", problem:"이것은 문제입니다. 이것은 문제입니까?", answer:1, url:dummyImage, selection:['선택지1', '선택지2', '선택지3', '선택지4']},
-  ]; 
+  ];
 
   //TODO : Custom Hook
   const refs = useRef(dummyData.map(()=>createRef<HTMLDivElement>()));
