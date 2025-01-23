@@ -1,3 +1,6 @@
+"use client";
+
+import { useRouter } from "next/navigation";
 import "./globals.css";
 function GamtooIcon() {
   return (
@@ -31,6 +34,7 @@ function GamtooIcon() {
 }
 
 function Header() {
+  const router = useRouter();
   return (
     <header className="flex justify-between items-center h-[90px] px-9 mb-6 border-b-[1px] border-stone-400 bg-[#FFFFFF] min-w-full">
       <div className="left mt-1 gap-11 flex ">
@@ -45,19 +49,47 @@ function Header() {
           </div>
         </div>
         <div className="router flex items-center gap-7 font-semibold text-xl mt-2 text-black">
-          <span>홈으로</span>
-          <span>모든문화재</span>
-          <div className="flex flex-row ">
+          <span
+            onClick={() => {
+              router.push("/");
+            }}
+          >
+            홈으로
+          </span>
+          <span
+            onClick={() => {
+              router.push("/culture");
+            }}
+          >
+            모든문화재
+          </span>
+          <div
+            onClick={() => {
+              router.push("/festival");
+            }}
+            className="flex flex-row "
+          >
             {" "}
             <span className="text-[#FA870E]">행사</span>
             <span>달력</span>
           </div>
 
-          <div className="flex flex-row">
+          <div
+            onClick={() => {
+              router.push("/quiz");
+            }}
+            className="flex flex-row"
+          >
             <span className="text-[#B23742]">퀴즈</span>
             <span>풀기</span>
           </div>
-          <span>Q&A</span>
+          <span
+            onClick={() => {
+              router.push("/qna");
+            }}
+          >
+            Q&A
+          </span>
         </div>
       </div>
       <div className="right mt-1 flex flex-row items-center gap-5">
@@ -73,7 +105,14 @@ function Header() {
             clipRule="evenodd"
           />
         </svg>
-        <span className="font-semibold text-xl text-[#424383]">로그인</span>
+        <span
+          onClick={() => {
+            router.push("/login");
+          }}
+          className="font-semibold text-xl text-[#424383]"
+        >
+          로그인
+        </span>
       </div>
     </header>
   );
