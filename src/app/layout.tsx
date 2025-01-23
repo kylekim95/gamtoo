@@ -40,7 +40,7 @@ function GamtooIcon() {
 function Header() {
   const router = useRouter();
   return (
-    <header className="flex justify-between items-center h-[90px] px-9 mb-6 border-b-[1px] border-stone-400 bg-[#FFFFFF] min-w-full">
+    <header className="flex justify-between items-center h-[90px] px-9 border-b-[1px] border-stone-400 bg-[#FFFFFF] min-w-full">
       <div className="left mt-1 gap-11 flex ">
         <div className="icon gap-4 flex flex-row justify-center items-center">
           {" "}

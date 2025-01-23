@@ -28,7 +28,7 @@ export default function NotificationModal() {
             </svg>
           </div>
         </div>
-        <div className="ml-">
+        <div className="ml-5">
           <p className="text-black">문화제1님이 회원님의 글에 좋아요를 남겼습니다.</p>
           <p className="text-black">‘어떤 글제목이들어가면 들어간 제목이 여기서 출됩니다 너무 긴 경우는’</p>
           <p className="text-[#9D53FF]">2시간</p>
