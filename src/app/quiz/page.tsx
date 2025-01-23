@@ -76,7 +76,9 @@ export default function QuizPage() {
   }, [userSelected]); //userSelected 로 뭔가를 하는 것은 아니어서 빈칸이지만 찝찝하다
 
   function OnClickToTop(){
-
+    window.scrollTo({
+      top: 0, left: 0, behavior:'smooth'
+    });
   }
   function OnClickSubmit(){
     console.log(userSelected);
