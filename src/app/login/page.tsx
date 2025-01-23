@@ -3,14 +3,57 @@ import React from 'react';
 import loginImage from "../../../public/loginImage.png";
 import signupImage from "../../../public/signupImage.png";
 import Image from "next/image";
+import {LoginType} from "@/types/LoginType";
+
+interface SignupType extends LoginType {
+  passwordCheck: string;
+  fullName: string;
+}
 
 export default function LoginPage() {
   const [isActive, setIsActive] = React.useState<boolean>(false);
-
+  const [loginInput, setLoginInput] = React.useState<LoginType>({
+    email: "",
+    password: ""
+  });
+  const [signupInput, setSignupInput] = React.useState<SignupType>({
+    email: "",
+    password: "",
+    passwordCheck: "",
+    fullName: ""
+  });
   const toggle = () => {
     setIsActive(!isActive);
   };
-
+  function handleSignupValueChange(field: string, e: React.ChangeEvent<HTMLInputElement>) {
+    setSignupInput((state) => ({
+      ...state,
+      [field]: e.target.value
+    }));
+  }
+  async function handleSignupSubmit() {
+    if(signupInput.passwordCheck !== signupInput.password) {
+      alert("비밀번호를 확인해주세요!");
+      return;
+    }
+    if(signupInput.email.length < 6 || signupInput.fullName.length < 4 || signupInput.password.length <= 4){
+      alert("짧다")
+      return;
+    }
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASIC_URL}/signup`,{
+      method: "POST",
+      headers: {
+        "Content-type": "application/json"
+      },
+      body: JSON.stringify({
+        email: signupInput.email,
+        fullName: signupInput.fullName,
+        password: signupInput.password
+      })
+    }).then((res) => {res.json()});
+    console.log(response);
+    // setIsActive(!isActive);
+  }
   return (
     <div className={`w-full h-[1000px] content-center ${isActive ? 'active bg-[#FFDCCF]' : 'bg-[#DAD1E6]'}`}>
       <section
@@ -26,7 +69,7 @@ export default function LoginPage() {
           <Image src={signupImage} alt={""} className="w-[600px]"/>
           <div className="flex flex-col items-center justify-center h-[400px] bg-white">
             <h1 className="mb-5 text-3xl text-center font-semibold text-black">로그인</h1>
-            <form className="flex flex-col w-[340px] gap-5">
+            <form method="post" className="flex flex-col w-[340px] gap-5">
               <input
                 type="text"
                 placeholder="email"
@@ -38,7 +81,7 @@ export default function LoginPage() {
                 className="px-3 py-2 text-black bg-gray-100 rounded-md placeholder:capitalize placeholder:font-bold placeholder:text-gray-300 focus:outline-none"
               />
               <input
-                type="submit"
+                type="button"
                 value="로그인"
                 className="px-4 py-2 text-lg font-medium text-white bg-[#BF9AF0] rounded-md cursor-pointer hover:bg-[#AE7CF1]"
               />
@@ -64,29 +107,38 @@ export default function LoginPage() {
           <Image src={loginImage} alt={""} className="w-full"/>
           <div className="flex flex-col items-center justify-center h-[400px] bg-white">
             <h1 className="mb-5 text-xl text-center">Create An Account</h1>
-            <form className="flex flex-col w-[340px] gap-5">
+            <form method="post" className="flex flex-col w-[340px] gap-5">
               <input
-                type="text"
+                type="email"
                 placeholder="email"
+                value={signupInput.email}
+                onChange={(e) => handleSignupValueChange("email",e)}
                 className="px-3 py-2 bg-gray-100 text-black rounded-md placeholder:capitalize placeholder:font-bold placeholder:text-gray-300 focus:outline-none"
               />
               <input
-                type="email"
+                type="text"
                 placeholder="name"
+                value={signupInput.fullName}
+                onChange={(e) => handleSignupValueChange("fullName",e)}
                 className="px-3 py-2 bg-gray-100 rounded-md text-black placeholder:capitalize placeholder:font-bold placeholder:text-gray-300 focus:outline-none"
               />
               <input
                 type="password"
-                placeholder="Create Password"
+                value={signupInput.password}
+                placeholder="Password"
+                onChange={(e) => handleSignupValueChange("password",e)}
                 className="px-3 py-2 bg-gray-100 rounded-md text-black placeholder:capitalize placeholder:font-bold placeholder:text-gray-300 focus:outline-none"
               />
               <input
                 type="password"
-                placeholder="Confirm Password"
+                value={signupInput.passwordCheck}
+                placeholder="Password Check"
+                onChange={(e) => handleSignupValueChange("passwordCheck",e)}
                 className="px-3 py-2 bg-gray-100 rounded-md text-black placeholder:capitalize placeholder:text-gray-300 focus:outline-none"
               />
               <input
-                type="submit"
+                type="button"
+                onClick={handleSignupSubmit}
                 value="회원가입"
                 className="px-4 py-2 text-lg font-medium text-white bg-[#EE765E] rounded-md cursor-pointer hover:bg-[#F56042]"
               />
