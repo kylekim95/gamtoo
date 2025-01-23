@@ -17,7 +17,7 @@ export default function QuizRanking() {
           <QuizResultsCard />
         </div>
       </div>
-      <div className='w-full aspect-[6/1] flex justify-center items-center gap-10 bg-slate-50'>
+      <div className='w-full min-w-[1200px] aspect-[6/1] flex justify-center items-center gap-10 bg-slate-50'>
           <div className='h-[50%] aspect-square bg-black rounded-full flex flex-col justify-center items-center opacity-75 hover:bg-blue-700 transition-colors'>
             <GyeongBokGungIcon width={40} height={40} color={'#FFFFFF'}/>
             <span className='text-sm font-bold m-1'>홈으로</span>
