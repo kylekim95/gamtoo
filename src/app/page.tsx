@@ -37,7 +37,9 @@ function ButtonGroup() {
   ];
 
   return (
+
     <div className="flex flex-row gap-16">
+      
       {buttonInfo.map(({ destination, bgColor }, index) => (
         <div
           key={index}

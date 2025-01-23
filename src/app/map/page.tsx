@@ -110,25 +110,38 @@ export default function MapPage() {
   const [isOpen, setIsOpen] = useState<boolean>(true);
   const router = useRouter();
   const searchParams = useSearchParams()
-  const xmlToJsonFilterHandler =(data:any)=>{
-    var parseString = require("xml2js").parseString;
-    parseString(data.data,{explicitArray: false}, function (err: any, result: any) {
-      if(result.result.totalCnt === '0'){
+  const xmlToJsonFilterHandler = (data: any) => {
+    const parseString = require("xml2js").parseString;
+  
+    parseString(data.data, { explicitArray: false }, function (err: any, result: any) {
+      if (result.result.totalCnt === "0") {
         alert("검색결과가 없습니다.");
-        
         return;
       }
-      console.log(result.result.item)
-      setItem(result.result.item);
+  
+      // 좌표가 0인 항목 필터링
+      const filteredItems = Array.isArray(result.result.item)
+        ? result.result.item.filter(
+            (item: any) =>
+              item.latitude !== "0" &&
+              item.longitude !== "0" &&
+              item.latitude !== undefined &&
+              item.longitude !== undefined
+          )
+        : result.result.item;
+  
+      console.log(filteredItems);
+      setItem(filteredItems); // 상태 업데이트
     });
+  };
   
-  }
-  
-  const getData = async (params:string) => {
+  const getData = async (params: string) => {
     const data = await axios.get(
-      `http://www.khs.go.kr/cha/SearchKindOpenapiList.do?pageUnit=10000&${params ? params :  "&ccbaCncl=N&ccbaKdcd=13"}`
+      `http://www.khs.go.kr/cha/SearchKindOpenapiList.do?pageUnit=10000&${
+        params ? params : "&ccbaCncl=N&ccbaKdcd=13"
+      }`
     );
-      xmlToJsonFilterHandler(data);
+    xmlToJsonFilterHandler(data);
   };
 
   const handleChange = (
@@ -154,6 +167,7 @@ export default function MapPage() {
   
   };
 
+  
   const filterButtonHandler = async () => {
     const cleanedFilters: Record<string, string> = Object.fromEntries(
       Object.entries(filters)
@@ -168,6 +182,8 @@ export default function MapPage() {
     const params = new URLSearchParams(cleanedFilters);
       router.push(`?${params}`)
   };
+ 
+
   useEffect(() => {
     const params = searchParams.toString();
     getData(params);
@@ -176,7 +192,8 @@ export default function MapPage() {
 
   return (
     <section className="items-center  justify-center gap-4 ">
-      <BasicMap data={item}>
+      
+      <BasicMap data={item} >
         <div className="absolute left-10 max-w-96 z-50 top-36 ">
           <div className=" bg-white flex flex-col gap-3 p-8 w-full rounded-3xl shadow-lg">
             <Accordion 
@@ -220,7 +237,6 @@ export default function MapPage() {
                         <option value={25}>대전</option>
                         <option value={22}>대구</option>
                       </select>
-                      <ReSetttingMapBounds points={item} />
                     </div>
                   </div>
                 </div>
@@ -260,29 +276,4 @@ export default function MapPage() {
       </BasicMap>
     </section>
   );
-}
-const ReSetttingMapBounds = ({
-  points,
-}: {
-  points: MapItem[]
-}) => {
-  const map = useMap()
-  const bounds = useMemo(() => {
-    const bounds = new kakao.maps.LatLngBounds()
-   
-    points.forEach((point) => {
-      console.log( point)
-      bounds.extend(new kakao.maps.LatLng(point.latitude, point.longitude))
-    })
-    
-    return bounds
-  }, [points])
-
-  return (
-    <p>
-      <button onClick={() => map.setBounds(bounds)}>
-        지도 범위 재설정 하기
-      </button>
-    </p>
-  )
 }
