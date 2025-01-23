@@ -179,8 +179,8 @@ const FestivalPage = () => {
                   <p className="text-center font-semibold text-xl">{e.sido}</p>
                 </div>
                 <p
-                  className="text-black font-semibold text-xl">[{e.groupName == "" ? "등록된 단체 없음" : e.groupName}]</p>
-                <p className="text-black font-semibold text-xl overflow-ellipsis">{e.subTitle}</p>
+                  className="text-black font-semibold text-xl  h-[28px] truncate">[{e.groupName == "" ? "등록된 단체 없음" : e.groupName}]</p>
+                <p className="text-black font-semibold text-xl h-[56px] truncate ">{e.subTitle}</p>
                 <p className="text-gray-500 text-sm">{e.sDate}~{e.eDate}</p>
               </div>
             )
