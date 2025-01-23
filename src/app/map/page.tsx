@@ -2,15 +2,13 @@
 import BasicMap from "@/app/map/kakaoMap";
 import axios from "axios";
 import { Accordion, AccordionItem as Item } from "@szhsin/react-accordion";
-import { ChangeEvent, SetStateAction, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import MultiRange from "@/app/map/rangeSlider";
 import SelectBox from "./slelctBox";
-import { SelectProps } from "../../../types/Map";
-import {
-  ControlledAccordion,
-  useAccordionProvider
-} from '@szhsin/react-accordion';
+import { MapItem, SelectProps } from "../../../types/Map";
+import { useMap } from "react-kakao-maps-sdk";
+
 const selectList:SelectProps[] = [
   {
     title:"국보",
@@ -104,8 +102,9 @@ const AccordionItem = ({ header, ...rest }: any) => (
 export default function MapPage() {
   const [filters, setFilters] = useState<Record<string, string | number |undefined>>({});
   const [inputItem, setInputItem] = useState<Record<string, string>>({});
-  const [item, setItem] = useState([]);
+  const [item, setItem] = useState<MapItem[]>([]);
   const [isOpen, setIsOpen] = useState<boolean>(true);
+
   const xmlToJsonFilterHandler =(data:any)=>{
     var parseString = require("xml2js").parseString;
     parseString(data.data,{explicitArray: false}, function (err: any, result: any) {
@@ -117,7 +116,9 @@ export default function MapPage() {
       console.log(result.result.item)
       setItem(result.result.item);
     });
+  
   }
+  
   const getData = async () => {
     const data = await axios.get(
       `http://www.khs.go.kr/cha/SearchKindOpenapiList.do?pageUnit=10000&ccbaCncl=N&ccbaKdcd=13`
@@ -149,8 +150,6 @@ export default function MapPage() {
   };
 
   const filterButtonHandler = async () => {
-    console.log(isOpen);
-  
     const cleanedFilters: Record<string, string> = Object.fromEntries(
       Object.entries(filters)
         .filter(([key, value]) => {
@@ -171,7 +170,9 @@ export default function MapPage() {
   };
   useEffect(() => {
     getData();
+
   }, []);
+
   return (
     <section className="items-center  justify-center gap-4 ">
       <BasicMap data={item}>
@@ -253,7 +254,31 @@ export default function MapPage() {
             </div>
           </div>
         </div>
+        <ReSetttingMapBounds points={item} />
       </BasicMap>
     </section>
   );
+}
+const ReSetttingMapBounds = ({
+  points,
+}: {
+  points: MapItem[]
+}) => {
+  const map = useMap()
+  const bounds = useMemo(() => {
+    const bounds = new kakao.maps.LatLngBounds()
+
+    points.forEach((point) => {
+      bounds.extend(new kakao.maps.LatLng(point.latitude, point.longitude))
+    })
+    return bounds
+  }, [points])
+
+  return (
+    <p>
+      <button onClick={() => map.setBounds(bounds)}>
+        지도 범위 재설정 하기
+      </button>
+    </p>
+  )
 }
