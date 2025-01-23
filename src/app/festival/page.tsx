@@ -90,11 +90,11 @@ const FestivalPage = () => {
         <div className="w-5/6 m-auto">
           <p className="text-black font-bold text-3xl ml-auto mb-4">인기 행사</p>
           <div className="flex justify-between">
-            {festivalItems.map((e,index) => {
+            {festivalItems.length === 1 ? (<div></div>): festivalItems.map((e,index) => {
               if(index < 5){
                 return (
                   <div key={e.seqNo} className="w-1/6 ml-0">
-                    <img className="rounded-lg" src={e.imageUrl} alt={""}/>
+                    <img className="rounded-lg h-4/6" src={e.imageUrl} alt={""}/>
                     <div className="absolute">
                       <p className="relative -top-10 left-2 italic text-5xl drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">{index+1}</p>
                     </div>
@@ -171,7 +171,7 @@ const FestivalPage = () => {
       <div className="w-5/6 m-auto mb-20">
         <p className="m-auto font-bold mb-4 text-4xl text-black text-center">검색된 문화행사</p>
         <div className="grid grid-cols-5 gap-2 gap-y-12">
-          {festivalItems.map((e) => {
+          {festivalItems.length === 1? (<div></div>):festivalItems.map((e) => {
             return (
               <div key={e.seqNo} className="rounded-lg p-3 border shadow-lg">
                 <img className="rounded-lg h-3/5" src={e.imageUrl} alt={""}/>
