@@ -1,13 +1,18 @@
 "use client";
-import BasicMap from "@/app/map/kakaoMap";
+
 import axios from "axios";
 import { Accordion, AccordionItem as Item } from "@szhsin/react-accordion";
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
-import MultiRange from "@/app/map/rangeSlider";
-import SelectBox from "./slelctBox";
-import { MapItem, SelectProps } from "../../../types/Map";
+
+
 import { useMap } from "react-kakao-maps-sdk";
+import { useRouter, useSearchParams } from "next/navigation";
+
+import MultiRange from "@/app/map/components/rangeSlider";
+import SelectBox from "@/app/map/components/slelctBox";
+import BasicMap from "@/app/map/components/kakaoMap";
+import { MapItem, SelectProps } from "../../../types/Map";
 
 const selectList:SelectProps[] = [
   {
@@ -101,10 +106,10 @@ const AccordionItem = ({ header, ...rest }: any) => (
 );
 export default function MapPage() {
   const [filters, setFilters] = useState<Record<string, string | number |undefined>>({});
-  const [inputItem, setInputItem] = useState<Record<string, string>>({});
   const [item, setItem] = useState<MapItem[]>([]);
   const [isOpen, setIsOpen] = useState<boolean>(true);
-
+  const router = useRouter();
+  const searchParams = useSearchParams()
   const xmlToJsonFilterHandler =(data:any)=>{
     var parseString = require("xml2js").parseString;
     parseString(data.data,{explicitArray: false}, function (err: any, result: any) {
@@ -119,9 +124,9 @@ export default function MapPage() {
   
   }
   
-  const getData = async () => {
+  const getData = async (params:string) => {
     const data = await axios.get(
-      `http://www.khs.go.kr/cha/SearchKindOpenapiList.do?pageUnit=10000&ccbaCncl=N&ccbaKdcd=13`
+      `http://www.khs.go.kr/cha/SearchKindOpenapiList.do?pageUnit=10000&${params ? params :  "&ccbaCncl=N&ccbaKdcd=13"}`
     );
       xmlToJsonFilterHandler(data);
   };
@@ -161,17 +166,13 @@ export default function MapPage() {
         .map(([key, value]) => [key, String(value)])
     );
     const params = new URLSearchParams(cleanedFilters);
-    console.log(cleanedFilters);
-  
-    const data = await axios.get(
-      `http://www.khs.go.kr/cha/SearchKindOpenapiList.do?${params.toString()}`
-    );
-    xmlToJsonFilterHandler(data);
+      router.push(`?${params}`)
   };
   useEffect(() => {
-    getData();
+    const params = searchParams.toString();
+    getData(params);
 
-  }, []);
+  }, [searchParams]);
 
   return (
     <section className="items-center  justify-center gap-4 ">
@@ -219,6 +220,7 @@ export default function MapPage() {
                         <option value={25}>대전</option>
                         <option value={22}>대구</option>
                       </select>
+                      <ReSetttingMapBounds points={item} />
                     </div>
                   </div>
                 </div>
@@ -232,7 +234,7 @@ export default function MapPage() {
                       <SelectBox key={`${item.name}-${item.value}`} title={item.title} handleChange={handleChange} value={item.value} name={item.name}/>
                       )
                     })}
-                  
+                
                   </div>
                 </div>
               </AccordionItem>
@@ -254,7 +256,7 @@ export default function MapPage() {
             </div>
           </div>
         </div>
-        <ReSetttingMapBounds points={item} />
+        
       </BasicMap>
     </section>
   );
@@ -267,10 +269,12 @@ const ReSetttingMapBounds = ({
   const map = useMap()
   const bounds = useMemo(() => {
     const bounds = new kakao.maps.LatLngBounds()
-
+   
     points.forEach((point) => {
+      console.log( point)
       bounds.extend(new kakao.maps.LatLng(point.latitude, point.longitude))
     })
+    
     return bounds
   }, [points])
 

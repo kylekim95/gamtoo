@@ -1,10 +1,14 @@
+'use client'
+
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Map,
   MapMarker,
   CustomOverlayMap,
+  useMap,
 } from "react-kakao-maps-sdk";
+import { MapItem } from "../../../../types/Map";
 
 function InfoWindows({ item, setOpenOverlayId }: any) {
   console.log(item); // item 데이터가 제대로 들어왔는지 확인
@@ -46,11 +50,11 @@ export default function BasicMap({
   data,
 }: {
   children: React.ReactNode;
-  data: { latitude: number; longitude: number; no: number; ccbaKdcd: string; ccbaCtcd: string; ccbaAsno: string; ccbaCpno: string }[];
+  data: MapItem[];
 }) {
   const [openOverlayId, setOpenOverlayId] = useState<number | null>(null);
   const [item, setItem] = useState<any>(null);
-
+  const map = useMap()
   const getDetailData = async (pos: any) => {
     const url = `http://www.khs.go.kr/cha/SearchKindOpenapiDt.do?ccbaKdcd=${pos.ccbaKdcd}&ccbaCtcd=${pos.ccbaCtcd}&ccbaAsno=${pos.ccbaAsno}&ccbaCpno=${pos.ccbaCpno}`;
     const response = await axios.get(url);
@@ -66,6 +70,25 @@ export default function BasicMap({
 
   };
 
+  const ReSetttingMapBounds = (
+    points:  MapItem[]
+  ) => {
+  
+    const bounds = useMemo(() => {
+      const bounds = new kakao.maps.LatLngBounds()
+      console.log( points)
+      points.forEach((point) => {
+       
+        bounds.extend(new kakao.maps.LatLng(point.latitude, point.longitude))
+      })
+      return bounds
+     
+    }, [points])
+    map.setBounds(bounds)
+  }
+  useEffect(() => {
+    ReSetttingMapBounds(data)
+  },[data])
   return (
     <Map
       id="map"
@@ -89,12 +112,13 @@ export default function BasicMap({
               }}
               onClick={() => getDetailData(pos)} // 클릭한 마커의 ID 저장
             />
-
             {openOverlayId === pos.no && item && (
               <InfoWindows item={item} setOpenOverlayId={setOpenOverlayId} />
             )}
           </div>
         ))}
+               
+
       {children}
     </Map>
   );
