@@ -11,100 +11,11 @@ import MultiRange from "@/app/map/components/rangeSlider";
 import SelectBox from "@/app/map/components/slelctBox";
 import BasicMap from "@/app/map/components/kakaoMap";
 import { MapItem, SelectProps } from "../../../types/Map";
+import { selectList } from "@/app/map/config/config";
+import { AccordionItem } from "@/app/map/components/accordionItem";
+import { Loading } from "@/app/map/components/loading";
 
-// select 객체
-const selectList: SelectProps[] = [
-  {
-    title: "국보",
-    name: "ccbaKdcd",
-    value: "11",
-  },
-  {
-    title: "보물",
-    name: "ccbaKdcd",
-    value: "12",
-  },
-  {
-    title: "사적",
-    name: "ccbaKdcd",
-    value: "13",
-  },
-  {
-    title: "사적 및 명승",
-    name: "ccbaKdcd",
-    value: "14",
-  },
-  {
-    title: "명승",
-    name: "ccbaKdcd",
-    value: "15",
-  },
-  {
-    title: "천연기념물",
-    name: "ccbaKdcd",
-    value: "16",
-  },
-  {
-    title: "국가무형유산",
-    name: "ccbaKdcd",
-    value: "17",
-  },
-  {
-    title: "국가민속문화유산",
-    name: "ccbaKdcd",
-    value: "18",
-  },
-  {
-    title: "시도유형문화유산",
-    name: "ccbaKdcd",
-    value: "21",
-  },
-  {
-    title: "시도무형유산",
-    name: "ccbaKdcd",
-    value: "22",
-  },
-];
 
-//custom 아코디언 스타일
-const AccordionItem = ({ header, ...rest }: any) => (
-  <Item
-    {...rest}
-    header={({ state: { isEnter } }) => (
-      <>
-        <div className="font-bold text-neutral-900 text-lg">{header}</div>
-        <div
-          className={`ml-auto py-2 transition-transform duration-200  ease-out  ${
-            isEnter && "rotate-180"
-          }`}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="size-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="m19.5 8.25-7.5 7.5-7.5-7.5"
-            />
-          </svg>
-        </div>
-      </>
-    )}
-    className=""
-    buttonProps={{
-      className: ({ isEnter }) => `flex w-full  text-left  ${isEnter}`,
-    }}
-    contentProps={{
-      className: "transition-height duration-200 ease-out",
-    }}
-    panelProps={{ className: "p-4" }}
-  />
-);
 
 export default function MapPage() {
   const router = useRouter();
@@ -116,18 +27,17 @@ export default function MapPage() {
   const [isOpen, setIsOpen] = useState<boolean>(true);
   const [isLoadOpen, setIsLoadOpen] = useState<boolean>(false);
   const [isNavOpen, setIsNavOpen] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-
- 
 //xml json 으로 변경해주는 함수
   const xmlToJsonFilterHandler = (data: any) => {
     const parseString = require("xml2js").parseString;
-
     parseString(
       data.data,
       { explicitArray: false },
       function (err: any, result: any) {
         if (result.result.totalCnt === "0") {
+          setIsLoading(false)
           alert("검색결과가 없습니다.");
           return;
         }
@@ -141,16 +51,17 @@ export default function MapPage() {
                 item.longitude !== undefined
             )
           : result.result.item;
-
+        setIsLoading(false)
         setItem(filteredItems); 
       }
     );
   };
 // 데이터 불러오는 함수
   const getData = async (params: string) => {
+    setIsLoading(true)
     const data = await axios.get(
       `http://www.khs.go.kr/cha/SearchKindOpenapiList.do?pageUnit=10000&${
-        params ? params : "&ccbaCncl=N&ccbaKdcd=13"
+        params ? params : "&ccbaCncl=N&ccbaKdcd=13&ccbaCtcd=11"
       }`
     );
     xmlToJsonFilterHandler(data);
@@ -160,6 +71,7 @@ export default function MapPage() {
   const searchLoadHandler = async (item: any) => {
     const url = "https://apis-navi.kakaomobility.com/v1/directions?";
     const key = process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY;
+    setIsLoading(true);
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         async (position) => {
@@ -179,10 +91,12 @@ export default function MapPage() {
             setItem([]);
             setIsLoadOpen(true);
             setIsNavOpen(false);
+            setIsLoading(false)
           }
         },
         (err) => {
           console.log(err);
+          setIsLoading(false)
         },
         { enableHighAccuracy: true }
       );
@@ -417,6 +331,8 @@ export default function MapPage() {
           </div>
         </div>
       </BasicMap>
+      {isLoading && (<Loading/>)}
+      
     </section>
   );
 }
