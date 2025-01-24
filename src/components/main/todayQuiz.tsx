@@ -15,10 +15,11 @@ export default function TodayQuiz() {
         alt="Gyeongbokgung Palace"
         fill // 부모 컨테이너를 채우도록 설정
         priority // LCP로 감지된 이미지에 우선순위 부여
-        // style={{
-        //   objectFit: "cover",
-        //   objectPosition: "top", // 상단 중심 정렬
-        // }}
+        sizes="99vw"
+        style={{
+          objectFit: "cover",
+          objectPosition: "top", // 상단 중심 정렬
+        }}
       />
       {/* 제목 */}
       <div className=" w-full flex flex-row gap-5 justify- items-center absolute top-[13%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 z-10 pl-[100px] border-b pb-3">
@@ -37,7 +38,10 @@ export default function TodayQuiz() {
             d="M18.9244 16.4927c-.3442.35-.3697.425-.3697 1.3875 0 1.15.102 1.4125.6374 1.6875.4717.2375 2.7155.2625 3.1872.025.5354-.2625.7904-.9.7394-1.8875-.0382-.775-.0892-.8875-.4589-1.2125-.408-.35-.4462-.3625-1.8868-.3625-1.4534 0-1.4789 0-1.8486.3625Zm2.69 1.45c0 .3-.0383.3125-.7649.3125-.7267 0-.765-.0125-.765-.3125s.0383-.3125.765-.3125c.7266 0 .7649.0125.7649.3125ZM30.5888 16.2545c-.5227.2-.6884.6125-.6884 1.6875 0 1.6125.3315 1.8625 2.4732 1.7875 1.2749-.0375 1.3642-.05 1.6956-.3875.3315-.325.357-.4125.357-1.4125 0-1.05-.0128-1.075-.4207-1.4375-.408-.35-.4462-.3625-1.7848-.35-.7522 0-1.4916.05-1.6319.1125Zm2.3713 1.6875c0 .3-.0383.3125-.7649.3125-.7267 0-.765-.0125-.765-.3125s.0383-.3125.765-.3125c.7266 0 .7649.0125.7649.3125ZM41.8845 16.2923c-.4589.225-.6374.6625-.6374 1.6125 0 1.6.3952 1.9 2.4605 1.825 1.3768-.0375 1.3896-.0375 1.7593-.45.3315-.3625.3697-.4875.3697-1.2875 0-1-.204-1.4875-.7012-1.7125-.4462-.2-2.8429-.1875-3.2509.0125Zm2.4223 1.65c0 .3-.0383.3125-.765.3125-.7266 0-.7649-.0125-.7649-.3125s.0383-.3125.7649-.3125c.7267 0 .765.0125.765.3125Z"
           />
         </svg>
-        <div className="font-semibold text-2xl "> 오늘의 문화재 퀴즈 </div>
+        <div className="font-semibold text-2xl text-white ">
+          {" "}
+          오늘의 문화재 퀴즈{" "}
+        </div>
       </div>
       <div className="flex flex-row items-center relative top-[27%]">
         {" "}
@@ -63,7 +67,7 @@ export default function TodayQuiz() {
                 Q. 다음 장소는 어디일까요
               </div>
               {/* 답안 부분 */}
-              <div className="flex flex-col justify-end items-center w-[100%] gap-5 mb-6">
+              <div className="flex flex-col justify-end items-center w-[100%] gap-5 mb-6 text-white">
                 <div className="w-[90%] h-10 rounded-lg bg-black opacity-75 flex justify-center items-center transition-colors ease-in-out hover:bg-red-700">
                   <span className="text-sm md:text-lg">선택지 1</span>
                 </div>
@@ -91,7 +95,7 @@ export default function TodayQuiz() {
               }}
               className="bg-[#C44440] w-[85%] h-[40px] flex flex-row justify-around items-center gap-14 mt-5 rounded-xl "
             >
-              <button className="flex flex-row items-center gap-9 text-xl font-bold">
+              <button className="flex flex-row items-center gap-9 text-xl text-white font-bold">
                 퀴즈에 참가하시겠습니까
                 <ArrowRightCircleIcon className="size-8 stroke-[2]" />
               </button>
