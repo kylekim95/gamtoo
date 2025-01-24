@@ -13,7 +13,7 @@ function Portal({ children }: IPortalProps) {
   useEffect(() => {
     const portalElement = document.querySelector(`#portal`);
     if (portalElement instanceof HTMLElement) {
-      setElement(portalElement); // 타입이 명확해짐
+      setElement(portalElement); 
     }
   }, []);
 
