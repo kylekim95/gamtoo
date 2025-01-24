@@ -2,10 +2,11 @@
 
 import React, { useCallback } from 'react'
 import KoreaCloudIcon from '@/components/quiz/svg/KoreaCloudIcon';
-import { Doughnut } from 'react-chartjs-2'
+import { Doughnut, Bar } from 'react-chartjs-2'
 import 'chart.js/auto';
 import CapsuleSelectMenu from './CapsuleSelectMenu';
 import { CatCode2String } from '@/components/quiz/CHCategories';
+import GagsiMaskIcon from '@/components/quiz/svg/GagsiMaskIcon';
 
 export default function StatisticsCard() {
   const testData = {
@@ -35,6 +36,85 @@ export default function StatisticsCard() {
     }
   };
 
+  const testBarData = {
+    labels: [...Object.values(CatCode2String)],
+    datasets:[
+      {
+        label: '내 오답률',
+        data: [50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50],
+        backgroundColor: '#222222'
+      },
+      {
+        label: '전체 유저 오답률',
+        data: [10,20,30,40,50,60,70,80,90,100,90,80,70,60,50,40],
+        backgroundColor: '#FF4444'
+      }
+    ],
+  };
+  const testBarOptions = {
+    indexAxis: 'y' as const,
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: false
+      },
+      title: {
+        display: true,
+        text: '문제 오답률'
+      },
+      tooltip: {
+        enabled: false
+      }
+    },
+    scales: {
+      y: {
+        stacked: true,
+      },
+      x: {
+        beginAtZero: true
+      }
+    }
+  };
+
+  const testBarVertData = {
+    labels: ['0~10','10~20','20~30','30~40','40~50','50~60','60~70','70~80','80~90','90~100'],
+    datasets:[
+      {
+        label:'Population',
+        data:[10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+        backgroundColor:[
+          '#222222',
+          '#222222',
+          '#222222',
+          '#222222',
+          '#FF4444',
+          '#222222',
+          '#222222',
+          '#222222',
+          '#222222',
+          '#222222'
+        ]
+      }
+    ]
+  };
+  const testBarVertOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: false
+      },
+      tooltip: {
+        enabled: false
+      },
+      title: {
+        display: true,
+        text: '랭킹에서 내 위치 확인하기'
+      }
+    }
+  };
+
   const testFunc = useCallback((selectedItems : object)=>console.log(selectedItems), []);
 
   return (
@@ -57,8 +137,17 @@ export default function StatisticsCard() {
         {/* Capsule Select Menu */}
         <CapsuleSelectMenu className='w-[80%] h-[100px] m-3 flex flex-wrap justify-center gap-1' items={CatCode2String} onSelectedChanged={testFunc}/>
         <div className='flex justify-center w-[90%]'>
-          <div className='w-[40%] aspect-square bg-slate-300 m-3'></div>
-          <div className='w-[40%] aspect-square bg-slate-300 m-3'></div>
+          <div className='w-[60%] flex justify-center'>
+            <Bar data={testBarData} options={testBarOptions}></Bar>
+          </div>
+          <div className='w-[40%] '>
+            <div className='w-full aspect-video mb-10'>
+              <Bar data={testBarVertData} options={testBarVertOptions}></Bar>
+            </div>
+            <div className='rounded-full border-[3px] border-black overflow-hidden w-fit self-end justify-self-end -rotate-[25deg] opacity-75'>
+              <GagsiMaskIcon width={125} height={125} color='#000000' />
+            </div>
+          </div>
         </div>
       </div>
     </div>

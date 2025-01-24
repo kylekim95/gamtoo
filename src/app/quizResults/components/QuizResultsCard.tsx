@@ -49,7 +49,7 @@ export default function QuizResultsCard() {
         <div className='w-full h-8 border-b flex items-center'>
           <span className='text-black text-sm font-bold'>{"유저 ID"} : {0}점</span>
         </div>
-        <div className='self-end mt-[-25px] -rotate-12 rounded-full overflow-hidden'>{ <GagsiMaskIcon width={150} height={150} color={"#FF4444"}/> }</div>
+        <div className='self-end mt-[-25px] -rotate-[25deg] rounded-full overflow-hidden border-[3px] border-[#FF4444]'>{ <GagsiMaskIcon width={150} height={150} color={"#FF4444"}/> }</div>
       </div>
     </div>
   )
