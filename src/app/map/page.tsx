@@ -159,7 +159,7 @@ export default function MapPage() {
   // 내위치 기반 길찾기 함수
   const searchLoadHandler = async (item: any) => {
     const url = "https://apis-navi.kakaomobility.com/v1/directions?";
-    const key = "061e7b60da5d9bdcecbc54f2dba198af";
+    const key = process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY;
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         async (position) => {
