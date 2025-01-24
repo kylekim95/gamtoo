@@ -1,4 +1,6 @@
 'use client'
+
+import React from "react";
 import { useState, useEffect } from "react";
 import { parseStringPromise } from "xml2js";
 import { useRouter } from "next/navigation"; // Next.js의 useRouter 사용
