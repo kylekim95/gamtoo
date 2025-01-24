@@ -233,20 +233,10 @@ function CultureFestival() {
     imageUrl: string;
   }
   const [filteredData, setFilteredData] = useState<Item[]>([
-    {
-      seqNo: "",
-      subTitle: "",
-      eDate: "",
-      imageUrl: "",
-    },
+
   ]);
   const [festivalItems, setFestivalItems] = useState<Item[]>([
-    {
-      seqNo: "",
-      subTitle: "",
-      eDate: "",
-      imageUrl: "",
-    },
+
   ]);
   const partyDate = parseISO("2024-06-10");
 
