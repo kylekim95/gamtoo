@@ -3,7 +3,7 @@ import React from 'react';
 import loginImage from "../../../public/loginImage.png";
 import signupImage from "../../../public/signupImage.png";
 import Image from "next/image";
-import {LoginType} from "@/types/LoginType";
+import LoginType from "@/types/LoginType";
 
 interface SignupType extends LoginType {
   passwordCheck: string;
@@ -42,23 +42,20 @@ export default function LoginPage() {
       alert("짧다")
       return;
     }
-    console.log(`${process.env.NEXT_PUBLIC_BASIC_URL}/login`, {
-      email: loginInput.email,
-      password: loginInput.password
-    })
     const response = await fetch(`${process.env.NEXT_PUBLIC_BASIC_URL}/login`,{
       method: "POST",
       headers: {
         "Content-type": "application/json"
       },
       body: JSON.stringify({
-        email: signupInput.email,
-        fullName: signupInput.fullName,
-        password: signupInput.password
+        email: loginInput.email,
+        password: loginInput.password
       })
     });
+    if(response.status !== 200) {
+      return;
+    }
     const data = await response.json();
-    console.log(data);
   }
   async function handleSignupSubmit() {
     if(signupInput.passwordCheck !== signupInput.password) {
@@ -69,11 +66,6 @@ export default function LoginPage() {
       alert("짧다")
       return;
     }
-    console.log(`${process.env.NEXT_PUBLIC_BASIC_URL}/signup`, {
-      email: signupInput.email,
-      fullName: signupInput.fullName,
-      password: signupInput.password
-    })
     const response = await fetch(`${process.env.NEXT_PUBLIC_BASIC_URL}/signup`,{
       method: "POST",
       headers: {
@@ -85,9 +77,11 @@ export default function LoginPage() {
         password: signupInput.password
       })
     });
+    if (response.status !== 200) {
+      return;
+    }
     const data = await response.json();
-    console.log(data);
-    // setIsActive(!isActive);
+    setIsActive(!isActive);
   }
   return (
     <div className={`w-full h-[1000px] content-center ${isActive ? 'active bg-[#FFDCCF]' : 'bg-[#DAD1E6]'}`}>
