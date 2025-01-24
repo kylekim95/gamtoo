@@ -1,11 +1,11 @@
 "use client"
 
-import React from 'react'
+import React, { useCallback } from 'react'
 import KoreaCloudIcon from '@/components/quiz/svg/KoreaCloudIcon';
 import { Doughnut } from 'react-chartjs-2'
 import 'chart.js/auto';
 import CapsuleSelectMenu from './CapsuleSelectMenu';
-import { CatCode2String, String2CatCode } from '@/components/quiz/CHCategories';
+import { CatCode2String } from '@/components/quiz/CHCategories';
 
 export default function StatisticsCard() {
   const testData = {
@@ -35,6 +35,8 @@ export default function StatisticsCard() {
     }
   };
 
+  const testFunc = useCallback((selectedItems : object)=>console.log(selectedItems), []);
+
   return (
     <div className='w-full min-w-[800px] h-auto flex flex-col items-center backdrop-blur-xl rounded-lg shadow-2xl overflow-hidden pb-10'>
       {/* Card Header */}
@@ -53,7 +55,7 @@ export default function StatisticsCard() {
         </div>
         <span className='text-black font-bold text-lg'>문화재 퀴즈에 도전한 25%의 유저 중 한명입니다!</span>
         {/* Capsule Select Menu */}
-        <CapsuleSelectMenu className='w-[80%] h-[100px] m-3' items={CatCode2String} onSelectedChanged={(selectedItems : object)=>console.log(selectedItems)}/>
+        <CapsuleSelectMenu className='w-[80%] h-[100px] m-3' items={CatCode2String} onSelectedChanged={testFunc}/>
         <div className='flex justify-center w-[90%]'>
           <div className='w-[40%] aspect-square bg-slate-300 m-3'></div>
           <div className='w-[40%] aspect-square bg-slate-300 m-3'></div>

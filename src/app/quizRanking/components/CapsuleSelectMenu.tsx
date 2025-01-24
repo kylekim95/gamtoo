@@ -33,8 +33,8 @@ export default function CapsuleSelectMenu(props : CapsuleSelectMenuProps) {
     setSelectedItems({...selectedItems, ...newState});
   }
   useEffect(()=>{
-    
-  }, []);
+    if(props.onSelectedChanged) props.onSelectedChanged(selectedItems);
+  }, [selectedItems, props]);
 
   return (
     <div className={props.className + ` flex flex-wrap gap-1`}>
