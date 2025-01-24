@@ -137,13 +137,17 @@ export default function StatisticsCard() {
         {/* Capsule Select Menu */}
         <CapsuleSelectMenu className='w-[80%] h-[100px] m-3 flex flex-wrap justify-center gap-1' items={CatCode2String} onSelectedChanged={testFunc}/>
         <div className='flex justify-center w-[90%]'>
+          {/* 오답률 차트트 */}
           <div className='w-[60%] flex justify-center'>
             <Bar data={testBarData} options={testBarOptions}></Bar>
           </div>
           <div className='w-[40%] '>
+            {/* 랭킹 내 위치 */}
             <div className='w-full aspect-video mb-10'>
               <Bar data={testBarVertData} options={testBarVertOptions}></Bar>
             </div>
+            {/* 각시탈 아이콘 */}
+            {/* TODO: 랭크에 맞게 색 설정하기 */}
             <div className='rounded-full border-[3px] border-black overflow-hidden w-fit self-end justify-self-end -rotate-[25deg] opacity-75'>
               <GagsiMaskIcon width={125} height={125} color='#000000' />
             </div>
