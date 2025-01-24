@@ -101,19 +101,30 @@ export default function QuizPage() {
         <div className='w-full flex'>
           <div className='shrink w-[15%]'></div>
           <div className='w-[70%] flex flex-col items-center'>
-            <div className='w-full flex flex-col items-center'>
+            <div className='w-full flex flex-col items-center mb-10'>
               {dummyData.map((elem, index)=><ProblemCard key={elem.id} id={elem.id} ref={refs.current[index]} url={elem.url} selectAnswer={elem.selection} selectAnswerCallback={SelectAnswerCallback}/> )}
             </div>
-            <div className='w-full aspect-[6/1] flex justify-center items-center gap-10 m-2'>
+            {/* 페이지 밑의 메뉴 화면 크기가 xl이상이면 hidden */}
+            <div className='xl:hidden w-full aspect-[6/1] flex justify-center items-center gap-10 mb-10'>
               <div onClick={()=>OnClickToTop()} className='h-[50%] min-h-[125px] aspect-square bg-red-700 rounded-full flex justify-center items-center opacity-75 hover:opacity-100 transition-opacity ease-in-out'>
-                <span className='text-white'>처음으로</span>
+                <span className='text-white font-bold text-sm'>처음으로</span>
               </div>
               <div onClick={()=>OnClickSubmit()} className='h-[50%] min-h-[125px] aspect-square bg-blue-700 rounded-full flex justify-center items-center opacity-75 hover:opacity-100 transition-opacity ease-in-out'>
-                <span className='text-white'>제출하기</span>
+                <span className='text-white font-bold text-sm'>제출하기</span>
               </div>
             </div>
           </div>
-          <div className='shrink w-[15%]'></div>
+          <div className='shrink w-[15%]'>
+            {/* Sticky menu 화면 크기가 xl이하면 hidden */}
+            <div className='hidden w-[50%] sticky top-[30%] xl:flex flex-col justify-center items-center gap-10 mt-10'>
+              <div onClick={()=>OnClickToTop()} className='h-[50%] min-h-[125px] aspect-square bg-red-700 rounded-full flex justify-center items-center opacity-75 hover:opacity-100 transition-opacity ease-in-out'>
+                <span className='text-white font-bold text-sm'>처음으로</span>
+              </div>
+              <div onClick={()=>OnClickSubmit()} className='h-[50%] min-h-[125px] aspect-square bg-blue-700 rounded-full flex justify-center items-center opacity-75 hover:opacity-100 transition-opacity ease-in-out'>
+                <span className='text-white font-bold text-sm'>제출하기</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
