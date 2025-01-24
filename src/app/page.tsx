@@ -15,7 +15,7 @@ import heritageData from "@/types/heritageData";
 
 //기타
 import Image from "next/image";
-
+require('dotenv').config();
 function ButtonGroup() {
   const buttonInfo: buttonGroup[] = [
     {
@@ -37,7 +37,9 @@ function ButtonGroup() {
   ];
 
   return (
+
     <div className="flex flex-row gap-16">
+      
       {buttonInfo.map(({ destination, bgColor }, index) => (
         <div
           key={index}
