@@ -6,6 +6,9 @@
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
+    "types": [
+      "kakao.maps.d.ts"
+    ],
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "node",
