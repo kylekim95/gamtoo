@@ -229,11 +229,15 @@ export default function RootLayout({
       <html lang="en">
     
         <body>
+        <div id="portal" />
           {" "}
           <Header />
           {children}
+         
           <Footer />
+      
         </body>
+        
       </html>
     </>
   );
