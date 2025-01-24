@@ -41,7 +41,7 @@ export default function RankingCard() {
   ];
 
   return (
-    <div className='w-full min-w-[800px] flex flex-col items-center backdrop-blur-xl pt-5 pb-5 rounded-lg shadow-2xl'>
+    <div className='w-full min-w-[800px] max-w-[1000px] flex flex-col items-center backdrop-blur-xl pt-5 pb-5 rounded-lg shadow-2xl'>
       <KoreaCloudIcon width={75} height={75} color='#FFFFFF'/>
       <span className='text-white font-bold text-xl mb-10'>문화재 퀴즈 랭킹</span>
       <div className='w-[90%] flex place-content-around gap-1 mb-10'>

@@ -38,7 +38,7 @@ export default function StatisticsCard() {
   const testFunc = useCallback((selectedItems : object)=>console.log(selectedItems), []);
 
   return (
-    <div className='w-full min-w-[800px] h-auto flex flex-col items-center backdrop-blur-xl rounded-lg shadow-2xl overflow-hidden pb-10'>
+    <div className='w-full min-w-[800px] max-w-[1000px] h-auto flex flex-col items-center backdrop-blur-xl rounded-lg shadow-2xl overflow-hidden pb-10'>
       {/* Card Header */}
       <div
         className='w-full aspect-[5/1] bg-[#00000080] flex flex-col justify-center items-center mb-5'
@@ -50,12 +50,12 @@ export default function StatisticsCard() {
       {/* Card Content */}
       <div className='flex flex-col items-center w-full'>
         {/* Participation Doughnut Chart */}
-        <div className='w-[20%] mb-5'>
+        <div className='w-[20%] mb-5 flex justify-center'>
           <Doughnut data={testData} options={testOptions}></Doughnut>
         </div>
         <span className='text-black font-bold text-lg'>문화재 퀴즈에 도전한 25%의 유저 중 한명입니다!</span>
         {/* Capsule Select Menu */}
-        <CapsuleSelectMenu className='w-[80%] h-[100px] m-3' items={CatCode2String} onSelectedChanged={testFunc}/>
+        <CapsuleSelectMenu className='w-[80%] h-[100px] m-3 flex flex-wrap justify-center gap-1' items={CatCode2String} onSelectedChanged={testFunc}/>
         <div className='flex justify-center w-[90%]'>
           <div className='w-[40%] aspect-square bg-slate-300 m-3'></div>
           <div className='w-[40%] aspect-square bg-slate-300 m-3'></div>
