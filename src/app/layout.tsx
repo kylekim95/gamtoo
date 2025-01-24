@@ -11,9 +11,6 @@ import {
   BellSlashIcon,
 } from "@heroicons/react/20/solid";
 
-import QuizPage from "./quiz/page";
-import QuizRanking from "./quizRanking/page";
-
 // 감투 아이콘
 function GamtooIcon() {
   return (
