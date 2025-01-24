@@ -15,7 +15,7 @@ import heritageData from "@/types/heritageData";
 
 //기타
 import Image from "next/image";
-require('dotenv').config();
+
 function ButtonGroup() {
   const buttonInfo: buttonGroup[] = [
     {
