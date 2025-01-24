@@ -1,9 +1,18 @@
 "use client";
+//라이브러리 정의
 import axios from "axios";
 import { useRef, useState, useEffect, useMemo } from "react";
-import { Map, MapMarker, CustomOverlayMap, Polyline } from "react-kakao-maps-sdk";
+import {
+  Map,
+  MapMarker,
+  CustomOverlayMap,
+  Polyline,
+} from "react-kakao-maps-sdk";
+
+//컴포넌트 정의
 import { MapItem } from "../../../../types/Map";
 
+// custom 인포윈도우
 function InfoWindows({
   item,
   setOpenOverlayId,
@@ -61,7 +70,12 @@ function InfoWindows({
             <p className=" flex items-center justify-center bg-gray-200 rounded-full px-3 py-1 text-xs tracking-tight font-semibold text-gray-700 ">
               주소: {item.item.ccbaLcad}
             </p>
-            <p onClick={()=>searchLoadHandler(item)} className=" w-28 h-9 text-white flex justify-center items-center py-1 rounded-md hover:bg-[#b23741c2] bg-[#B23742]">길찾기</p>
+            <p
+              onClick={() => searchLoadHandler(item)}
+              className=" w-28 h-9 text-white flex justify-center items-center py-1 rounded-md hover:bg-[#b23741c2] bg-[#B23742]"
+            >
+              길찾기
+            </p>
           </div>
         </div>
       </div>
@@ -80,29 +94,35 @@ export default function BasicMap({
   load: any;
   searchLoadHandler: (e: any) => void;
 }) {
-  const mapRef = useRef<kakao.maps.Map | null>(null); // 지도 객체를 참조하기 위한 useRef
+  const mapRef = useRef<kakao.maps.Map | null>(null); 
+
+  //state 정의
   const [openOverlayId, setOpenOverlayId] = useState<number | null>(null);
   const [item, setItem] = useState<any>(null);
+
+// 지도 재설정 함수
   const bounds = useMemo(() => {
     if (mapRef.current && data.length > 0) {
       const bounds = new kakao.maps.LatLngBounds();
-
       data?.forEach((point) => {
         bounds.extend(new kakao.maps.LatLng(point.latitude, point.longitude));
       });
       return bounds;
     }
   }, [data]);
+
+// 길찾기 버튼 클릭시 지도 재설정 함수
   const loadbounds = useMemo(() => {
     if (mapRef.current && load.sections) {
-      const bound = load.sections[0].bound
-      console.log(bound);
+      const bound = load.sections[0].bound;
       const bounds = new kakao.maps.LatLngBounds();
       bounds.extend(new kakao.maps.LatLng(bound.max_y, bound.max_x));
       bounds.extend(new kakao.maps.LatLng(bound.min_y, bound.min_x));
       return bounds;
     }
   }, [load]);
+
+// 마커 클릭시 상세정보 데이터 함수
   const getDetailData = async (pos: any) => {
     const url = `http://www.khs.go.kr/cha/SearchKindOpenapiDt.do?ccbaKdcd=${pos.ccbaKdcd}&ccbaCtcd=${pos.ccbaCtcd}&ccbaAsno=${pos.ccbaAsno}&ccbaCpno=${pos.ccbaCpno}`;
     const response = await axios.get(url);
@@ -119,79 +139,68 @@ export default function BasicMap({
     );
   };
 
+  // 마커 클릭시 실행되는 함수
   const handleMarkerClick = (pos: any) => {
     getDetailData(pos);
-
     if (mapRef.current) {
       const moveLatLng = new kakao.maps.LatLng(pos.latitude, pos.longitude);
       mapRef.current.panTo(moveLatLng); // 지도 위치를 클릭한 마커로 이동
     }
   };
+// update 지도크기
   const updateBounds = () => {
     if (mapRef.current && data.length > 0) {
       mapRef.current.setBounds(bounds!);
-      // 지도 타입을 ROADMAP(일반 지도)로 설정
     }
   };
+//길찾기시 update 지도크기
   const updateLoadBounds = () => {
     if (mapRef.current && load.sections) {
       mapRef.current.setBounds(loadbounds!);
     }
   };
+
   useEffect(() => {
-    
     updateBounds();
-    console.log(load)
   }, [data]);
   useEffect(() => {
-    if (!load || !load.sections) return; // load 또는 load.sections가 없으면 실행하지 않음
-  
+    if (!load || !load.sections) return;
     updateLoadBounds();
-  
     const linePath: kakao.maps.LatLng[] = [];
-  
-    // load.sections[0].roads의 vertexes를 순회하며 경로 생성
     load.sections[0].roads.forEach((router: { vertexes: any[] }) => {
       router.vertexes.forEach((vertex, index) => {
-        // 짝수 인덱스가 lng, 홀수 인덱스가 lat
         if (index % 2 === 0) {
           linePath.push(
-            new kakao.maps.LatLng(router.vertexes[index + 1], router.vertexes[index])
+            new kakao.maps.LatLng(
+              router.vertexes[index + 1],
+              router.vertexes[index]
+            )
           );
         }
       });
     });
-  
-    // 폴리라인 생성
+
     const polyline = new kakao.maps.Polyline({
-      path: linePath, // 생성된 경로
-      strokeWeight: 5, // 선 두께
-      strokeColor: "#000000", // 선 색상
-      strokeOpacity: 0.7, // 선 투명도
-      strokeStyle: "solid", // 선 스타일
+      path: linePath,
+      strokeWeight: 5,
+      strokeColor: "#b23741c2",
+      strokeOpacity: 1,
+      strokeStyle: "solid",
     });
-  
-    // 지도에 폴리라인 추가
+
     polyline.setMap(mapRef.current);
-  
-    // 시작 및 끝 마커 생성
-   
-      // 시작 좌표
-      const startMarker = new kakao.maps.Marker({
-        position: linePath[0], // 첫 번째 좌표
-        map: mapRef.current!,
-        title: "출발점",
-      });
-  
-      // 끝 좌표
-      const endMarker = new kakao.maps.Marker({
-        position: linePath[linePath.length - 1], // 마지막 좌표
-        map: mapRef.current!,
-        title: "도착점",
-      });
-  
-  
-    // 메모리 관리를 위해 컴포넌트 언마운트 시 폴리라인 및 마커 제거
+    const startMarker = new kakao.maps.Marker({
+      position: linePath[0],
+      map: mapRef.current!,
+      title: "출발점",
+    });
+
+    const endMarker = new kakao.maps.Marker({
+      position: linePath[linePath.length - 1],
+      map: mapRef.current!,
+      title: "도착점",
+    });
+
     return () => {
       polyline.setMap(null);
       startMarker.setMap(null);
@@ -210,7 +219,7 @@ export default function BasicMap({
         height: "100vh",
       }}
       level={12}
-      onCreate={(map) => (mapRef.current = map)} // 지도 객체를 mapRef에 저장
+      onCreate={(map) => (mapRef.current = map)}
     >
       {data.length > 0 &&
         data.map((pos) => (
@@ -226,17 +235,16 @@ export default function BasicMap({
                   offset: {
                     x: 20,
                     y: 40,
-                  }, // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+                  },
                 },
               }}
               position={{
                 lat: pos.latitude,
                 lng: pos.longitude,
               }}
-              onClick={() => handleMarkerClick(pos)} // 클릭한 마커의 ID 저장
+              onClick={() => handleMarkerClick(pos)}
             />
-            
-         
+
             {openOverlayId === pos.no && item && (
               <InfoWindows
                 item={item}

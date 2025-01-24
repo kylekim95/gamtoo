@@ -1,17 +1,18 @@
 "use client";
 
+//라이브러리 정의
 import axios from "axios";
 import { Accordion, AccordionItem as Item } from "@szhsin/react-accordion";
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
-
+//컴포넌트 정의
 import MultiRange from "@/app/map/components/rangeSlider";
 import SelectBox from "@/app/map/components/slelctBox";
 import BasicMap from "@/app/map/components/kakaoMap";
 import { MapItem, SelectProps } from "../../../types/Map";
-import { DivideIcon } from "@heroicons/react/20/solid";
 
+// select 객체
 const selectList: SelectProps[] = [
   {
     title: "국보",
@@ -64,7 +65,8 @@ const selectList: SelectProps[] = [
     value: "22",
   },
 ];
-// import historyIcon from "@/styles/history-icon.svg";
+
+//custom 아코디언 스타일
 const AccordionItem = ({ header, ...rest }: any) => (
   <Item
     {...rest}
@@ -103,26 +105,21 @@ const AccordionItem = ({ header, ...rest }: any) => (
     panelProps={{ className: "p-4" }}
   />
 );
+
 export default function MapPage() {
-  const [filters, setFilters] = useState<
-    Record<string, string | number | undefined>
-  >({});
+  const router = useRouter();
+  const searchParams = useSearchParams();
+// state
+  const [filters, setFilters] = useState<Record<string, string | number | undefined>>({});
   const [item, setItem] = useState<MapItem[]>([]);
   const [load, setLoad] = useState<any>([]);
   const [isOpen, setIsOpen] = useState<boolean>(true);
   const [isLoadOpen, setIsLoadOpen] = useState<boolean>(false);
   const [isNavOpen, setIsNavOpen] = useState<boolean>(true);
 
-  const [state, setState] = useState<any>({
-    center: {
-      lat: 33.450701,
-      lng: 126.570667,
-    },
-    errMsg: null,
-    isLoading: true,
-  });
-  const router = useRouter();
-  const searchParams = useSearchParams();
+
+ 
+//xml json 으로 변경해주는 함수
   const xmlToJsonFilterHandler = (data: any) => {
     const parseString = require("xml2js").parseString;
 
@@ -135,7 +132,6 @@ export default function MapPage() {
           return;
         }
 
-        // 좌표가 0인 항목 필터링
         const filteredItems = Array.isArray(result.result.item)
           ? result.result.item.filter(
               (item: any) =>
@@ -146,11 +142,11 @@ export default function MapPage() {
             )
           : result.result.item;
 
-        setItem(filteredItems); // 상태 업데이트
+        setItem(filteredItems); 
       }
     );
   };
-
+// 데이터 불러오는 함수
   const getData = async (params: string) => {
     const data = await axios.get(
       `http://www.khs.go.kr/cha/SearchKindOpenapiList.do?pageUnit=10000&${
@@ -160,21 +156,13 @@ export default function MapPage() {
     xmlToJsonFilterHandler(data);
   };
 
+  // 내위치 기반 길찾기 함수
   const searchLoadHandler = async (item: any) => {
     const url = "https://apis-navi.kakaomobility.com/v1/directions?";
     const key = "061e7b60da5d9bdcecbc54f2dba198af";
     if (navigator.geolocation) {
-      // GeoLocation을 이용해서 접속 위치를 얻어옵니다
       navigator.geolocation.getCurrentPosition(
-       async (position) => {
-        setState((prev: any) => ({
-          ...prev,
-          center: {
-            lat: position.coords.latitude, // 위도
-            lng: position.coords.longitude, // 경도
-          },
-          isLoading: false,
-        }));
+        async (position) => {
           const data = await axios.get(
             `${url}origin=${position.coords.longitude},${position.coords.latitude}&destination=${item.longitude},${item.latitude}&priority=RECOMMEND`,
             {
@@ -184,43 +172,31 @@ export default function MapPage() {
             }
           );
           if (data.status === 200) {
+            if (data.data.routes[0].result_code === 103) {
+              alert("주변에 도로가 없어서 길찾기에 실패하였습니다.");
+            }
             setLoad(data.data.routes[0]);
             setItem([]);
             setIsLoadOpen(true);
             setIsNavOpen(false);
-    
-            console.log(data.data.routes[0]);
           }
-      
         },
         (err) => {
-          console.log(err)
-          setState((prev: any) => ({
-            ...prev,
-            errMsg: err.message,
-            isLoading: false,
-          }));
+          console.log(err);
         },
         { enableHighAccuracy: true }
       );
-   
-   
     } else {
-      // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정합니다
-      setState((prev: any) => ({
-        ...prev,
-        errMsg: "geolocation을 사용할수 없어요..",
-        isLoading: false,
-      }));
+      alert("내위치를 사용할 수 없습니다.")
     }
   };
 
+  //onChange 핸들러
   const handleChange = (
     e:
       | ChangeEvent<HTMLSelectElement | HTMLInputElement>
       | { minValue: number; maxValue: number }
   ) => {
-    // 슬라이더에서 호출한 경우
     if ("minValue" in e && "maxValue" in e) {
       const { minValue, maxValue } = e;
       setFilters((prev) => ({
@@ -229,7 +205,6 @@ export default function MapPage() {
         enCcbaAsdt: maxValue,
       }));
     }
-    // 드롭다운이나 다른 입력 이벤트 처리
     else if ("target" in e) {
       const { name, value } = e.target;
       setFilters((prev) => ({
@@ -239,6 +214,7 @@ export default function MapPage() {
     }
   };
 
+  // 조건 검색 함수
   const filterButtonHandler = async () => {
     const cleanedFilters: Record<string, string> = Object.fromEntries(
       Object.entries(filters)
@@ -252,19 +228,21 @@ export default function MapPage() {
     );
     const params = new URLSearchParams(cleanedFilters);
     router.push(`?${params}`);
-
   };
 
   function convertSecondsToTime(seconds: number) {
-    const hours = Math.floor(seconds / 3600); // 전체 시간을 계산
-    const minutes = Math.floor((seconds % 3600) / 60); // 남은 초를 분으로 변환
+    const hours = Math.floor(seconds / 3600); 
+    const minutes = Math.floor((seconds % 3600) / 60); 
     return `${hours}시간 ${minutes}분`;
   }
+
+  // 길찾기 모달창 닫는 함수
   const backLoad = () => {
     setLoad({});
     setIsLoadOpen(false);
     getData("");
   };
+
   useEffect(() => {
     const params = searchParams.toString();
     getData(params);
@@ -276,6 +254,7 @@ export default function MapPage() {
       setFilters(queryObject);
     }
   }, []);
+
   return (
     <section className="items-center  justify-center gap-4 ">
       <BasicMap searchLoadHandler={searchLoadHandler} data={item} load={load}>
@@ -284,28 +263,28 @@ export default function MapPage() {
             isNavOpen ? "-left-[383px]" : "left-10"
           } transition-all duration-300 max-w-96 z-50 top-36`}
         >
-          {!isLoadOpen ?
-          <div className=" absolute w-10 h-10 flex items-center justify-center bg-white -right-10  rounded-r-lg top-10">
-            <button onClick={() => setIsNavOpen(!isNavOpen)}>
-              <div className={`${!isNavOpen ? "rotate-180" : null}`}>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="size-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="m5.25 4.5 7.5 7.5-7.5 7.5m6-15 7.5 7.5-7.5 7.5"
-                  />
-                </svg>
-              </div>
-            </button>
-          </div>:null
-          }
+          {!isLoadOpen ? (
+            <div className=" absolute w-10 h-10 flex items-center justify-center bg-white -right-10  rounded-r-lg top-10">
+              <button onClick={() => setIsNavOpen(!isNavOpen)}>
+                <div className={`${!isNavOpen ? "rotate-180" : null}`}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="size-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="m5.25 4.5 7.5 7.5-7.5 7.5m6-15 7.5 7.5-7.5 7.5"
+                    />
+                  </svg>
+                </div>
+              </button>
+            </div>
+          ) : null}
           <div className=" bg-white flex flex-col gap-3 p-8 w-full rounded-3xl shadow-lg">
             {!isLoadOpen && load ? (
               <>
@@ -413,13 +392,14 @@ export default function MapPage() {
                 <div className="flex items-center justify-between gap-4 ">
                   <p className="text-lg text-gray-400">소요시간</p>
                   <p className="text-slate-800 font-semibold text-2xl">
-                    {convertSecondsToTime(load?.sections?.[0]?.duration) || "정보 없음"}
+                    {convertSecondsToTime(load?.sections?.[0]?.duration) ||
+                      "정보 없음"}
                   </p>
                 </div>
                 <div className="flex items-center justify-between gap-4">
                   <p className="text-lg text-gray-400">총거리</p>
                   <p className="text-slate-800 font-semibold text-2xl">
-                    {load?.sections?.[0]?.distance / 1000 || ""}
+                    {load?.sections?.[0]?.distance / 1000 || "정보 없음"}
                     <span className="font-normal text-gray-500 text-sm">
                       {" "}
                       KM
