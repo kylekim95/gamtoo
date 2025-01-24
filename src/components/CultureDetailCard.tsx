@@ -20,13 +20,17 @@ export default function Card() {
             <Image
               src={item.imageUrl}
               alt={item.name}
-              layout="fill" // 부모 컨테이너를 채우도록 설정
-              objectFit="cover"
-              objectPosition="center top" // 상단 중심 정렬
+              fill // 부모 컨테이너를 채우도록 설정
+              priority // LCP로 감지된 이미지에 우선순위 부여
+              sizes="280px" // 부모 컨테이너의 고정 너비와 동일하게 설정
+              style={{
+                objectFit: "cover",
+                objectPosition: "center top", // 상단 중심 정렬
+              }}
             />
-            {/* 1. layout="fill": Next.js <Image> 컴포넌트가 부모 컨테이너를 채우도록 설정합니다.
-                  2. objectFit="cover": 이미지를 비율을 유지하며 컨테이너를 꽉 채웁니다.
-                  3. objectPosition="top center": 이미지의 상단 중심을 기준으로 잘립니다. */}
+            {/* 1. fill: Next.js <Image> 컴포넌트가 부모 컨테이너를 채우도록 설정합니다.
+                2. objectFit="cover": 이미지를 비율을 유지하며 컨테이너를 꽉 채웁니다.
+                3. objectPosition="top center": 이미지의 상단 중심을 기준으로 잘립니다. */}
           </div>
 
           {/* 유형, 이름, 주소를 세로로 정렬하기 위해 flex flex-col 사용 */}
