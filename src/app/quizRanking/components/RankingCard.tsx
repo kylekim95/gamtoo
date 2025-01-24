@@ -15,8 +15,8 @@ type DataType = {
 }
 
 export default function RankingCard() {
-  const smallCheck = <CheckIcon width={25} height={25} color={"#44FF44"}/>;
-  const dummyDesc = ["#", "랭크크", "ID", "최고 점수", "시도 횟수", "날짜"];
+  const smallCheck = <CheckIcon width={20} height={20} color={"#000000"}/>;
+  const dummyDesc = ["#", "랭크", "ID", "최고 점수", "시도 횟수", "날짜"];
   const dummyData : DataType[] = [
     {standings:1, rank:smallCheck, id:"유저ID", highScore:100, attempts:10, date:"2025.01.23"},
     {standings:2, rank:smallCheck, id:"유저ID", highScore:100, attempts:10, date:"2025.01.23"},
@@ -28,20 +28,30 @@ export default function RankingCard() {
     {standings:8, rank:smallCheck, id:"유저ID", highScore:100, attempts:10, date:"2025.01.23"},
     {standings:9, rank:smallCheck, id:"유저ID", highScore:100, attempts:10, date:"2025.01.23"},
     {standings:10, rank:smallCheck, id:"유저ID", highScore:100, attempts:10, date:"2025.01.23"},
+    {standings:11, rank:smallCheck, id:"유저ID", highScore:100, attempts:10, date:"2025.01.23"},
+    {standings:12, rank:smallCheck, id:"유저ID", highScore:100, attempts:10, date:"2025.01.23"},
+    {standings:13, rank:smallCheck, id:"유저ID", highScore:100, attempts:10, date:"2025.01.23"},
+    {standings:14, rank:smallCheck, id:"유저ID", highScore:100, attempts:10, date:"2025.01.23"},
+    {standings:15, rank:smallCheck, id:"유저ID", highScore:100, attempts:10, date:"2025.01.23"},
+    {standings:16, rank:smallCheck, id:"유저ID", highScore:100, attempts:10, date:"2025.01.23"},
+    {standings:17, rank:smallCheck, id:"유저ID", highScore:100, attempts:10, date:"2025.01.23"},
+    {standings:18, rank:smallCheck, id:"유저ID", highScore:100, attempts:10, date:"2025.01.23"},
+    {standings:19, rank:smallCheck, id:"유저ID", highScore:100, attempts:10, date:"2025.01.23"},
+    {standings:20, rank:smallCheck, id:"유저ID", highScore:100, attempts:10, date:"2025.01.23"},
   ];
 
   return (
-    <div className='w-full min-w-[800px] aspect-[3/2] flex flex-col items-center backdrop-blur-xl p-5 rounded-lg'>
+    <div className='w-full min-w-[800px] flex flex-col items-center backdrop-blur-xl pt-5 pb-5 rounded-lg shadow-2xl'>
       <KoreaCloudIcon width={75} height={75} color='#FFFFFF'/>
-      <span className='text-white font-bold text-xl mb-5'>문화재 퀴즈 랭킹</span>
-      <div className='w-[80%] flex place-content-around gap-1 mb-10'>
-        <ImportantRankCard className='w-[22.5%] aspect-[1/1.2]' color='#c21616' header='이번주 점수 1위' uid=''/>
-        <ImportantRankCard className='w-[22.5%] aspect-[1/1.2]' color='#c21616' header='이번주 시도 횟수 1위' uid=''/>
-        <ImportantRankCard className='w-[22.5%] aspect-[1/1.2]' color='#c21616' header='오늘 점수 1위' uid=''/>
-        <ImportantRankCard className='w-[22.5%] aspect-[1/1.2]' color='#c21616' header='오늘 시도 횟수 1위' uid=''/>
+      <span className='text-white font-bold text-xl mb-10'>문화재 퀴즈 랭킹</span>
+      <div className='w-[90%] flex place-content-around gap-1 mb-10'>
+        <ImportantRankCard className='w-[22.5%] aspect-square' color='#c21616' header='이번주 점수 1위' uid=''/>
+        <ImportantRankCard className='w-[22.5%] aspect-square' color='#c21616' header='이번주 시도 횟수 1위' uid=''/>
+        <ImportantRankCard className='w-[22.5%] aspect-square' color='#c21616' header='오늘 점수 1위' uid=''/>
+        <ImportantRankCard className='w-[22.5%] aspect-square' color='#c21616' header='오늘 시도 횟수 1위' uid=''/>
       </div>
-      <div className='w-[70%] flex justify-center'>
-        <Table<DataType> data={dummyData} spacing={[1,1,2,2,2,3]} desc={dummyDesc} />
+      <div className='w-[80%] flex justify-center mb-10'>
+        <Table<DataType> data={dummyData} spacing={[1,1,2,2,2,3]} desc={dummyDesc} maxHeight={'300px'}/>
       </div>
     </div>
   )
