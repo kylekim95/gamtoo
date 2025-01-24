@@ -21,6 +21,7 @@ import Card from "@/components/CultureDetailCard";
 
 //기타
 import Image from "next/image";
+
 import { useRouter } from "next/navigation";
 
 // Navigation
@@ -72,6 +73,7 @@ function Navigation() {
     </div>
   );
 }
+require('dotenv').config();
 
 function ButtonGroup() {
   const router = useRouter();
@@ -99,8 +101,11 @@ function ButtonGroup() {
   ];
 
   return (
+
     <div className="flex flex-row gap-16">
+
       {buttonInfo.map(({ destination, bgColor, text }, index) => (
+
         <div
           key={index}
           className={`rounded-tl-lg rounded-br-lg rounded-tr-3xl rounded-bl-3xl opacity-90`}

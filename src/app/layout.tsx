@@ -1,7 +1,11 @@
-"use client";
 
+
+
+"use client";
+import Script from "next/script";
 import { useRouter } from "next/navigation";
 import "./globals.css";
+
 
 // 외부
 // 알림 아이콘입니다.
@@ -10,6 +14,7 @@ import {
   BellAlertIcon,
   BellSlashIcon,
 } from "@heroicons/react/20/solid";
+
 
 // 감투 아이콘
 function GamtooIcon() {
@@ -42,6 +47,7 @@ function GamtooIcon() {
     </svg>
   );
 }
+
 
 // 각시탈 아이콘
 function Gaksital() {
@@ -77,6 +83,7 @@ function Header() {
   return (
     <header className="flex justify-between items-center h-[90px] px-9 mb-6 border-b-[1px] border-stone-400 bg-[#FFFFFF] min-w-full">
       {/* 헤더 왼쪽 */}
+
       <div className="left mt-1 gap-11 flex ">
         <div
           onClick={() => {
@@ -220,6 +227,7 @@ export default function RootLayout({
   return (
     <>
       <html lang="en">
+    
         <body>
           {" "}
           <Header />
