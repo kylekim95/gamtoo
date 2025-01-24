@@ -1,14 +1,24 @@
-import React from 'react'
-
-import CheckedIcon from '../../../components/quiz/svg/CheckedIcon'
-import CrossedIcon from '../../../components/quiz/svg/CrossedIcon'
+import React, { useRef, createRef, useState } from 'react'
 
 type ProblemCardProps = {
-  ref: React.RefObject<HTMLDivElement | null>;
-  url: string
+  id: string;
+  ref: React.RefObject<HTMLDivElement | null>; //Intersection Observer
+  url: string; //이미지 로딩 용
+  selectAnswer: string[];
+  selectAnswerCallback: (id: string, selected : number)=>void;
 }
 
-export default function ProblemCard(props : ProblemCardProps) {
+export default function ProblemCard(props : ProblemCardProps) {  
+  const selectionButtons = useRef(props.selectAnswer.map(()=>createRef<HTMLDivElement>()));
+  const selectionColors = ["bg-red-700", "bg-green-700", "bg-blue-700", "bg-yellow-700"];
+  const selectionColorsText = ["text-red-500", "text-green-500", "text-blue-500", "text-yellow-500"];
+  const [selected, setSelected] = useState(-1);
+
+  function OnClickSelectBtn(selectedNum : number){
+    setSelected(selectedNum);
+    props.selectAnswerCallback(props.id, selectedNum);
+  }
+  
   return (
     <div className='
       w-full max-w-[900px] min-w-[600px] aspect-[2.5/1] m-2
@@ -20,8 +30,7 @@ export default function ProblemCard(props : ProblemCardProps) {
         className={`w-[10%] h-full flex justify-center items-center bg-[#00000080] rounded-lg`}
         style={{backgroundImage: `url(${props.url})`, backgroundSize:'cover', backgroundPosition: 'center', backgroundBlendMode: 'multiply'}}
       >
-        {/* <CheckIcon width={40} height={40} color={"#77FF77"}/> */}
-        <CrossedIcon width={40} height={40} color={"#FF2222"}/>
+        { selected !== -1 && <span className={'font-bold text-2xl ' + selectionColorsText[selected]}>{selected + 1}</span> }
       </div>
       <div className='w-[90%] h-full flex flex-col bg-slate-50'>
         <div className='w-full h-[10%] min-h-[50px] flex items-end ml-5'>
@@ -31,10 +40,7 @@ export default function ProblemCard(props : ProblemCardProps) {
         <div className='w-full h-[90%] flex place-content-evenly items-center'>
           <div className='w-[30%] aspect-square rounded-lg' style={{backgroundImage: `url(${props.url})`, backgroundSize: 'contain'}}></div>
           <div className='w-[55%] aspect-[16/9] rounded-lg overflow-hidden grid grid-cols-2 gap-1'>
-            <div className='bg-black opacity-75 flex justify-center items-center transition-colors ease-in-out hover:bg-red-700'><span className='text-sm md:text-lg'>선택지 1</span></div>
-            <div className='bg-black opacity-75 flex justify-center items-center transition-colors ease-in-out hover:bg-blue-700'><span className='text-sm md:text-lg'>선택지 2</span></div>
-            <div className='bg-black opacity-75 flex justify-center items-center transition-colors ease-in-out hover:bg-yellow-700'><span className='text-sm md:text-lg'>선택지 3</span></div>
-            <div className='bg-black opacity-75 flex justify-center items-center transition-colors ease-in-out hover:bg-green-700'><span className='text-sm md:text-lg'>선택지 4</span></div>
+            {props.selectAnswer.map((elem, index)=><div ref={selectionButtons.current[index]} key={index} onClick={()=>OnClickSelectBtn(index)} className={`${selected !== index ? 'bg-black' : selectionColors[index]} opacity-75 flex justify-center items-center transition-opacity ease-in-out hover:opacity-100`}><span className='text-sm md:text-lg'>{elem}</span></div>)}
           </div>
         </div>
       </div>
