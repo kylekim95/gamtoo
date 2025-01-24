@@ -73,7 +73,6 @@ function Navigation() {
     </div>
   );
 }
-require('dotenv').config();
 
 function ButtonGroup() {
   const router = useRouter();
