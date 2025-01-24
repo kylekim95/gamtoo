@@ -73,6 +73,14 @@ export default function QuizPage() {
 
   const SelectAnswerCallback = useCallback((id : string, selected : number)=>{
     userSelected[id] = selected;
+    const next = parseInt(id);
+    if(next < refs.current.length && refs.current[next].current !== null){
+      console.log(refs.current[next].current.offsetTop);
+      window.scrollTo({
+        top: refs.current[next].current.offsetTop,
+        behavior: 'smooth'
+      });
+    }
   }, [userSelected]); //userSelected 로 뭔가를 하는 것은 아니어서 빈칸이지만 찝찝하다
 
   function OnClickToTop(){
