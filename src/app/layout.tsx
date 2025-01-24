@@ -40,7 +40,7 @@ function GamtooIcon() {
   );
 }
 
-function Header() {
+ export function Header() {
   const router = useRouter();
   return (
 

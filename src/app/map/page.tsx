@@ -4,14 +4,13 @@ import axios from "axios";
 import { Accordion, AccordionItem as Item } from "@szhsin/react-accordion";
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
-
-import { useMap } from "react-kakao-maps-sdk";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import MultiRange from "@/app/map/components/rangeSlider";
 import SelectBox from "@/app/map/components/slelctBox";
 import BasicMap from "@/app/map/components/kakaoMap";
 import { MapItem, SelectProps } from "../../../types/Map";
+import { DivideIcon } from "@heroicons/react/20/solid";
 
 const selectList: SelectProps[] = [
   {
@@ -109,8 +108,19 @@ export default function MapPage() {
     Record<string, string | number | undefined>
   >({});
   const [item, setItem] = useState<MapItem[]>([]);
+  const [load, setLoad] = useState<any>([]);
   const [isOpen, setIsOpen] = useState<boolean>(true);
+  const [isLoadOpen, setIsLoadOpen] = useState<boolean>(false);
   const [isNavOpen, setIsNavOpen] = useState<boolean>(true);
+
+  const [state, setState] = useState<any>({
+    center: {
+      lat: 33.450701,
+      lng: 126.570667,
+    },
+    errMsg: null,
+    isLoading: true,
+  });
   const router = useRouter();
   const searchParams = useSearchParams();
   const xmlToJsonFilterHandler = (data: any) => {
@@ -136,7 +146,6 @@ export default function MapPage() {
             )
           : result.result.item;
 
-        console.log(filteredItems);
         setItem(filteredItems); // 상태 업데이트
       }
     );
@@ -149,6 +158,61 @@ export default function MapPage() {
       }`
     );
     xmlToJsonFilterHandler(data);
+  };
+
+  const searchLoadHandler = async (item: any) => {
+    const url = "https://apis-navi.kakaomobility.com/v1/directions?";
+    const key = "061e7b60da5d9bdcecbc54f2dba198af";
+    if (navigator.geolocation) {
+      // GeoLocation을 이용해서 접속 위치를 얻어옵니다
+      navigator.geolocation.getCurrentPosition(
+       async (position) => {
+        setState((prev: any) => ({
+          ...prev,
+          center: {
+            lat: position.coords.latitude, // 위도
+            lng: position.coords.longitude, // 경도
+          },
+          isLoading: false,
+        }));
+          const data = await axios.get(
+            `${url}origin=${position.coords.longitude},${position.coords.latitude}&destination=${item.longitude},${item.latitude}&priority=RECOMMEND`,
+            {
+              headers: {
+                Authorization: `KakaoAK ${key}`,
+              },
+            }
+          );
+          if (data.status === 200) {
+            setLoad(data.data.routes[0]);
+            setItem([]);
+            setIsLoadOpen(true);
+            setIsNavOpen(false);
+    
+            console.log(data.data.routes[0]);
+          }
+      
+        },
+        (err) => {
+          console.log(err)
+          setState((prev: any) => ({
+            ...prev,
+            errMsg: err.message,
+            isLoading: false,
+          }));
+        },
+        { enableHighAccuracy: true }
+      );
+   
+   
+    } else {
+      // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정합니다
+      setState((prev: any) => ({
+        ...prev,
+        errMsg: "geolocation을 사용할수 없어요..",
+        isLoading: false,
+      }));
+    }
   };
 
   const handleChange = (
@@ -188,136 +252,188 @@ export default function MapPage() {
     );
     const params = new URLSearchParams(cleanedFilters);
     router.push(`?${params}`);
+
   };
 
+  function convertSecondsToTime(seconds: number) {
+    const hours = Math.floor(seconds / 3600); // 전체 시간을 계산
+    const minutes = Math.floor((seconds % 3600) / 60); // 남은 초를 분으로 변환
+    return `${hours}시간 ${minutes}분`;
+  }
+  const backLoad = () => {
+    setLoad({});
+    setIsLoadOpen(false);
+    getData("");
+  };
   useEffect(() => {
     const params = searchParams.toString();
     getData(params);
   }, [searchParams]);
 
+  useEffect(() => {
+    const queryObject = Object.fromEntries(searchParams.entries());
+    if (Object.keys(queryObject).length > 0) {
+      setFilters(queryObject);
+    }
+  }, []);
   return (
     <section className="items-center  justify-center gap-4 ">
-      <BasicMap data={item}>
+      <BasicMap searchLoadHandler={searchLoadHandler} data={item} load={load}>
         <div
           className={`absolute ${
             isNavOpen ? "-left-[383px]" : "left-10"
-          } transition-all  max-w-96 z-50 top-36`}
+          } transition-all duration-300 max-w-96 z-50 top-36`}
         >
+          {!isLoadOpen ?
           <div className=" absolute w-10 h-10 flex items-center justify-center bg-white -right-10  rounded-r-lg top-10">
             <button onClick={() => setIsNavOpen(!isNavOpen)}>
-              <div className={`${!isNavOpen ? 'rotate-180': null}`}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="size-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="m5.25 4.5 7.5 7.5-7.5 7.5m6-15 7.5 7.5-7.5 7.5"
-                />
-              </svg>
+              <div className={`${!isNavOpen ? "rotate-180" : null}`}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="size-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="m5.25 4.5 7.5 7.5-7.5 7.5m6-15 7.5 7.5-7.5 7.5"
+                  />
+                </svg>
               </div>
             </button>
-          </div>
+          </div>:null
+          }
           <div className=" bg-white flex flex-col gap-3 p-8 w-full rounded-3xl shadow-lg">
-            <Accordion
-              onStateChange={({ current }) => {
-                setIsOpen(current.isEnter);
-              }}
-              transition
-              initialEntered
-            >
-              <AccordionItem header={"카테고리별 검색"}>
-                <div>
-                  <div className="w-full flex gap-1 py-2 border-b-1">
-                    <span>
-                      <Image
-                        alt="문화재 아이콘"
-                        width={30}
-                        height={23}
-                        src="/icons/map-history-icon.svg"
+            {!isLoadOpen && load ? (
+              <>
+                <Accordion
+                  onStateChange={({ current }) => {
+                    setIsOpen(current.isEnter);
+                  }}
+                  transition
+                  initialEntered
+                >
+                  <AccordionItem header={"카테고리별 검색"}>
+                    <div>
+                      <div className="w-full flex gap-1 py-2 border-b-1">
+                        <span>
+                          <Image
+                            alt="문화재 아이콘"
+                            width={30}
+                            height={23}
+                            src="/icons/map-history-icon.svg"
+                          />
+                        </span>
+                        <h4 className="text-xl text-neutral-900 font-bold ">
+                          시대{" "}
+                        </h4>
+                      </div>
+                      <MultiRange
+                        fixedMinPrice={1000}
+                        fixedMaxPrice={2025}
+                        value={filters}
+                        min={1000}
+                        max={2025}
+                        handleValueChange={(minValue, maxValue) =>
+                          handleChange({ minValue, maxValue })
+                        }
                       />
-                    </span>
-                    <h4 className="text-xl text-neutral-900 font-bold ">
-                      시대{" "}
-                    </h4>
-                  </div>
-                  <MultiRange
-                    fixedMinPrice={1000}
-                    fixedMaxPrice={2025}
-                    min={1000}
-                    max={2025}
-                    handleValueChange={(minValue, maxValue) =>
-                      handleChange({ minValue, maxValue })
-                    }
-                  />
-                </div>
-                <div>
-                  <div className="w-full flex gap-2 py-2   border-b">
-                    <span>
-                      <Image
-                        alt="문화재 아이콘"
-                        width={23}
-                        height={30}
-                        src="/icons/map_map_icon.svg"
-                      />{" "}
-                    </span>
-                    <h4 className="text-xl font-bold ">지역 </h4>
-                  </div>
-                  <div className="py-4">
-                    <div className="relative w-full lg:max-w-sm">
-                      <select
-                        name="ccbaCtcd"
-                        onChange={(e) => handleChange(e)}
-                        className="w-full p-2.5 text-gray-500 bg-white border rounded-md shadow-sm outline-none appearance-none focus:border-indigo-600"
-                      >
-                        <option value={""}>지역선택</option>
-                        <option value={11}>서울</option>
-                        <option value={25}>대전</option>
-                        <option value={22}>대구</option>
-                      </select>
                     </div>
-                  </div>
+                    <div>
+                      <div className="w-full flex gap-2 py-2   border-b">
+                        <span>
+                          <Image
+                            alt="문화재 아이콘"
+                            width={23}
+                            height={30}
+                            src="/icons/map_map_icon.svg"
+                          />{" "}
+                        </span>
+                        <h4 className="text-xl font-bold ">지역 </h4>
+                      </div>
+                      <div className="py-4">
+                        <div className="relative w-full lg:max-w-sm">
+                          <select
+                            name="ccbaCtcd"
+                            value={filters.ccbaCtcd || ""}
+                            onChange={(e) => handleChange(e)}
+                            className="w-full p-2.5 text-gray-500 bg-white border rounded-md shadow-sm outline-none appearance-none focus:border-indigo-600"
+                          >
+                            <option value={""}>지역선택</option>
+                            <option value={11}>서울</option>
+                            <option value={25}>대전</option>
+                            <option value={22}>대구</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <div className="w-full flex gap-2 py-2 border-b">
+                        <h4 className="text-xl font-bold ">지정 종목별 </h4>
+                      </div>
+                      <div className="flex py-2 items-center justify-between flex-wrap gap-1">
+                        {selectList.map((item) => {
+                          return (
+                            <SelectBox
+                              key={`${item.name}-${item.value}`}
+                              title={item.title}
+                              checked={filters.ccbaKdcd === item.value}
+                              handleChange={handleChange}
+                              value={item.value}
+                              name={item.name}
+                            />
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </AccordionItem>
+                </Accordion>
+                <div className="flex flex-col gap-4">
+                  <input
+                    onChange={(e) => handleChange(e)}
+                    name="ccbaMnm1"
+                    value={filters.ccbaMnm1 || ""}
+                    className="border rounded-full h-12 p-2 px-5"
+                    placeholder="이름으로 검색"
+                    type="text"
+                  />
+                  <button
+                    onClick={() => filterButtonHandler()}
+                    className=" w-full h-10 bg-[#B23742] text-white rounded-xl"
+                  >
+                    검색
+                  </button>
                 </div>
-                <div>
-                  <div className="w-full flex gap-2 py-2 border-b">
-                    <h4 className="text-xl font-bold ">지정 종목별 </h4>
-                  </div>
-                  <div className="flex py-2 items-center justify-between flex-wrap gap-1">
-                    {selectList.map((item) => {
-                      return (
-                        <SelectBox
-                          key={`${item.name}-${item.value}`}
-                          title={item.title}
-                          handleChange={handleChange}
-                          value={item.value}
-                          name={item.name}
-                        />
-                      );
-                    })}
-                  </div>
+              </>
+            ) : (
+              <div className="flex flex-col w-full gap-4">
+                <div className="flex items-center justify-between gap-4 ">
+                  <p className="text-lg text-gray-400">소요시간</p>
+                  <p className="text-slate-800 font-semibold text-2xl">
+                    {convertSecondsToTime(load?.sections?.[0]?.duration) || "정보 없음"}
+                  </p>
                 </div>
-              </AccordionItem>
-            </Accordion>
-            <div className="flex flex-col gap-4">
-              <input
-                onChange={(e) => handleChange(e)}
-                name="ccbaMnm1"
-                className="border rounded-full h-12 p-2 px-5"
-                placeholder="이름으로 검색"
-                type="text"
-              />
-              <button
-                onClick={() => filterButtonHandler()}
-                className=" w-full h-10 bg-[#B23742] text-white rounded-xl"
-              >
-                검색
-              </button>
-            </div>
+                <div className="flex items-center justify-between gap-4">
+                  <p className="text-lg text-gray-400">총거리</p>
+                  <p className="text-slate-800 font-semibold text-2xl">
+                    {load?.sections?.[0]?.distance / 1000 || ""}
+                    <span className="font-normal text-gray-500 text-sm">
+                      {" "}
+                      KM
+                    </span>
+                  </p>
+                </div>
+                <button
+                  onClick={() => backLoad()}
+                  className=" w-full h-10 bg-[#B23742] text-white rounded-xl"
+                >
+                  돌아가기
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </BasicMap>

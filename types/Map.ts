@@ -4,6 +4,7 @@ export interface SelectProps {
   handleChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   value: string;
   name: string;
+  checked?: boolean;
 }
 
 export interface MapItem {

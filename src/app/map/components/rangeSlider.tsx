@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 interface MultiRangeProps {
+  value: any;
   fixedMinPrice: number;
   fixedMaxPrice: number;
   min: number;
@@ -9,6 +10,7 @@ interface MultiRangeProps {
 }
 
 export default function MultiRange({
+  value,
   fixedMinPrice,
   fixedMaxPrice,
   min,
@@ -21,11 +23,15 @@ export default function MultiRange({
   const [rangeMaxPercent, setRangeMaxPercent] = useState(100);
   const step = 1;
 
-  const prcieRangeMinValueHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const prcieRangeMinValueHandler = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setRangeMinValue(parseInt(e.target.value));
   };
 
-  const prcieRangeMaxValueHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const prcieRangeMaxValueHandler = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setRangeMaxValue(parseInt(e.target.value));
   };
 
@@ -39,7 +45,10 @@ export default function MultiRange({
       setRangeMaxPercent(((fixedMaxPrice - rangeMaxValue) / range) * 100);
     }
   };
-
+  useEffect(() => {
+    setRangeMaxValue(value.enCcbaAsdt || fixedMaxPrice);
+    setRangeMinValue(value.stCcbaAsdt || fixedMinPrice);
+  }, []);
   useEffect(() => {
     twoRangeHandler();
     if (handleValueChange) {
@@ -49,12 +58,11 @@ export default function MultiRange({
 
   return (
     <>
-    <div className="flex justify-between py-4">
-                <div>시대조정</div>
-                <div>{`${rangeMinValue}년 - ${rangeMaxValue}년`}</div>
-    </div>
+      <div className="flex justify-between py-4">
+        <div>시대조정</div>
+        <div>{`${rangeMinValue}년 - ${rangeMaxValue}년`}</div>
+      </div>
       <div className="relative h-1 w-full rounded-lg bg-slate-300">
-        
         <div
           className="absolute h-1 rounded-xl bg-[#B23742]"
           style={{
@@ -88,14 +96,12 @@ export default function MultiRange({
               twoRangeHandler();
             }}
           />
-          
         </div>
-          
       </div>
       <div className="flex justify-between py-4">
-                <div>{min}</div>
-                <div>{max}</div>
-    </div>
+        <div>{min}</div>
+        <div>{max}</div>
+      </div>
     </>
   );
 }
