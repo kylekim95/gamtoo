@@ -231,22 +231,8 @@ function CultureFestival() {
     eDate: string;
     imageUrl: string;
   }
-  const [filteredData, setFilteredData] = useState<Item[]>([
-    {
-      seqNo: "",
-      subTitle: "",
-      eDate: "",
-      imageUrl: "",
-    },
-  ]);
-  const [festivalItems, setFestivalItems] = useState<Item[]>([
-    {
-      seqNo: "",
-      subTitle: "",
-      eDate: "",
-      imageUrl: "",
-    },
-  ]);
+  const [filteredData, setFilteredData] = useState<Item[]>([]);
+  const [festivalItems, setFestivalItems] = useState<Item[]>([]);
   const partyDate = parseISO("2024-06-10");
 
   async function testData() {
