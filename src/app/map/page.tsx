@@ -150,7 +150,7 @@ export default function MapPage() {
   const getData = async (params: string) => {
     const data = await axios.get(
       `http://www.khs.go.kr/cha/SearchKindOpenapiList.do?pageUnit=10000&${
-        params ? params : "&ccbaCncl=N&ccbaKdcd=13"
+        params ? params : "&ccbaCncl=N&ccbaKdcd=13&ccbaCtcd=11"
       }`
     );
     xmlToJsonFilterHandler(data);
