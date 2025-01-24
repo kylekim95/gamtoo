@@ -16,7 +16,7 @@ function CapsuleSelectItem(props : CapsuleSelectItemProps){
   return (
     <div className={
         'min-w-[100px] border-2 border-solid rounded-full flex justify-center items-center px-2 transition-colors ' + 
-        (props.selected ? 'bg-violet-400 border-white text-white' : 'bg-white border-violet-400 text-black')
+        (props.selected ? 'bg-violet-300 border-violet-400 text-white' : 'bg-white border-violet-400 text-black')
       }
       onClick={()=>props.onClick(props.id)}
     >
@@ -37,7 +37,7 @@ export default function CapsuleSelectMenu(props : CapsuleSelectMenuProps) {
   }, [selectedItems, props]);
 
   return (
-    <div className={props.className + ` flex flex-wrap gap-1`}>
+    <div className={props.className}>
       {Object.entries(props.items).map(([_key, value])=><CapsuleSelectItem key={_key} id={_key} item={value} selected={selectedItems[_key]} onClick={OnClickSelectItem}/> )}
     </div>
   )
