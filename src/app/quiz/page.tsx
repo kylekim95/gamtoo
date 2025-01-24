@@ -98,10 +98,10 @@ export default function QuizPage() {
             </div>
             <div className='w-full aspect-[6/1] flex justify-center items-center gap-10 m-2'>
               <div onClick={()=>OnClickToTop()} className='h-[50%] min-h-[125px] aspect-square bg-red-700 rounded-full flex justify-center items-center opacity-75 hover:opacity-100 transition-opacity ease-in-out'>
-                <span className=''>처음으로</span>
+                <span className='text-white'>처음으로</span>
               </div>
               <div onClick={()=>OnClickSubmit()} className='h-[50%] min-h-[125px] aspect-square bg-blue-700 rounded-full flex justify-center items-center opacity-75 hover:opacity-100 transition-opacity ease-in-out'>
-                <span className=''>제출하기</span>
+                <span className='text-white'>제출하기</span>
               </div>
             </div>
           </div>
