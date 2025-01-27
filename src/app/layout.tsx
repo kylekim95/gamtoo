@@ -1,7 +1,6 @@
 "use client";
-import Script from "next/script";
-import {useRouter} from "next/navigation";
-import "./globals.css";
+
+import { useRouter } from "next/navigation";
 
 
 // 외부
@@ -11,11 +10,13 @@ import {
   BellAlertIcon,
   BellSlashIcon,
 } from "@heroicons/react/20/solid";
+
 import ReduxProvider from "@/lib/redux/provider";
 import {useAppSelector} from "@/lib/redux/store";
 import GagsiMaskIcon from "@/components/quiz/svg/GagsiMaskIcon";
 import React, {useState} from "react";
 import NotificationModal from "@/components/NotificationModal";
+
 
 // 감투 아이콘
 function GamtooIcon() {
@@ -48,7 +49,6 @@ function GamtooIcon() {
     </svg>
   );
 }
-
 
 // 각시탈 아이콘
 function Gaksital() {
@@ -98,7 +98,7 @@ function Header({isNotification, notificationHandler}: props) {
           onClick={() => {
             router.push("/");
           }}
-          className="icon gap-4 flex flex-row justify-center items-center"
+          className="icon gap-4 flex flex-row justify-center items-center hover:cursor-pointer"
         >
           {" "}
           <GamtooIcon/>
@@ -109,7 +109,7 @@ function Header({isNotification, notificationHandler}: props) {
             <span className="text-[40px] font-bold">감투</span>
           </div>
         </div>
-        <div className="router flex items-center gap-7 font-semibold text-xl mt-2 text-black">
+        <div className="router flex items-center gap-7 font-semibold text-xl mt-2 text-black hover:cursor-pointer">
           <span
             onClick={() => {
               router.push("/");
@@ -154,6 +154,7 @@ function Header({isNotification, notificationHandler}: props) {
         </div>
       </div>
       {/* 헤더 오른쪽 */}
+
       {isAuth ? <div className="flex items-center">
           {isNotification ?
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" onClick={notificationHandler} fill="currentColor"
@@ -184,6 +185,7 @@ function Header({isNotification, notificationHandler}: props) {
             }}
             className="font-semibold text-xl text-[#424383]"
           >
+
           로그인
         </span>
         </div>}
@@ -263,7 +265,9 @@ export default function RootLayout({
   return (
     <>
       <html lang="en">
+
       <ReduxProvider>{
+
         <body>
         <div id="portal"/>
         {" "}
