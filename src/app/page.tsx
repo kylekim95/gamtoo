@@ -2,7 +2,7 @@
 
 // 내부
 import Navigation from "@/components/main/navigation";
-import HeritageList from "@/components/main/heritageList";
+import Heritage from "@/components/main/heritage";
 import CultureFestival from "@/components/main/cultureFestival";
 import TodayQuiz from "@/components/main/todayQuiz";
 import Map from "@/components/main/map";
@@ -14,7 +14,7 @@ export default function Home() {
       <Navigation />
       {/* 문화재 리스트 영역 */}
       <div className="mt-11 mx-6">
-        <HeritageList />
+        <Heritage />
       </div>
       {/* 문화재 행사 */}
       <div className=" mx-6">

@@ -1,9 +1,9 @@
 // 외부
 import { CheckIcon } from "@heroicons/react/20/solid";
-import Card from "@/components/CultureDetailCard";
+import Card from "@/components/CultureList";
 import { useState } from "react";
 
-export default function HeritageList() {
+export default function Heritage() {
   const [category, setCategory] = useState("사적");
 
   function handleCategory(value: string) {
