@@ -1,6 +1,7 @@
 "use client";
 
 // 내부
+
 import Navigation from "@/components/main/navigation";
 import Heritage from "@/components/main/heritage";
 import CultureFestival from "@/components/main/cultureFestival";

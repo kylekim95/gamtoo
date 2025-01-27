@@ -205,6 +205,7 @@ export default function BasicMap({
       polyline.setMap(null);
       startMarker.setMap(null);
       endMarker.setMap(null);
+      setOpenOverlayId(null)
     };
   }, [load]);
   return (
