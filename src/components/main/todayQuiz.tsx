@@ -93,7 +93,7 @@ export default function TodayQuiz() {
               onClick={() => {
                 router.push("/quiz");
               }}
-              className="bg-[#C44440] w-[85%] h-[40px] flex flex-row justify-around items-center gap-14 mt-5 rounded-xl "
+              className="bg-[#C44440] w-[85%] h-[40px] flex flex-row justify-around items-center gap-14 mt-5 rounded-xl hover:cursor-pointer"
             >
               <button className="flex flex-row items-center gap-9 text-xl text-white font-bold">
                 퀴즈에 참가하시겠습니까

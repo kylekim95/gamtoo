@@ -1,11 +1,6 @@
-
-
-
 "use client";
-import Script from "next/script";
 import { useRouter } from "next/navigation";
 import "./globals.css";
-
 
 // 외부
 // 알림 아이콘입니다.
@@ -14,7 +9,6 @@ import {
   BellAlertIcon,
   BellSlashIcon,
 } from "@heroicons/react/20/solid";
-
 
 // 감투 아이콘
 function GamtooIcon() {
@@ -47,7 +41,6 @@ function GamtooIcon() {
     </svg>
   );
 }
-
 
 // 각시탈 아이콘
 function Gaksital() {
@@ -89,7 +82,7 @@ function Header() {
           onClick={() => {
             router.push("/");
           }}
-          className="icon gap-4 flex flex-row justify-center items-center"
+          className="icon gap-4 flex flex-row justify-center items-center hover:cursor-pointer"
         >
           {" "}
           <GamtooIcon />
@@ -100,7 +93,7 @@ function Header() {
             <span className="text-[40px] font-bold">감투</span>
           </div>
         </div>
-        <div className="router flex items-center gap-7 font-semibold text-xl mt-2 text-black">
+        <div className="router flex items-center gap-7 font-semibold text-xl mt-2 text-black hover:cursor-pointer">
           <span
             onClick={() => {
               router.push("/");
@@ -151,7 +144,7 @@ function Header() {
           onClick={() => {
             router.push("/login");
           }}
-          className="font-semibold text-xl text-[#424383]"
+          className="font-semibold text-xl text-[#424383] hover:cursor-pointer"
         >
           로그인
         </span>
@@ -227,7 +220,6 @@ export default function RootLayout({
   return (
     <>
       <html lang="en">
-    
         <body>
           {" "}
           <Header />
