@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useEffect, useRef, createRef, useCallback, useMemo } from 'react'
+import { useRouter } from 'next/navigation';
 import ProblemCard from './components/ProblemCard';
 
 type ProblemData = {
@@ -88,8 +89,11 @@ export default function QuizPage() {
       top: 0, left: 0, behavior:'smooth'
     });
   }
+
+  const router = useRouter();
   function OnClickSubmit(){
-    console.log(userSelected);
+    // console.log(userSelected);
+    router.push('/quizResults');
   }
 
   return (
@@ -106,10 +110,10 @@ export default function QuizPage() {
             </div>
             {/* 페이지 밑의 메뉴 화면 크기가 xl이상이면 hidden */}
             <div className='xl:hidden w-full aspect-[6/1] flex justify-center items-center gap-10 mb-10'>
-              <div onClick={()=>OnClickToTop()} className='h-[50%] min-h-[125px] aspect-square bg-red-700 rounded-full flex justify-center items-center opacity-75 hover:opacity-100 transition-opacity ease-in-out'>
+              <div onClick={()=>OnClickToTop()} className='h-[50%] min-h-[150px] aspect-square bg-red-700 rounded-full flex justify-center items-center opacity-75 hover:opacity-100 transition-opacity ease-in-out cursor-pointer'>
                 <span className='text-white font-bold text-sm'>처음으로</span>
               </div>
-              <div onClick={()=>OnClickSubmit()} className='h-[50%] min-h-[125px] aspect-square bg-blue-700 rounded-full flex justify-center items-center opacity-75 hover:opacity-100 transition-opacity ease-in-out'>
+              <div onClick={()=>OnClickSubmit()} className='h-[50%] min-h-[150px] aspect-square bg-blue-700 rounded-full flex justify-center items-center opacity-75 hover:opacity-100 transition-opacity ease-in-out cursor-pointer'>
                 <span className='text-white font-bold text-sm'>제출하기</span>
               </div>
             </div>
@@ -117,10 +121,10 @@ export default function QuizPage() {
           <div className='shrink w-[15%]'>
             {/* Sticky menu 화면 크기가 xl이하면 hidden */}
             <div className='hidden w-[50%] sticky top-[30%] xl:flex flex-col justify-center items-center gap-10 mt-10'>
-              <div onClick={()=>OnClickToTop()} className='h-[50%] min-h-[125px] aspect-square bg-red-700 rounded-full flex justify-center items-center opacity-75 hover:opacity-100 transition-opacity ease-in-out'>
+              <div onClick={()=>OnClickToTop()} className='h-[50%] min-h-[150px] aspect-square bg-red-700 rounded-full flex justify-center items-center opacity-75 hover:opacity-100 transition-opacity ease-in-out cursor-pointer'>
                 <span className='text-white font-bold text-sm'>처음으로</span>
               </div>
-              <div onClick={()=>OnClickSubmit()} className='h-[50%] min-h-[125px] aspect-square bg-blue-700 rounded-full flex justify-center items-center opacity-75 hover:opacity-100 transition-opacity ease-in-out'>
+              <div onClick={()=>OnClickSubmit()} className='h-[50%] min-h-[150px] aspect-square bg-blue-700 rounded-full flex justify-center items-center opacity-75 hover:opacity-100 transition-opacity ease-in-out cursor-pointer'>
                 <span className='text-white font-bold text-sm'>제출하기</span>
               </div>
             </div>

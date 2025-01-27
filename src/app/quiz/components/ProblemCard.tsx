@@ -41,7 +41,7 @@ export default function ProblemCard(props : ProblemCardProps) {
         <div className='w-full h-[90%] flex place-content-evenly items-center'>
           <div className='w-[30%] aspect-square rounded-lg' style={{backgroundImage: `url(${props.url})`, backgroundSize: 'contain'}}></div>
           <div className='w-[55%] aspect-[16/9] rounded-lg overflow-hidden grid grid-cols-2 gap-1'>
-            {props.selectAnswer.map((elem, index)=><div ref={selectionButtons.current[index]} key={index} onClick={()=>OnClickSelectBtn(index)} className={`${selected !== index ? 'bg-black' : selectionColors[index]} opacity-75 flex justify-center items-center transition-opacity ease-in-out hover:opacity-80`}><span className='text-sm md:text-lg text-white'>{elem}</span></div>)}
+            {props.selectAnswer.map((elem, index)=><div ref={selectionButtons.current[index]} key={index} onClick={()=>OnClickSelectBtn(index)} className={`${selected !== index ? 'bg-black' : selectionColors[index]} opacity-75 flex justify-center items-center transition-opacity ease-in-out hover:opacity-80 cursor-pointer`}><span className='text-sm md:text-lg text-white'>{elem}</span></div>)}
           </div>
         </div>
       </div>

@@ -1,3 +1,5 @@
+"use client"
+
 import React from 'react'
 
 import ChumSungDaeIcon from '../../components/quiz/svg/ChumSungDaeIcon';
@@ -5,6 +7,7 @@ import QuizResultsCard, { DataType } from './components/QuizResultsCard';
 import GyeongBokGungIcon from '../../components/quiz/svg/GyeongBokGungIcon'
 import CheckIcon from '@/components/quiz/svg/CheckedIcon';
 import CrossedIcon from '@/components/quiz/svg/CrossedIcon';
+import { useRouter } from 'next/navigation';
 
 export default function QuizRanking() {
   const smallCheck = <CheckIcon width={25} height={25} color={"#44FF44"}/>;
@@ -33,6 +36,11 @@ export default function QuizRanking() {
     {id:"20", problem:"이것은 문제입니다. 이것은 문제입니까?", answer:"정답", userSelect:"유저 답", result:smallCheck},
   ];
 
+  const router = useRouter();
+  function OnClickToHome(){router.push('/');}
+  function OnClickRetry(){router.push('/quiz');}
+  function OnClickToRanking(){router.push('/quizRanking');}
+
   return (
     <div className='flex flex-col items-center justify-center'>
       <div 
@@ -46,15 +54,15 @@ export default function QuizRanking() {
         </div>
       </div>
       <div className='w-full min-w-[1200px] aspect-[6/1] flex justify-center items-center gap-10 bg-slate-50'>
-          <div className='h-[50%] aspect-square bg-blue-700 rounded-full flex flex-col justify-center items-center opacity-75 hover:opacity-90 transition-opacity'>
+          <div onClick={OnClickToHome} className='cursor-pointer h-[50%] aspect-square bg-blue-700 rounded-full flex flex-col justify-center items-center opacity-75 hover:opacity-90 transition-opacity'>
             <GyeongBokGungIcon width={40} height={40} color={'#FFFFFF'}/>
             <span className='text-sm font-bold m-1 text-white'>홈으로</span>
           </div>
-          <div className='h-[50%] aspect-square bg-yellow-700 rounded-full flex flex-col justify-center items-center opacity-75 hover:opacity-90 transition-opacity'>
+          <div onClick={OnClickRetry} className='cursor-pointer h-[50%] aspect-square bg-yellow-700 rounded-full flex flex-col justify-center items-center opacity-75 hover:opacity-90 transition-opacity'>
             <GyeongBokGungIcon width={40} height={40} color={'#FFFFFF'}/>
             <span className='text-sm font-bold m-1 text-white'>다시 도전</span>
           </div>
-          <div className='h-[50%] aspect-square bg-red-700 rounded-full flex flex-col justify-center items-center opacity-75 hover:opacity-90 transition-opacity'>
+          <div onClick={OnClickToRanking} className='cursor-pointer h-[50%] aspect-square bg-red-700 rounded-full flex flex-col justify-center items-center opacity-75 hover:opacity-90 transition-opacity'>
             <GyeongBokGungIcon width={40} height={40} color={'#FFFFFF'}/>
             <span className='text-sm font-bold m-1 text-white'>랭킹 확인</span>
           </div>
