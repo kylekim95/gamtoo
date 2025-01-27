@@ -24,6 +24,17 @@ export default function QuizRanking() {
         <div className='w-[50%] flex flex-col items-center mt-[-150px] mb-5 gap-5'>
           <RankingCard />
           <StatisticsCard />
+          {/* EOF Menu */}
+          <div className='w-[50%] sticky top-[30%] xl:hidden flex justify-center items-center gap-10 mt-10'>
+            <div onClick={()=>OnClickHelloWorld()} className='min-w-[150px] aspect-square bg-yellow-600 rounded-full flex flex-col justify-center items-center opacity-75 hover:opacity-100 transition-opacity ease-in-out gap-2'>
+              <GyeongBokGungIcon width={50} height={50} color='#FFFFFF'/>
+              <span className='text-white text-xs font-bold'>문화재 퀴즈 도전</span>
+            </div>
+            <div onClick={()=>OnClickHelloWorld()} className='min-w-[150px] aspect-square bg-pink-600 rounded-full flex flex-col justify-center items-center opacity-75 hover:opacity-100 transition-opacity ease-in-out gap-2'>
+              <GyeongBokGungIcon width={50} height={50} color='#FFFFFF'/>
+              <span className='text-white text-xs font-bold'>문화재 공부하기</span>
+            </div>
+          </div>
         </div>
         <div className='w-[25%] flex flex-col items-center'>
           {/* Sticky menu */}

@@ -46,16 +46,16 @@ export default function StatisticsCard() {
         label:'비율',
         data:[10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
         backgroundColor:[
-          '#222222',
-          '#222222',
-          '#222222',
-          '#222222',
-          '#FF4444',
-          '#222222',
-          '#222222',
-          '#222222',
-          '#222222',
-          '#222222'
+          '#CACACA',
+          '#CACACA',
+          '#CACACA',
+          '#CACACA',
+          '#9999FF',
+          '#CACACA',
+          '#CACACA',
+          '#CACACA',
+          '#CACACA',
+          '#CACACA'
         ]
       }
     ]
@@ -117,12 +117,12 @@ export default function StatisticsCard() {
       {
         label: '내 오답률',
         data: Object.values(realisticMyErrData),
-        backgroundColor: '#222222'
+        backgroundColor: '#9999FF'
       },
       {
         label: '전체 유저 오답률',
         data: Object.values(realisticAllErrData),
-        backgroundColor: '#FF4444'
+        backgroundColor: '#CACACA'
       }
     ],
   };
@@ -182,14 +182,14 @@ export default function StatisticsCard() {
           <div className='w-[60%] aspect-[1/1.1] flex justify-center'>
             <Bar ref={errRateChartRef} data={initErrRateData} options={initErrRateOptions} />
           </div>
-          <div className='w-[40%]'>
+          <div className='w-[40%] h-full flex flex-col'>
             {/* 랭킹 내 위치 */}
-            <div className='w-full aspect-video mb-10'>
+            <div className='w-full aspect-square mb-10'>
               <Bar data={testBarVertData} options={testBarVertOptions}></Bar>
             </div>
             {/* 각시탈 아이콘 */}
             {/* TODO: 랭크에 맞게 색 설정하기 */}
-            <div className='rounded-full border-[3px] border-black overflow-hidden w-fit self-end justify-self-end -rotate-[25deg] opacity-75'>
+            <div className='rounded-full border-[3px] border-black overflow-hidden self-end justify-self-end -rotate-[25deg] opacity-75'>
               <GagsiMaskIcon width={125} height={125} color='#000000' />
             </div>
           </div>
