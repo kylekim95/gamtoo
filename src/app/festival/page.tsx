@@ -92,11 +92,9 @@ const FestivalPage = () => {
       return;
     }
     const getDay = `${date}`.split(" ")[2];
-    console.log(getDay);
   }
   return (
     <div>
-      <NotificationModal />
       <div className="bg-festivalBg pt-12 pb-12 mt-2">
         <div className="w-5/6 m-auto">
           <p className="text-black font-bold text-3xl ml-auto mb-4">인기 행사</p>
