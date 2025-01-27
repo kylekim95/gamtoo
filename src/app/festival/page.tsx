@@ -5,6 +5,7 @@ import { parseISO } from 'date-fns'
 import { ko } from 'date-fns/locale'
 import {DayPicker, getDefaultClassNames} from 'react-day-picker'
 import 'react-day-picker/dist/style.css'
+import NotificationModal from "@/components/NotificationModal";
 
 interface Item {
   seqNo: string;
@@ -48,6 +49,7 @@ const FestivalPage = () => {
     imageUrl: ""
   }]);
   const defaultClassNames = getDefaultClassNames();
+  const [selected, setSelected] = React.useState<Date>();
   const partyDate = parseISO("2024-06-10");
 
   React.useEffect(() => {
@@ -84,6 +86,13 @@ const FestivalPage = () => {
     }
     setFestivalItems(items);
   }
+  const handleDaySelect = (date: Date | undefined) => {
+    if(date === undefined) {
+      alert("알 수 없는 값입니다.")
+      return;
+    }
+    const getDay = `${date}`.split(" ")[2];
+  }
   return (
     <div>
       <div className="bg-festivalBg pt-12 pb-12 mt-2">
@@ -94,7 +103,7 @@ const FestivalPage = () => {
               if(index < 5){
                 return (
                   <div key={e.seqNo} className="w-1/6 ml-0">
-                    <img className="rounded-lg h-4/6" src={e.imageUrl} alt={""}/>
+                    <img className="rounded-lg h-4/6 w-full" src={e.imageUrl} alt={""}/>
                     <div className="absolute">
                       <p className="relative -top-10 left-2 italic text-5xl drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">{index+1}</p>
                     </div>
@@ -159,13 +168,19 @@ const FestivalPage = () => {
 
 
           </div>
-          <DayPicker className="ml-auto min-w-max rounded-br-3xl rounded-tr-3xl" mode="single" locale={ko}
-                     month={partyDate} classNames={{
-            today: `border-amber-500`, // Add a border to today's date
-            selected: `bg-amber-500 border-amber-500 text-white`, // Highlight the selected day
-            root: `${defaultClassNames.root} shadow-lg p-5`, // Add a shadow to the root element
-            chevron: `${defaultClassNames.chevron} fill-amber-500`,
-          }}/>
+          <DayPicker className="ml-auto min-w-max rounded-br-3xl rounded-tr-3xl"
+                     mode="single"
+                     locale={ko}
+                     month={partyDate}
+                     classNames={{
+                        today: `border-amber-500`, // Add a border to today's date
+                        selected: `bg-amber-500 border-amber-500 text-white`, // Highlight the selected day
+                        root: `${defaultClassNames.root} shadow-lg p-5`, // Add a shadow to the root element
+                        chevron: `${defaultClassNames.chevron} fill-amber-500`,
+                     }}
+                     selected={selected}
+                     onSelect={handleDaySelect}
+          />
         </div>
       </div>
       <div className="w-5/6 m-auto mb-20">
@@ -174,7 +189,7 @@ const FestivalPage = () => {
           {festivalItems.length === 1? (<div></div>):festivalItems.map((e) => {
             return (
               <div key={e.seqNo} className="rounded-lg p-3 border shadow-lg">
-                <img className="rounded-lg h-3/5" src={e.imageUrl} alt={""}/>
+                <img className="rounded-lg h-3/5 w-full" src={e.imageUrl} alt={""}/>
                 <div className="bg-[#FA870E] pt-2 pb-2 rounded-lg mt-2 mb-2">
                   <p className="text-center font-semibold text-xl">{e.sido}</p>
                 </div>
