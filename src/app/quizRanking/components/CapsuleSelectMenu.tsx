@@ -1,10 +1,5 @@
 import React, { useEffect, useState } from 'react'
 
-type CapsuleSelectMenuProps = {
-  className: string;
-  items: object;
-  onSelectedChanged?: (selectedItems : object)=>void
-}
 type CapsuleSelectItemProps = {
   id: string;
   item: string;
@@ -16,7 +11,7 @@ function CapsuleSelectItem(props : CapsuleSelectItemProps){
   return (
     <div className={
         'min-w-[100px] border-2 border-solid rounded-full flex justify-center items-center px-2 transition-colors ' + 
-        (props.selected ? 'bg-violet-400 border-white text-white' : 'bg-white border-violet-400 text-black')
+        (props.selected ? 'bg-violet-300 border-violet-400 text-white' : 'bg-white border-violet-400 text-black')
       }
       onClick={()=>props.onClick(props.id)}
     >
@@ -25,20 +20,28 @@ function CapsuleSelectItem(props : CapsuleSelectItemProps){
   )
 }
 
+type CapsuleSelectMenuProps = {
+  className: string;
+  items: [code:string, desc:string][];
+  onSelectedChanged?: (selectedItems : [code:string, selected:boolean][])=>void
+}
+
 export default function CapsuleSelectMenu(props : CapsuleSelectMenuProps) {  
-  const [selectedItems, setSelectedItems] = useState(Object.keys(props.items).map((elem)=>{ return {[elem]:false}}).reduce((p, c)=>Object.assign(p, c)));
+  const [selectedItems, setSelectedItems] = useState(props.items.map(([code])=>{ return {[code]: false} }).reduce((p, c)=>Object.assign(p, c)));
   
   function OnClickSelectItem(id: string){
     const newState = {[id]: !selectedItems[id]};
     setSelectedItems({...selectedItems, ...newState});
   }
   useEffect(()=>{
-    if(props.onSelectedChanged) props.onSelectedChanged(selectedItems);
+    if(props.onSelectedChanged){
+      props.onSelectedChanged(Object.entries(selectedItems));
+    }
   }, [selectedItems, props]);
 
   return (
-    <div className={props.className + ` flex flex-wrap gap-1`}>
-      {Object.entries(props.items).map(([_key, value])=><CapsuleSelectItem key={_key} id={_key} item={value} selected={selectedItems[_key]} onClick={OnClickSelectItem}/> )}
+    <div className={props.className}>
+      {props.items.map(([code, desc])=><CapsuleSelectItem key={code} id={code} item={desc} selected={selectedItems[code]} onClick={()=>OnClickSelectItem(code)} />)}
     </div>
   )
 }
