@@ -4,10 +4,21 @@ import loginImage from "../../../public/loginImage.png";
 import signupImage from "../../../public/signupImage.png";
 import Image from "next/image";
 import LoginType from "@/types/LoginType";
+import {useRouter} from "next/navigation";
+import axios from "axios";
+import {useDispatch} from "react-redux";
+import {AppDispatch} from "@/lib/redux/store";
+import {logIn} from "@/lib/redux/slice/authSlice";
 
 interface SignupType extends LoginType {
   passwordCheck: string;
   fullName: string;
+}
+const axiosConfig = {
+  method: "POST",
+  headers: {
+    "Content-type": "application/json"
+  },
 }
 
 export default function LoginPage() {
@@ -22,9 +33,13 @@ export default function LoginPage() {
     passwordCheck: "",
     fullName: ""
   });
+  const router = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
+
   const toggle = () => {
     setIsActive(!isActive);
   };
+
   function handleLoginValueChange(field: string, e: React.ChangeEvent<HTMLInputElement>) {
     setLoginInput((state) => ({
       ...state,
@@ -37,50 +52,52 @@ export default function LoginPage() {
       [field]: e.target.value
     }));
   }
+
   async function handleLoginSubmit() {
     if(loginInput.email.length < 6 || loginInput.password.length <= 4){
       alert("짧다")
       return;
     }
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASIC_URL}/login`,{
-      method: "POST",
-      headers: {
-        "Content-type": "application/json"
-      },
-      body: JSON.stringify({
-        email: loginInput.email,
-        password: loginInput.password
-      })
-    });
+
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_BASIC_URL}/login`,{
+      email: loginInput.email,
+      password: loginInput.password
+    },
+      axiosConfig,
+    );
     if(response.status !== 200) {
+      console.log("login error => ", response.status)
       return;
     }
-    const data = await response.json();
+    axios.defaults.headers.common['Authorization'] = response.data.token;
+    dispatch(logIn({
+      isAuth: true,
+      userName: response.data.user.fullName,
+      userId: response.data.user._id
+    }))
+    router.push('/');
   }
+
   async function handleSignupSubmit() {
     if(signupInput.passwordCheck !== signupInput.password) {
       alert("비밀번호를 확인해주세요!");
       return;
     }
-    if(signupInput.email.length < 6 || signupInput.fullName.length < 3 || signupInput.password.length <= 4){
+    if(signupInput.email.length < 6 || signupInput.fullName.length < 3 || signupInput.password.length <= 4) {
       alert("짧다")
       return;
     }
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASIC_URL}/signup`,{
-      method: "POST",
-      headers: {
-        "Content-type": "application/json"
-      },
-      body: JSON.stringify({
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_BASIC_URL}/signup`,{
         email: signupInput.email,
         fullName: signupInput.fullName,
         password: signupInput.password
-      })
-    });
-    if (response.status !== 200) {
+      },
+      axiosConfig,
+    );
+    if(response.status !== 200) {
+      console.log("signup error => ", response.status)
       return;
     }
-    const data = await response.json();
     setIsActive(!isActive);
   }
   return (

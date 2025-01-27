@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useEffect, useRef, createRef, useCallback, useMemo } from 'react'
+import { useRouter } from 'next/navigation';
 import ProblemCard from './components/ProblemCard';
 
 type ProblemData = {
@@ -73,6 +74,14 @@ export default function QuizPage() {
 
   const SelectAnswerCallback = useCallback((id : string, selected : number)=>{
     userSelected[id] = selected;
+    const next = parseInt(id);
+    if(next < refs.current.length && refs.current[next].current !== null){
+      console.log(refs.current[next].current.offsetTop);
+      window.scrollTo({
+        top: refs.current[next].current.offsetTop,
+        behavior: 'smooth'
+      });
+    }
   }, [userSelected]); //userSelected 로 뭔가를 하는 것은 아니어서 빈칸이지만 찝찝하다
 
   function OnClickToTop(){
@@ -80,8 +89,11 @@ export default function QuizPage() {
       top: 0, left: 0, behavior:'smooth'
     });
   }
+
+  const router = useRouter();
   function OnClickSubmit(){
-    console.log(userSelected);
+    // console.log(userSelected);
+    router.push('/quizResults');
   }
 
   return (
@@ -93,19 +105,30 @@ export default function QuizPage() {
         <div className='w-full flex'>
           <div className='shrink w-[15%]'></div>
           <div className='w-[70%] flex flex-col items-center'>
-            <div className='w-full flex flex-col items-center'>
+            <div className='w-full flex flex-col items-center mb-10'>
               {dummyData.map((elem, index)=><ProblemCard key={elem.id} id={elem.id} ref={refs.current[index]} url={elem.url} selectAnswer={elem.selection} selectAnswerCallback={SelectAnswerCallback}/> )}
             </div>
-            <div className='w-full aspect-[6/1] flex justify-center items-center gap-10 m-2'>
-              <div onClick={()=>OnClickToTop()} className='h-[50%] min-h-[125px] aspect-square bg-red-700 rounded-full flex justify-center items-center opacity-75 hover:opacity-100 transition-opacity ease-in-out'>
-                <span className=''>처음으로</span>
+            {/* 페이지 밑의 메뉴 화면 크기가 xl이상이면 hidden */}
+            <div className='xl:hidden w-full aspect-[6/1] flex justify-center items-center gap-10 mb-10'>
+              <div onClick={()=>OnClickToTop()} className='h-[50%] min-h-[150px] aspect-square bg-red-700 rounded-full flex justify-center items-center opacity-75 hover:opacity-100 transition-opacity ease-in-out cursor-pointer'>
+                <span className='text-white font-bold text-sm'>처음으로</span>
               </div>
-              <div onClick={()=>OnClickSubmit()} className='h-[50%] min-h-[125px] aspect-square bg-blue-700 rounded-full flex justify-center items-center opacity-75 hover:opacity-100 transition-opacity ease-in-out'>
-                <span className=''>제출하기</span>
+              <div onClick={()=>OnClickSubmit()} className='h-[50%] min-h-[150px] aspect-square bg-blue-700 rounded-full flex justify-center items-center opacity-75 hover:opacity-100 transition-opacity ease-in-out cursor-pointer'>
+                <span className='text-white font-bold text-sm'>제출하기</span>
               </div>
             </div>
           </div>
-          <div className='shrink w-[15%]'></div>
+          <div className='shrink w-[15%]'>
+            {/* Sticky menu 화면 크기가 xl이하면 hidden */}
+            <div className='hidden w-[50%] sticky top-[30%] xl:flex flex-col justify-center items-center gap-10 mt-10'>
+              <div onClick={()=>OnClickToTop()} className='h-[50%] min-h-[150px] aspect-square bg-red-700 rounded-full flex justify-center items-center opacity-75 hover:opacity-100 transition-opacity ease-in-out cursor-pointer'>
+                <span className='text-white font-bold text-sm'>처음으로</span>
+              </div>
+              <div onClick={()=>OnClickSubmit()} className='h-[50%] min-h-[150px] aspect-square bg-blue-700 rounded-full flex justify-center items-center opacity-75 hover:opacity-100 transition-opacity ease-in-out cursor-pointer'>
+                <span className='text-white font-bold text-sm'>제출하기</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
