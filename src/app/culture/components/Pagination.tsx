@@ -56,7 +56,7 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalCnt, pageUnit
         onClick={goToFirstPage}
         disabled={currentPage === 1} // 첫 페이지일 때 비활성화
       >
-        {'첫번째 페이지로 이동'}
+        {'첫번째 페이지'}
       </button>
 
       {/* 페이지 번호 */}
@@ -76,7 +76,7 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalCnt, pageUnit
         onClick={goToLastPage}
         disabled={currentPage === totalPages} // 마지막 페이지일 때 비활성화
       >
-        {'마지막 페이지로 이동'}
+        {'마지막 페이지'}
       </button>
     </div>
   );

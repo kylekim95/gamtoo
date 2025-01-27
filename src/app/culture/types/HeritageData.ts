@@ -46,5 +46,5 @@ export interface PaginationProps {
   currentPage: number;  // 현재 페이지
   totalCnt: number;  // 총 데이터 수
   pageUnit: number;  // 페이지당 데이터 수
-  onPageChange: (newPage: number) => void;  // 페이지 변경 함수
+  onPageChange: (newPage: number) => void;
 }
