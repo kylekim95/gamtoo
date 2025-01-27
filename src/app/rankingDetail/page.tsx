@@ -11,6 +11,8 @@ import 'chart.js/auto';
 import QuizScoreCard from './components/QuizScoreCard';
 import RecentCommentsCard from './components/RecentCommentsCard';
 
+import GagsiMaskIcon from '@/components/quiz/svg/GagsiMaskIcon';
+
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 
@@ -170,8 +172,24 @@ export default function RankingDetail() {
     }
   ];
   const FormattedCommentsData : {url:string, name:string, comment:string}[] = [
-    
+    {url:dummyImage, name:"안녕하세요", comment:"이것은 테스트용 댓글입니다."},
+    {url:dummyImage, name:"안녕하세요", comment:"이것은 테스트용 댓글입니다."},
+    {url:dummyImage, name:"안녕하세요", comment:"이것은 테스트용 댓글입니다."},
+    {url:dummyImage, name:"안녕하세요", comment:"이것은 테스트용 댓글입니다."},
+    {url:dummyImage, name:"안녕하세요", comment:"이것은 테스트용 댓글입니다."}
   ];
+
+  //유저 정보
+  const labels = ["좋아요", "댓글", "문화재 퀴즈 최고점수"];
+  const value = ["1234", "12", "100"];
+  function socialData(label: string, value: string, key: React.Key | null | undefined){
+    return (
+      <div key={key} className='w-[20%] aspect-[1.75/1] flex flex-col justify-center items-center'>
+        <span className='font-bold text-sm'>{label}</span>
+        <span className='text-sm'>{value}</span>
+      </div>
+    );
+  }
 
   return (
     <div className='flex flex-col items-center'>
@@ -182,10 +200,11 @@ export default function RankingDetail() {
       </div>
       <div className='w-full min-w-[900px] max-w-[1200px] flex flex-col justify-center items-center'>
         {/* Social info */}
-        <div className='w-[80%] place-content-evenly flex items-end overflow-hidden my-4'>
-          <div className='bg-red-400 w-[15%] aspect-[1.75/1]'></div>
-          <div className='bg-red-400 w-[15%] aspect-[1.75/1]'></div>
-          <div className='bg-red-400 w-[15%] aspect-[1.75/1]'></div>
+        <div className='w-[80%] place-content-evenly flex items-end overflow-hidden lg:mt-[-100px] mt-4 mb-4'>
+          <div className='w-[25%] aspect-square rounded-full overflow-hidden flex flex-col items-center justify-center bg-white border-4 border-black'>
+            <GagsiMaskIcon width={150} height={150} color={'#000000'}/>
+          </div>
+          {labels.map((elem, index)=>socialData(elem, value[index], index))}
         </div>
         {/* 문화재 퀴즈 최근 결과 */}
         <div className='w-full flex flex-col justify-center items-center mb-4'>
@@ -200,7 +219,7 @@ export default function RankingDetail() {
                 }
               }}
             >
-              {formattedResults.map(({date, score}, index)=><SwiperSlide key={index} ><QuizScoreCard className='w-[15%] min-w-[150px] aspect-[1.2/1] m-3' color='#9999ff' header={date.toLocaleDateString()} content={score.toString()} footer={date.toLocaleTimeString()} /></SwiperSlide>)}
+              {formattedResults.map(({date, score}, index)=><SwiperSlide key={index} ><QuizScoreCard className='w-[15%] min-w-[150px] aspect-[1.2/1] m-3' color='#5555ff' header={date.toLocaleDateString()} content={score.toString()} footer={date.toLocaleTimeString()} /></SwiperSlide>)}
             </Swiper>
           </div>
         </div>
@@ -229,9 +248,7 @@ export default function RankingDetail() {
                 }
               }}
             >
-              {
-                FormattedCommentsData.map(({}, index)=><SwiperSlide key={index} ><RecentCommentsCard className='min-w-[250px] aspect-[1.5/1] m-3' url='' name='' comment=''/></SwiperSlide>)
-              }
+              {FormattedCommentsData.map(({url, name, comment}, index)=><SwiperSlide key={index} ><RecentCommentsCard className='w-[20%] min-w-[275px] aspect-[1.5/1] m-3' url={url} name={name} comment={comment} /></SwiperSlide>)}
             </Swiper>
           </div>
         </div>
