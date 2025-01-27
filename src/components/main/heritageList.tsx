@@ -1,11 +1,14 @@
 // 외부
 import { CheckIcon } from "@heroicons/react/20/solid";
 import Card from "@/components/CultureDetailCard";
-
-// 내부
-import Pagination from "./pagiNation";
+import { useState } from "react";
 
 export default function HeritageList() {
+  const [category, setCategory] = useState("사적");
+
+  function handleCategory(value: string) {
+    setCategory(value);
+  }
   return (
     <>
       {/* 버튼 전부를 감싸는 태그 */}
@@ -44,23 +47,39 @@ export default function HeritageList() {
         <div className="rightContent text-black flex flex-row gap-16 pb-[17px]">
           <div className="flex flex-row gap-1 items-center">
             <CheckIcon className="size-5" />
-            <button>최신등록</button>
+            <button
+              onClick={() => {
+                handleCategory("사적");
+              }}
+            >
+              사적
+            </button>
           </div>
           <div className="flex flex-row gap-1 items-center">
             <CheckIcon className="size-5" />
-            <button>무형 문화재</button>
+            <button
+              onClick={() => {
+                handleCategory("국보");
+              }}
+            >
+              국보
+            </button>
           </div>
           <div className="flex flex-row gap-1 items-center">
             <CheckIcon className="size-5" />
-            <button>유형 문화재</button>
+            <button
+              onClick={() => {
+                handleCategory("보물");
+              }}
+            >
+              보물
+            </button>
           </div>
         </div>
       </div>
       {/* 문화재 리스트 하단 부분 */}
-      <div className="flex flex-col justify-center items-center mt-4 mx-3">
-        {" "}
-        <Card />
-        <Pagination />
+      <div className="flex flex-col w-[100%] items-center mt-4">
+        <Card category={category} />
       </div>
     </>
   );
