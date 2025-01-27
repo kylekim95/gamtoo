@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-
+import "./globals.css"
 
 // 외부
 // 알림 아이콘입니다.
