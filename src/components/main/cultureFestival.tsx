@@ -41,7 +41,6 @@ export default function CultureFestival() {
     }
 
     setFestivalItems(items);
-    alert("Data fetch success");
   }
   useEffect(() => {
     testData();
