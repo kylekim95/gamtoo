@@ -37,19 +37,22 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalCnt, pageUnit
   const handlePageClick = (pageNum: number) => {
     if (pageNum !== currentPage) {
       onPageChange(pageNum);  // 페이지 변경
+      window.scrollTo(0, 0);  // 화면 맨 위로 스크롤
     }
   };
 
   const goToFirstPage = () => {
     onPageChange(1); // 첫 번째 페이지로 이동
+    window.scrollTo(0, 0);  // 화면 맨 위로 스크롤
   };
 
   const goToLastPage = () => {
     onPageChange(totalPages); // 마지막 페이지로 이동
+    window.scrollTo(0, 0);  // 화면 맨 위로 스크롤
   };
 
   return (
-    <div className="flex justify-center items-center space-x-4 mt-8">
+    <div className="flex justify-center items-center font-pretendard space-x-4 mt-8">
       {/* 첫 페이지로 가는 버튼 */}
       <button
         className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300"

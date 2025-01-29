@@ -13,7 +13,7 @@ export default function HeroImage() {
 
       {/* 텍스트 오버레이 */}
       <div className="absolute top-32 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 text-center">
-        <h1 className="text-white text-5xl font-extrabold">국가유산 조회</h1>
+        <h1 className="text-white text-5xl font-extrabold font-pretendard">국가유산 조회</h1>
       </div>
     </div>
   );

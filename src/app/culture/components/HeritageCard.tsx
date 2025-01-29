@@ -82,7 +82,7 @@ export default function HeritageCard() {
   return (
     <div>
       <div className="flex items-center justify-between pt-10"></div>
-     <div className="flex items-center text-gray-400 font-semibold text-xs pl-5 pr-4 space-x-2">
+     <div className="flex items-center font-pretendard text-gray-400 font-semibold text-xs pl-5 pr-4 space-x-2">
   {/* SVG 아이콘 */} <div className="flex-grow border-t border-gray-300"></div>
   <svg
     width="17"
@@ -109,7 +109,7 @@ export default function HeritageCard() {
   <span>총 {paginationInfo.totalCnt}개의 국가유산이 검색되었습니다. (부속국가유산 포함)</span>
 </div>
   
-      <div className="grid grid-cols-5 gap-14 p-20 pt-8">
+      <div className="grid grid-cols-5 gap-14 p-5 pt-8">
         {heritageData.map((heritage: HeritageData, index) => ( // heritage 타입 명시
           <Link
             key={index}
@@ -130,10 +130,10 @@ export default function HeritageCard() {
               </div>
   
               {/* 텍스트 영역 */}
-              <div className="text-left ml-4 mb-3">
-  <span className="text-[#4F6CF3] font-semibold text-base">{heritage.ccmaName}</span>
-  <p className="text-black font-extrabold text-lg">{heritage.ccbaMnm1}</p>
-  <div className="flex items-center text-gray-600 text-sm font-bold relative translate-y-1">
+              <div className="text-left ml-2 mb-3">
+  <span className="font-pretendard text-[#4F6CF3] font-semibold text-base">{heritage.ccmaName}</span>
+  <p className="text-black font-pretendard font-extrabold text-lg">{heritage.ccbaMnm1}</p>
+  <div className="flex items-center font-pretendard text-gray-600 text-sm font-bold relative translate-y-1">
   <svg
     width="12"
     height="12"

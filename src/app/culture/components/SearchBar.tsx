@@ -4,7 +4,10 @@ export default function SearchBar() {
       <input
         type="text"
         placeholder="검색어를 입력해주세요."
-        className="border rounded-3xl p-3 w-[33vw] bg-white bg-opacity-80 placeholder-gray-700 placeholder:tracking-widest placeholder:font-extrabold pl-6 focus:outline-none"  // focus:outline-none 추가하여 테두리 색 제거
+        className="border rounded-3xl p-3 w-[33vw] bg-white bg-opacity-80
+         placeholder-gray-700 placeholder:tracking-widest 
+         placeholder:font-extrabold pl-6 focus:outline-none
+         placeholder:font-pretendard" 
       />
       <button
         className="text-white px-4 py-2 rounded-lg transition-colors duration-300 absolute right-1 top-1/2 transform -translate-y-1/2 flex items-center space-x-2"
