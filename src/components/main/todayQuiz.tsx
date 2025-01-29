@@ -3,11 +3,186 @@ import { useRouter } from "next/navigation";
 import { ArrowRightCircleIcon } from "@heroicons/react/24/outline";
 
 import Ranking from "./rankingImg";
+import { useState } from "react";
+type ProblemData = {
+  id: string;
+  problem: string;
+  answer: number;
+  url: string;
+  selection: string[];
+};
 
 export default function TodayQuiz() {
-  const router = useRouter();
+  //TEST DATA
   const dummyImage =
     "http://www.cha.go.kr/unisearch/images/treasure/1618146.jpg";
+
+  //useCallback, useMemo 관련 경고 더미 데이터이니까 일단 놔둘것
+  //실제 데이터에는 useMemo 사용
+  const dummyData: ProblemData[] = [
+    {
+      id: "1",
+      problem: "이것은 문제입니다. 이것은 문제입니까?",
+      answer: 1,
+      url: dummyImage,
+      selection: ["선택지1", "선택지2", "선택지3", "선택지4"],
+    },
+    {
+      id: "2",
+      problem: "이것은 문제입니다. 이것은 문제입니까?",
+      answer: 1,
+      url: dummyImage,
+      selection: ["선택지1", "선택지2", "선택지3", "선택지4"],
+    },
+    {
+      id: "3",
+      problem: "이것은 문제입니다. 이것은 문제입니까?",
+      answer: 1,
+      url: dummyImage,
+      selection: ["선택지1", "선택지2", "선택지3", "선택지4"],
+    },
+    {
+      id: "4",
+      problem: "이것은 문제입니다. 이것은 문제입니까?",
+      answer: 1,
+      url: dummyImage,
+      selection: ["선택지1", "선택지2", "선택지3", "선택지4"],
+    },
+    {
+      id: "5",
+      problem: "이것은 문제입니다. 이것은 문제입니까?",
+      answer: 1,
+      url: dummyImage,
+      selection: ["선택지1", "선택지2", "선택지3", "선택지4"],
+    },
+    {
+      id: "6",
+      problem: "이것은 문제입니다. 이것은 문제입니까?",
+      answer: 1,
+      url: dummyImage,
+      selection: ["선택지1", "선택지2", "선택지3", "선택지4"],
+    },
+    {
+      id: "7",
+      problem: "이것은 문제입니다. 이것은 문제입니까?",
+      answer: 1,
+      url: dummyImage,
+      selection: ["선택지1", "선택지2", "선택지3", "선택지4"],
+    },
+    {
+      id: "8",
+      problem: "이것은 문제입니다. 이것은 문제입니까?",
+      answer: 1,
+      url: dummyImage,
+      selection: ["선택지1", "선택지2", "선택지3", "선택지4"],
+    },
+    {
+      id: "9",
+      problem: "이것은 문제입니다. 이것은 문제입니까?",
+      answer: 1,
+      url: dummyImage,
+      selection: ["선택지1", "선택지2", "선택지3", "선택지4"],
+    },
+    {
+      id: "10",
+      problem: "이것은 문제입니다. 이것은 문제입니까?",
+      answer: 1,
+      url: dummyImage,
+      selection: ["선택지1", "선택지2", "선택지3", "선택지4"],
+    },
+    {
+      id: "11",
+      problem: "이것은 문제입니다. 이것은 문제입니까?",
+      answer: 1,
+      url: dummyImage,
+      selection: ["선택지1", "선택지2", "선택지3", "선택지4"],
+    },
+    {
+      id: "12",
+      problem: "이것은 문제입니다. 이것은 문제입니까?",
+      answer: 1,
+      url: dummyImage,
+      selection: ["선택지1", "선택지2", "선택지3", "선택지4"],
+    },
+    {
+      id: "13",
+      problem: "이것은 문제입니다. 이것은 문제입니까?",
+      answer: 1,
+      url: dummyImage,
+      selection: ["선택지1", "선택지2", "선택지3", "선택지4"],
+    },
+    {
+      id: "14",
+      problem: "이것은 문제입니다. 이것은 문제입니까?",
+      answer: 1,
+      url: dummyImage,
+      selection: ["선택지1", "선택지2", "선택지3", "선택지4"],
+    },
+    {
+      id: "15",
+      problem: "이것은 문제입니다. 이것은 문제입니까?",
+      answer: 1,
+      url: dummyImage,
+      selection: ["선택지1", "선택지2", "선택지3", "선택지4"],
+    },
+    {
+      id: "16",
+      problem: "이것은 문제입니다. 이것은 문제입니까?",
+      answer: 1,
+      url: dummyImage,
+      selection: ["선택지1", "선택지2", "선택지3", "선택지4"],
+    },
+    {
+      id: "17",
+      problem: "이것은 문제입니다. 이것은 문제입니까?",
+      answer: 1,
+      url: dummyImage,
+      selection: ["선택지1", "선택지2", "선택지3", "선택지4"],
+    },
+    {
+      id: "18",
+      problem: "이것은 문제입니다. 이것은 문제입니까?",
+      answer: 1,
+      url: dummyImage,
+      selection: ["선택지1", "선택지2", "선택지3", "선택지4"],
+    },
+    {
+      id: "19",
+      problem: "이것은 문제입니다. 이것은 문제입니까?",
+      answer: 1,
+      url: dummyImage,
+      selection: ["선택지1", "선택지2", "선택지3", "선택지4"],
+    },
+    {
+      id: "20",
+      problem: "이것은 문제입니다. 이것은 문제입니까?",
+      answer: 1,
+      url: dummyImage,
+      selection: ["선택지1", "선택지2", "선택지3", "선택지4"],
+    },
+  ];
+
+  const router = useRouter();
+  const todayQuiz: ProblemData =
+    dummyData[Math.floor(Math.random() * dummyData.length)];
+
+  //  상태관리
+  const selectionColors = [
+    "bg-red-700",
+    "bg-green-700",
+    "bg-blue-700",
+    "bg-yellow-700",
+  ];
+  const [selectedBtn, setSelectedBtn] = useState<number>(-1);
+  const [resultMessage, setResultMessage] = useState<string>("");
+
+  function checkAnswer(selectedNum: number) {
+    setSelectedBtn(selectedNum);
+    setResultMessage(
+      selectedNum + 1 === todayQuiz.answer ? "정답입니다!" : "정답이 아닙니다"
+    );
+  }
+
   return (
     <div className="z-0 relative w-[99%] h-[550px] m-auto mt-10">
       <Image
@@ -63,23 +238,29 @@ export default function TodayQuiz() {
             </div>
             {/* 문제 */}
             <div className="flex flex-col items-center  justify-between w-[45%] ">
-              <div className="font-bold text-lg text-black mt-6">
-                Q. 다음 장소는 어디일까요
+              <div className="flex flex-col gap-2 font-bold text-lg text-black mt-6">
+                <span>{todayQuiz.problem}</span> {/* 문제 */}
+                <span>{resultMessage}</span> {/* 결과 */}
               </div>
               {/* 답안 부분 */}
               <div className="flex flex-col justify-end items-center w-[100%] gap-5 mb-6 text-white">
-                <div className="w-[90%] h-10 rounded-lg bg-black opacity-75 flex justify-center items-center transition-colors ease-in-out hover:bg-red-700">
-                  <span className="text-sm md:text-lg">선택지 1</span>
-                </div>
-                <div className="w-[90%] h-10 rounded-lg bg-black opacity-75 flex justify-center items-center transition-colors ease-in-out hover:bg-blue-700">
-                  <span className="text-sm md:text-lg">선택지 2</span>
-                </div>
-                <div className="w-[90%] h-10 rounded-lg bg-black opacity-75 flex justify-center items-center transition-colors ease-in-out hover:bg-yellow-700">
-                  <span className="text-sm md:text-lg">선택지 3</span>
-                </div>
-                <div className="w-[90%] h-10 rounded-lg bg-black opacity-75 flex justify-center items-center transition-colors ease-in-out hover:bg-green-700">
-                  <span className="text-sm md:text-lg">선택지 4</span>
-                </div>
+                {todayQuiz.selection.map((item, index) => {
+                  return (
+                    <button
+                      key={index}
+                      onClick={() => {
+                        checkAnswer(index);
+                      }}
+                      className={`w-[90%] h-10 rounded-lg ${
+                        selectedBtn === index
+                          ? selectionColors[index]
+                          : "bg-black"
+                      }  opacity-75 flex justify-center items-center transition-opacity ease-in-out hover:opacity-80 `}
+                    >
+                      <span className="text-sm md:text-lg">{item}</span>
+                    </button>
+                  );
+                })}
               </div>
             </div>
           </div>
