@@ -1,16 +1,17 @@
 import React from "react";
 
 type IconProps = {
-  width: number,
-  height: number,
-  color: string
+  width?: number,
+  height?: number,
+  color: string,
+  className?: string
 };
 
 export default function GagsiMaskIcon(props : IconProps){
   return (
   <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
   width={props.width} height={props.height} viewBox="0 0 512.000000 512.000000"
-  preserveAspectRatio="xMidYMid meet">
+  preserveAspectRatio="xMidYMid meet" className={props.className}>
  
  <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)"
  fill={props.color} stroke="none">
