@@ -9,8 +9,11 @@ import CapsuleSelectMenu from './CapsuleSelectMenu';
 import { CatCode2String } from '@/components/quiz/CHCategories';
 import GagsiMaskIcon from '@/components/quiz/svg/GagsiMaskIcon';
 import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
+import { useAppSelector } from '@/lib/redux/store';
 
 export default function StatisticsCard() {
+  const {isAuth, userName, userId} = useAppSelector((state) => state.authReducer.value);
+
   // 퀴즈 참여율 관련
   const testData : ChartData<"doughnut", number[], string> = {
     labels: ['😎👍', '😢'],
@@ -50,7 +53,7 @@ export default function StatisticsCard() {
           '#CACACA',
           '#CACACA',
           '#CACACA',
-          '#9999FF',
+          '#CACACA',
           '#CACACA',
           '#CACACA',
           '#CACACA',
@@ -116,7 +119,7 @@ export default function StatisticsCard() {
     datasets:[
       {
         label: '내 오답률',
-        data: Object.values(realisticMyErrData),
+        data: isAuth ? Object.values(realisticMyErrData) : [],
         backgroundColor: '#9999FF'
       },
       {
@@ -148,7 +151,7 @@ export default function StatisticsCard() {
     if(selectedCat.size === 0){
       selectedCat = new Set(selectedItems.map((elem)=>elem[0]));
     }
-    const selectedCatMyVals = Object.entries(realisticMyErrData).filter(([code])=>selectedCat.has(code)).map((elem)=>elem[1]);
+    const selectedCatMyVals = isAuth ? Object.entries(realisticMyErrData).filter(([code])=>selectedCat.has(code)).map((elem)=>elem[1]) : [];
     const selectedCatAllVals = Object.entries(realisticAllErrData).filter(([code])=>selectedCat.has(code)).map((elem)=>elem[1]);
     if(errRateChartRef.current){
       errRateChartRef.current.data.labels = [...selectedCat].map((elem)=>CatCode2StringMap.get(elem) ?? '문화재 분류');
@@ -156,7 +159,7 @@ export default function StatisticsCard() {
       errRateChartRef.current.data.datasets[1].data = selectedCatAllVals;
       errRateChartRef.current.update();
     }
-  }, [realisticMyErrData, realisticAllErrData, errRateChartRef]);
+  }, [realisticMyErrData, realisticAllErrData, errRateChartRef, isAuth]);
 
   return (
     <div className='w-full min-w-[800px] max-w-[1000px] h-auto flex flex-col items-center backdrop-blur-xl rounded-lg shadow-2xl overflow-hidden pb-10'>
@@ -174,7 +177,8 @@ export default function StatisticsCard() {
         <div className='w-[20%] mb-5 flex justify-center'>
           <Doughnut data={testData} options={testOptions}></Doughnut>
         </div>
-        <span className='text-black font-bold text-lg'>문화재 퀴즈에 도전한 25%의 유저 중 한명입니다!</span>
+        {isAuth && <span className='text-black font-bold text-lg'>문화재 퀴즈에 도전한 25%의 유저 중 한명입니다!</span>}
+        {!isAuth && <span className='text-black font-bold text-lg'>25%의 유저들이 이미 문화재 퀴즈에 도전했습니다!</span>}
         {/* Capsule Select Menu */}
         <CapsuleSelectMenu className='w-[80%] h-[100px] m-3 flex flex-wrap justify-center gap-1' items={Object.entries(CatCode2String)} onSelectedChanged={testFunc}/>
         <div className='flex justify-center w-[90%]'>
@@ -189,9 +193,7 @@ export default function StatisticsCard() {
             </div>
             {/* 각시탈 아이콘 */}
             {/* TODO: 랭크에 맞게 색 설정하기 */}
-            <div className='rounded-full border-[3px] border-black overflow-hidden self-end justify-self-end -rotate-[25deg] opacity-75'>
-              <GagsiMaskIcon width={125} height={125} color='#000000' />
-            </div>
+            <GagsiMaskIcon color='#000000' className=' w-[50%] aspect-square rounded-full border-[3px] border-black overflow-hidden self-end justify-self-end -rotate-[25deg] opacity-75' />
           </div>
         </div>
       </div>

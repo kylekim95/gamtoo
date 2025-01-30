@@ -15,8 +15,12 @@ import GagsiMaskIcon from '@/components/quiz/svg/GagsiMaskIcon';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
+import { useAppSelector } from '@/lib/redux/store';
 
 export default function RankingDetail() {
+  const {isAuth, userName, userId} = useAppSelector((state) => state.authReducer.value);
+  console.log(isAuth);
+
   // 오답률 차트 관련련
   const realisticMyErrData = {
     "11": 50,
@@ -201,9 +205,7 @@ export default function RankingDetail() {
       <div className='w-full min-w-[900px] max-w-[1200px] flex flex-col justify-center items-center'>
         {/* Social info */}
         <div className='w-[80%] place-content-evenly flex items-end overflow-hidden lg:mt-[-100px] mt-4 mb-4'>
-          <div className='w-[25%] aspect-square rounded-full overflow-hidden flex flex-col items-center justify-center bg-white border-4 border-black'>
-            <GagsiMaskIcon width={150} height={150} color={'#000000'}/>
-          </div>
+          <GagsiMaskIcon color={'#000000'} className='w-[25%] aspect-square rounded-full overflow-hidden flex flex-col items-center justify-center bg-white border-4 border-black'/>
           {labels.map((elem, index)=>socialData(elem, value[index], index))}
         </div>
         {/* 문화재 퀴즈 최근 결과 */}

@@ -29,7 +29,7 @@ export default function QuizResultsCard(props : QuizResultsCardProps) {
         <div className='w-full h-8 border-b flex items-center'>
           <span className='text-black text-sm font-bold'>{ userName } : {props.score * 5}점</span>
         </div>
-        <div className='self-end mt-[-25px] -rotate-[25deg] rounded-full overflow-hidden border-[3px] border-[#FF4444]'>{ <GagsiMaskIcon width={150} height={150} color={"#FF4444"}/> }</div>
+        <GagsiMaskIcon color={"#FF4444"} className='w-[25%] aspect-square self-end mt-[-25px] -rotate-[25deg] rounded-full overflow-hidden border-[3px] border-[#FF4444]'/>
       </div>
     </div>
   )
