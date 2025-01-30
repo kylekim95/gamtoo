@@ -5,9 +5,9 @@ import { useRouter, redirect } from 'next/navigation';
 import ProblemCard, { DefaultProblemCard } from './components/ProblemCard';
 import { useAppSelector } from '@/lib/redux/store';
 import { heritageListRequest, heritageListResponse, getHeritageList } from './components/heritageList';
-import { getHeritageDetailed, heritageDetailedRequest, heritageDetailedResponse } from './components/heritageDetail';
 import { quizResults } from '../quizResults/page';
 import GyeongBokGungIcon from '@/components/quiz/svg/GyeongBokGungIcon';
+import { GetProblem, ProblemFactoryInput, ProblemFactoryOutput } from './components/problemFactory';
 
 type ProblemData = {
   id: string;
@@ -16,6 +16,7 @@ type ProblemData = {
   url:string;
   selection: string[];
 }
+
 interface UserSelection {
   [index : number] : number;
 };
@@ -28,36 +29,37 @@ export default function QuizPage() {
   }
 
   const defaultProblemData = { id:'', problem: '', answer: '', url: '', selection: [] };
-  const numProblems = 20;
+  const numProblems = 10;
   const problems = useRef<ProblemData[]>(new Array(numProblems).fill(defaultProblemData));
   const [loaded, setLoaded] = useState(0);
+  const mounted = useRef(false);
   useEffect(()=>{
+    mounted.current = true;
     async function InitProblems() {
       const heritageListReqObj : heritageListRequest = { pageUnit: numProblems * 4 };
       const heritageList : heritageListResponse[] = await getHeritageList(heritageListReqObj);
+      if(!mounted.current) return;
       for(let i = 0; i < numProblems; i++){
         const answerInd = i * 4;
-        const heritageDetailedReqObj : heritageDetailedRequest = { ccbaAsno: heritageList[answerInd].ccbaAsno, ccbaCtcd: heritageList[answerInd].ccbaCtcd, ccbaKdcd: heritageList[answerInd].ccbaKdcd };
-        const heritageDetailed : heritageDetailedResponse | null = await getHeritageDetailed(heritageDetailedReqObj);
-        if(heritageDetailed){
-          const newProblem : ProblemData = {
-            answer: heritageList[answerInd].ccbaMnm1,
-            id: i.toString(),
-            problem: '사진 속 문화유산의 이름은?',
-            selection: [
-              heritageList[answerInd].ccbaMnm1, 
-              heritageList[answerInd + 1].ccbaMnm1, 
-              heritageList[answerInd + 2].ccbaMnm1, 
-              heritageList[answerInd + 3].ccbaMnm1
-            ],
-            url: heritageDetailed.imageUrl
-          }
-          problems.current[i] = newProblem;
+        const input : ProblemFactoryInput = {
+          Answer_ccbaAsno : heritageList[answerInd].ccbaAsno,
+          Answer_ccbaCtcd : heritageList[answerInd].ccbaCtcd,
+          Answer_ccbaKdcd : heritageList[answerInd].ccbaKdcd,
+          Answer_ccbaMnm1 : heritageList[answerInd].ccbaMnm1,
+        }
+        const problemFactoryOutput : ProblemFactoryOutput | null = await GetProblem(input);
+        if(!mounted.current) break;
+        if(problemFactoryOutput){
+          const newProblemData : ProblemData = {...problemFactoryOutput, id:i.toString()};
+          problems.current[i] = newProblemData;
           setLoaded(i);
         }
       }
     }
     InitProblems();
+    return () => {
+      mounted.current = false;
+    }
   }, []);
 
   //TODO : Custom Hook
