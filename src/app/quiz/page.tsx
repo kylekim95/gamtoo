@@ -6,27 +6,28 @@ import ProblemCard, { DefaultProblemCard } from './components/ProblemCard';
 import { useAppSelector } from '@/lib/redux/store';
 import { heritageListRequest, heritageListResponse, getHeritageList } from './components/heritageList';
 import { getHeritageDetailed, heritageDetailedRequest, heritageDetailedResponse } from './components/heritageDetail';
+import { quizResults } from '../quizResults/page';
+import GyeongBokGungIcon from '@/components/quiz/svg/GyeongBokGungIcon';
 
 type ProblemData = {
   id: string;
   problem: string;
-  answer: number;
+  answer: string;
   url:string;
   selection: string[];
 }
 interface UserSelection {
-  [index : string] : number;
+  [index : number] : number;
 };
 
 export default function QuizPage() {
   const router = useRouter();
-  // 테스트 할때 불편해서 제외됨
-  // const {isAuth, userName, userId} = useAppSelector((state) => state.authReducer.value);
-  // if(!isAuth || userName==='' || userId===''){
-  //   redirect('/login');
-  // }
+  const {isAuth, userName, userId} = useAppSelector((state) => state.authReducer.value);
+  if(!isAuth || userName==='' || userId===''){
+    redirect('/login');
+  }
 
-  const defaultProblemData = { id:'', problem: '', answer: -1, url: '', selection: [] };
+  const defaultProblemData = { id:'', problem: '', answer: '', url: '', selection: [] };
   const numProblems = 20;
   const problems = useRef<ProblemData[]>(new Array(numProblems).fill(defaultProblemData));
   const [loaded, setLoaded] = useState(0);
@@ -40,10 +41,15 @@ export default function QuizPage() {
         const heritageDetailed : heritageDetailedResponse | null = await getHeritageDetailed(heritageDetailedReqObj);
         if(heritageDetailed){
           const newProblem : ProblemData = {
-            answer: 1,
+            answer: heritageList[answerInd].ccbaMnm1,
             id: i.toString(),
             problem: '사진 속 문화유산의 이름은?',
-            selection: [heritageList[answerInd].ccbaMnm1, '2', '3', '4'],
+            selection: [
+              heritageList[answerInd].ccbaMnm1, 
+              heritageList[answerInd + 1].ccbaMnm1, 
+              heritageList[answerInd + 2].ccbaMnm1, 
+              heritageList[answerInd + 3].ccbaMnm1
+            ],
             url: heritageDetailed.imageUrl
           }
           problems.current[i] = newProblem;
@@ -76,9 +82,9 @@ export default function QuizPage() {
 
   const userSelected : UserSelection = useMemo(()=>{
     const temp : UserSelection = {};
-    problems.current.forEach((elem)=>{
-      temp[elem.id] = -1;
-    });
+    for(let i = 0; i < numProblems; i++){
+      temp[i] = -1;
+    }
     return temp;
   }, []);
   const SelectAnswerCallback = useCallback((id : string, selected : number)=>{
@@ -98,18 +104,22 @@ export default function QuizPage() {
     });
   }
   function OnClickSubmit(){
-    // console.log(userSelected);
-    const checkAnswers : {id:string, problem:string, answer:number, userSelect:number, result:boolean}[] = [];
+    const data : quizResults[] = [];
+    let score = 0;
     for(let i = 0; i < problems.current.length; i++){
-      checkAnswers.push({
-        id: problems.current[i].id,
-        problem: problems.current[i].problem,
+      const temp : quizResults = {
         answer: problems.current[i].answer,
-        userSelect: userSelected[i],
-        result: problems.current[i].answer === userSelected[i]
-      });
+        id: i.toString(),
+        problem: problems.current[i].problem,
+        selected: problems.current[i].selection[userSelected[i]],
+        correct: problems.current[i].selection[userSelected[i]] === problems.current[i].answer,
+      }
+      if(temp.correct)
+        score++;
+      data.push(temp);
     }
-    router.push(`/quizResults?checkData=${JSON.stringify(checkAnswers)}`);
+    const queryString = `?score=${score}&data=${JSON.stringify(data)}`;
+    router.push('/quizResults' + queryString);
   }
 
   return (
@@ -126,22 +136,26 @@ export default function QuizPage() {
             </div>
             {/* 페이지 밑의 메뉴 화면 크기가 xl이상이면 hidden */}
             <div className='xl:hidden w-full aspect-[6/1] flex justify-center items-center gap-10 mb-10'>
-              <div onClick={()=>OnClickToTop()} className='h-[50%] min-h-[150px] aspect-square bg-red-700 rounded-full flex justify-center items-center opacity-75 hover:opacity-100 transition-opacity ease-in-out cursor-pointer'>
-                <span className='text-white font-bold text-sm'>처음으로</span>
+              <div onClick={()=>OnClickToTop()} className='flex-col h-[50%] min-h-[150px] aspect-square bg-red-700 rounded-full flex justify-center items-center opacity-75 hover:opacity-100 transition-opacity ease-in-out cursor-pointer'>
+                <GyeongBokGungIcon width={40} height={40} color={'#FFFFFF'}/>
+                <span className='text-white font-bold text-sm mt-2'>처음으로</span>
               </div>
-              <div onClick={OnClickSubmit} className='h-[50%] min-h-[150px] aspect-square bg-blue-700 rounded-full flex justify-center items-center opacity-75 hover:opacity-100 transition-opacity ease-in-out cursor-pointer'>
-                <span className='text-white font-bold text-sm'>제출하기</span>
+              <div onClick={OnClickSubmit} className='flex-col h-[50%] min-h-[150px] aspect-square bg-blue-700 rounded-full flex justify-center items-center opacity-75 hover:opacity-100 transition-opacity ease-in-out cursor-pointer'>
+                <GyeongBokGungIcon width={40} height={40} color={'#FFFFFF'}/>
+                <span className='text-white font-bold text-sm mt-2'>제출하기</span>
               </div>
             </div>
           </div>
           <div className='shrink w-[15%]'>
             {/* Sticky menu 화면 크기가 xl이하면 hidden */}
             <div className='hidden w-[50%] sticky top-[30%] xl:flex flex-col justify-center items-center gap-10 mt-10'>
-              <div onClick={()=>OnClickToTop()} className='h-[50%] min-h-[150px] aspect-square bg-red-700 rounded-full flex justify-center items-center opacity-75 hover:opacity-100 transition-opacity ease-in-out cursor-pointer'>
-                <span className='text-white font-bold text-sm'>처음으로</span>
+              <div onClick={()=>OnClickToTop()} className='flex-col h-[50%] min-h-[150px] aspect-square bg-red-700 rounded-full flex justify-center items-center opacity-75 hover:opacity-100 transition-opacity ease-in-out cursor-pointer'>
+                <GyeongBokGungIcon width={40} height={40} color={'#FFFFFF'}/>
+                <span className='text-white font-bold text-sm mt-2'>처음으로</span>
               </div>
-              <div onClick={OnClickSubmit} className='h-[50%] min-h-[150px] aspect-square bg-blue-700 rounded-full flex justify-center items-center opacity-75 hover:opacity-100 transition-opacity ease-in-out cursor-pointer'>
-                <span className='text-white font-bold text-sm'>제출하기</span>
+              <div onClick={OnClickSubmit} className='flex-col h-[50%] min-h-[150px] aspect-square bg-blue-700 rounded-full flex justify-center items-center opacity-75 hover:opacity-100 transition-opacity ease-in-out cursor-pointer'>
+                <GyeongBokGungIcon width={40} height={40} color={'#FFFFFF'}/>
+                <span className='text-white font-bold text-sm mt-2'>제출하기</span>
               </div>
             </div>
           </div>

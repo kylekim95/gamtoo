@@ -60,24 +60,24 @@ export function DefaultProblemCard(props : {ref: React.RefObject<HTMLDivElement 
       w-full max-w-[900px] min-w-[600px] aspect-[2.5/1] m-2
       transition-opacity duration-300 ease-in-out
       rounded-lg drop-shadow-2xl overflow-hidden
-      flex'
+      flex bg-white'
       ref={props.ref}
     >
       <div 
-        className={`w-[10%] h-full flex justify-center items-center bg-slate-300 rounded-lg`}
+        className={`w-[10%] h-full flex justify-center items-center bg-slate-200 rounded-l-lg `}
       >
       </div>
-      <div className='w-[90%] h-full flex flex-col'>
-        <div className='w-full h-[10%] min-h-[50px] flex items-end p-1'>
-          <div className='w-full h-full bg-slate-300 rounded-lg'></div>
+      <div className='w-[90%] h-full flex flex-col items-center pt-2'>
+        <div className='w-[90%] h-[10%] min-h-[50px] flex items-end p-1'>
+          <div className='w-full h-full bg-slate-200 rounded-lg '></div>
         </div>
         <div className='w-full h-[90%] flex place-content-evenly items-center'>
-          <div className='w-[30%] aspect-square rounded-lg bg-slate-300'></div>
+          <div className='w-[30%] aspect-square rounded-lg bg-slate-200 '></div>
           <div className='w-[55%] aspect-[16/9] rounded-lg overflow-hidden grid grid-cols-2 gap-1'>
-            <div className={`bg-slate-300 flex justify-center items-center transition-opacity ease-in-out`}></div>
-            <div className={`bg-slate-300 flex justify-center items-center transition-opacity ease-in-out`}></div>
-            <div className={`bg-slate-300 flex justify-center items-center transition-opacity ease-in-out`}></div>
-            <div className={`bg-slate-300 flex justify-center items-center transition-opacity ease-in-out`}></div>
+            <div className={`bg-slate-200 flex justify-center items-center transition-opacity ease-in-out `}></div>
+            <div className={`bg-slate-200 flex justify-center items-center transition-opacity ease-in-out `}></div>
+            <div className={`bg-slate-200 flex justify-center items-center transition-opacity ease-in-out `}></div>
+            <div className={`bg-slate-200 flex justify-center items-center transition-opacity ease-in-out `}></div>
           </div>
         </div>
       </div>
