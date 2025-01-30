@@ -88,7 +88,7 @@ export default function QuizPage() {
     return temp;
   }, []);
   const SelectAnswerCallback = useCallback((id : string, selected : number)=>{
-    userSelected[id] = selected;
+    userSelected[parseInt(id)] = selected;
     const next = parseInt(id);
     if(next < refs.current.length && refs.current[next].current !== null){
       window.scrollTo({

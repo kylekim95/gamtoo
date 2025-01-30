@@ -9,6 +9,7 @@ import CheckIcon from '@/components/quiz/svg/CheckedIcon';
 import CrossedIcon from '@/components/quiz/svg/CrossedIcon';
 import { redirect, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import { useAppSelector } from '@/lib/redux/store';
 
 export type quizResults = {
   id: string;
@@ -19,6 +20,11 @@ export type quizResults = {
 }
 
 export default function QuizResultsPage() {
+  const {isAuth, userName, userId} = useAppSelector((state) => state.authReducer.value);
+  if(!isAuth || userName==='' || userId===''){
+    redirect('/');
+  }
+
   const smallCheck = <CheckIcon width={25} height={25} color={"#44FF44"}/>;
   const smallCross = <CrossedIcon width={25} height={25} color={"#FF2222"}/>;
   const dataDesc = ["id", "문제", "정답", "선택된 답", "결과"];
