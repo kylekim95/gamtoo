@@ -34,11 +34,16 @@ export default function QuizPage() {
   const [loaded, setLoaded] = useState(0);
   const mounted = useRef(false);
   useEffect(()=>{
+    if(mounted.current){
+      console.log('twice?');
+      return;
+    }
     mounted.current = true;
     async function InitProblems() {
       const heritageListReqObj : heritageListRequest = { pageUnit: numProblems * 4 };
       const heritageList : heritageListResponse[] = await getHeritageList(heritageListReqObj);
       if(!mounted.current) return;
+      //TODO: 문제의 정답을 랜덥하게 고른다
       for(let i = 0; i < numProblems; i++){
         const answerInd = i * 4;
         const input : ProblemFactoryInput = {

@@ -24,14 +24,20 @@ export async function GetProblem(input : ProblemFactoryInput) : Promise<ProblemF
   let output : ProblemFactoryOutput | null = null;
   const randNum = Math.trunc(Math.random() * factories.length);
   output = await factories[randNum](input);
+  if(output) shuffle(output.selection);
   return output;
+}
+
+function shuffle(arr : string[]) {
+  arr.sort(()=>Math.random() - 0.5);
 }
 
 async function NameProblem(input : ProblemFactoryInput) : Promise<ProblemFactoryOutput | null> {
   const heritageDetailedReqObj : heritageDetailedRequest = { ccbaAsno: input.Answer_ccbaAsno, ccbaCtcd: input.Answer_ccbaCtcd, ccbaKdcd: input.Answer_ccbaKdcd };
   const heritageDetailed : heritageDetailedResponse | null = await getHeritageDetailed(heritageDetailedReqObj);
   
-  const heritageListReqObj : heritageListRequest = { pageUnit: 4, pageIndex: 1, ccbaKdcd: input.Answer_ccbaKdcd };
+  const randNum = Math.trunc(Math.random() * 10 + 1);
+  const heritageListReqObj : heritageListRequest = { pageUnit: 4, pageIndex: randNum, ccbaKdcd: input.Answer_ccbaKdcd };
   const heritageList : heritageListResponse[] = await getHeritageList(heritageListReqObj);
 
   if(heritageDetailed){
@@ -60,22 +66,21 @@ async function CategoryProblem(input : ProblemFactoryInput) : Promise<ProblemFac
 
     const other = Object.values(CatCode2String);
     const otherSelected : string[] = [];
-    for(let i = 0; i < 3; i++){
-      let randomNum = Math.trunc(Math.random() * other.length);
-      let selected = other[randomNum];
+    for(let i = 0; i < 4; i++){
+      const randomNum = Math.trunc(Math.random() * other.length);
+      const selected = other[randomNum];
       if(selected){
         otherSelected.push(selected);
         other.splice(randomNum, 1);
       }
     }
-    console.log(otherSelected);
 
     const newProblem : ProblemFactoryOutput = {
       answer: answer,
       problem: '사진 속 문화유산의 분류는?',
       selection: [ 
         answer,
-        ...otherSelected
+        ...(otherSelected.filter((elem)=>elem!==answer).slice(0, 3))
       ],
       url: heritageDetailed.imageUrl
     }
