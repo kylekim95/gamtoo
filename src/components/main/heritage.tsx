@@ -4,9 +4,9 @@ import Card from "@/components/CultureList";
 import { useState } from "react";
 
 export default function Heritage() {
-  const [category, setCategory] = useState("사적");
+  const [category, setCategory] = useState(11);
 
-  function handleCategory(value: string) {
+  function handleCategory(value: number) {
     setCategory(value);
   }
   return (
@@ -49,7 +49,7 @@ export default function Heritage() {
             <CheckIcon className="size-5" />
             <button
               onClick={() => {
-                handleCategory("사적");
+                handleCategory(13);
               }}
             >
               사적
@@ -59,7 +59,7 @@ export default function Heritage() {
             <CheckIcon className="size-5" />
             <button
               onClick={() => {
-                handleCategory("국보");
+                handleCategory(11);
               }}
             >
               국보
@@ -69,7 +69,7 @@ export default function Heritage() {
             <CheckIcon className="size-5" />
             <button
               onClick={() => {
-                handleCategory("보물");
+                handleCategory(12);
               }}
             >
               보물

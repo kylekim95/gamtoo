@@ -1,3 +1,5 @@
+import { VideoCameraIcon } from "@heroicons/react/20/solid";
+
 export default function VideoList() {
   interface videoItem {
     title: string;
@@ -32,7 +34,7 @@ export default function VideoList() {
       <div className="w-[47%] mx-[1%]">
         {/* 제목 */}
         <div className=" border-b">
-          <div className="flex flex-col pb-1">
+          <div className="flex flex-col">
             {/* 아이콘 & 동영상 텍스트 */}
             <div className=" text-[#F09AFF]">VIDEO</div>
             <div className="flex flex-row items-end gap-4">
@@ -69,11 +71,12 @@ export default function VideoList() {
               className="mt-7 w-[45%] shadow-[5px_5px_5px_#ccc8c8]"
             >
               <iframe
-                className="w-[100%] h-[200px]"
+                className="w-[100%] h-[220px]"
                 src={item.videoUrl.replace("?si=", "?")}
                 title={item.title}
               ></iframe>
-              <div className="text-lg text-black font-semibold py-3 ml-2">
+              <div className="flex flex-row gap-4 items-center text-base text-black font-semibold py-3 ml-2 h-[60px]">
+                <VideoCameraIcon className="size-5" />
                 {item.title}
               </div>
             </div>

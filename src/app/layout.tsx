@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import "./globals.css"
+import "./globals.css";
 
 // 외부
 // 알림 아이콘입니다.
@@ -12,12 +12,11 @@ import {
 } from "@heroicons/react/20/solid";
 
 import ReduxProvider from "@/lib/redux/provider";
-import {useAppSelector} from "@/lib/redux/store";
+import { useAppSelector } from "@/lib/redux/store";
 import GagsiMaskIcon from "@/components/quiz/svg/GagsiMaskIcon";
-import React, {useState} from "react";
+import React, { useState } from "react";
 import NotificationModal from "@/components/NotificationModal";
 import axios from "axios";
-
 
 // 감투 아이콘
 function GamtooIcon() {
@@ -82,12 +81,13 @@ function Gaksital() {
 }
 
 interface props {
-  isNotification: boolean,
-  notificationHandler: () => void,
+  isNotification: boolean;
+  notificationHandler: () => void;
 }
 
-function Header({isNotification, notificationHandler}: props) {
+function Header({ isNotification, notificationHandler }: props) {
   const router = useRouter();
+
   const {isAuth, userId} = useAppSelector((state) => state.authReducer.value);
   if(isNotification) {
     (async function () {
@@ -95,9 +95,9 @@ function Header({isNotification, notificationHandler}: props) {
       console.log("response",response)
     })()
   }
+
   return (
-    <header
-      className="flex justify-between items-center h-[90px] px-9 mb-6 border-b-[1px] border-stone-400 bg-[#FFFFFF] min-w-full">
+    <header className="flex justify-between items-center h-[90px] px-9 mb-6 border-b-[1px] border-stone-400 bg-[#FFFFFF] min-w-full">
       {/* 헤더 왼쪽 */}
 
       <div className="left mt-1 gap-11 flex ">
@@ -108,7 +108,7 @@ function Header({isNotification, notificationHandler}: props) {
           className="icon gap-4 flex flex-row justify-center items-center hover:cursor-pointer"
         >
           {" "}
-          <GamtooIcon/>
+          <GamtooIcon />
           <div className="flex flex-col text-black">
             <span className="text-stone-500 font-semibold text-[12px]">
               감춰진 역사 투어
@@ -162,40 +162,60 @@ function Header({isNotification, notificationHandler}: props) {
       </div>
       {/* 헤더 오른쪽 */}
 
-      {isAuth ? <div className="flex items-center">
-          {isNotification ?
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" onClick={notificationHandler} fill="currentColor"
-                 className="size-10 mr-4">
+      {isAuth ? (
+        <div className="flex items-center">
+          {isNotification ? (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              onClick={notificationHandler}
+              fill="currentColor"
+              className="size-10 mr-4"
+            >
+              <path d="M3.53 2.47a.75.75 0 0 0-1.06 1.06l18 18a.75.75 0 1 0 1.06-1.06l-18-18ZM20.57 16.476c-.223.082-.448.161-.674.238L7.319 4.137A6.75 6.75 0 0 1 18.75 9v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 0 1-.297 1.206Z" />
               <path
-                d="M3.53 2.47a.75.75 0 0 0-1.06 1.06l18 18a.75.75 0 1 0 1.06-1.06l-18-18ZM20.57 16.476c-.223.082-.448.161-.674.238L7.319 4.137A6.75 6.75 0 0 1 18.75 9v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 0 1-.297 1.206Z"/>
-              <path fillRule="evenodd"
-                    d="M5.25 9c0-.184.007-.366.022-.546l10.384 10.384a3.751 3.751 0 0 1-7.396-1.119 24.585 24.585 0 0 1-4.831-1.244.75.75 0 0 1-.298-1.205A8.217 8.217 0 0 0 5.25 9.75V9Zm4.502 8.9a2.25 2.25 0 1 0 4.496 0 25.057 25.057 0 0 1-4.496 0Z"
-                    clipRule="evenodd"/>
-            </svg> :
-            <svg xmlns="http://www.w3.org/2000/svg" onClick={notificationHandler} viewBox="0 0 24 24" fill="currentColor"
-                 className="size-10 mr-4">
-              <path fill-rule="evenodd"
-                    d="M5.25 9a6.75 6.75 0 0 1 13.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 0 1-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 1 1-7.48 0 24.585 24.585 0 0 1-4.831-1.244.75.75 0 0 1-.298-1.205A8.217 8.217 0 0 0 5.25 9.75V9Zm4.502 8.9a2.25 2.25 0 1 0 4.496 0 25.057 25.057 0 0 1-4.496 0Z"
-                    clip-rule="evenodd"/>
+                fillRule="evenodd"
+                d="M5.25 9c0-.184.007-.366.022-.546l10.384 10.384a3.751 3.751 0 0 1-7.396-1.119 24.585 24.585 0 0 1-4.831-1.244.75.75 0 0 1-.298-1.205A8.217 8.217 0 0 0 5.25 9.75V9Zm4.502 8.9a2.25 2.25 0 1 0 4.496 0 25.057 25.057 0 0 1-4.496 0Z"
+                clipRule="evenodd"
+              />
             </svg>
-          }
+          ) : (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              onClick={notificationHandler}
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              className="size-10 mr-4"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M5.25 9a6.75 6.75 0 0 1 13.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 0 1-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 1 1-7.48 0 24.585 24.585 0 0 1-4.831-1.244.75.75 0 0 1-.298-1.205A8.217 8.217 0 0 0 5.25 9.75V9Zm4.502 8.9a2.25 2.25 0 1 0 4.496 0 25.057 25.057 0 0 1-4.496 0Z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          )}
           <div className="w-[75px] h-[75px] rounded-full border-4 overflow-hidden content-center border-black">
-            <GagsiMaskIcon width={68} height={70} color={"#00000"}/>
+            <GagsiMaskIcon width={68} height={70} color={"#00000"} />
           </div>
-
         </div>
-        : <div className="right mt-1 flex flex-row items-center gap-5">
-          <UserCircleIcon className="size-8 text-black"/>
+      ) : (
+        <div className="right mt-1 flex flex-row items-center gap-5">
+          <UserCircleIcon
+            onClick={() => {
+              router.push("/user");
+            }}
+            className="size-8 text-black hover:cursor-pointer"
+          />
           <span
             onClick={() => {
               router.push("/login");
             }}
-            className="font-semibold text-xl text-[#424383]"
+            className="font-semibold text-xl text-[#424383] hover:cursor-pointer"
           >
-
-          로그인
-        </span>
-        </div>}
+            로그인
+          </span>
+        </div>
+      )}
     </header>
   );
 }
@@ -209,7 +229,7 @@ function Footer() {
             DIRECTORY
           </span>
           <span>
-            Lorem, ipsum dolor sit amet consectetur <br/>
+            Lorem, ipsum dolor sit amet consectetur <br />
             adipisicing elit. Assumenda, saepe.
           </span>
         </div>
@@ -247,7 +267,7 @@ function Footer() {
             fill="currentColor"
             className="size-6"
           >
-            <path d="M4.5 3.75a3 3 0 0 0-3 3v.75h21v-.75a3 3 0 0 0-3-3h-15Z"/>
+            <path d="M4.5 3.75a3 3 0 0 0-3 3v.75h21v-.75a3 3 0 0 0-3-3h-15Z" />
             <path
               fillRule="evenodd"
               d="M22.5 9.75h-21v7.5a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3v-7.5Zm-18 3.75a.75.75 0 0 1 .75-.75h6a.75.75 0 0 1 0 1.5h-6a.75.75 0 0 1-.75-.75Zm.75 2.25a.75.75 0 0 0 0 1.5h3a.75.75 0 0 0 0-1.5h-3Z"
@@ -261,30 +281,31 @@ function Footer() {
 }
 
 export default function RootLayout({
-                                     children,
-                                   }: Readonly<{
+  children,
+}: Readonly<{
   children: React.ReactNode;
 }>) {
   const [isNotification, setIsNotificationModal] = useState<boolean>(false);
   const notificationHandler = () => {
     setIsNotificationModal(!isNotification);
-  }
+  };
   return (
     <>
       <html lang="en">
-
-      <ReduxProvider>{
-
-        <body>
-        <div id="portal"/>
-        {" "}
-        <Header isNotification={isNotification} notificationHandler={notificationHandler}/>
-        {isNotification ? <NotificationModal/> : ""}
-        {children}
-        <Footer/>
-        </body>}
-      </ReduxProvider>
-
+        <ReduxProvider>
+          {
+            <body>
+              <div id="portal" />{" "}
+              <Header
+                isNotification={isNotification}
+                notificationHandler={notificationHandler}
+              />
+              {isNotification ? <NotificationModal /> : ""}
+              {children}
+              <Footer />
+            </body>
+          }
+        </ReduxProvider>
       </html>
     </>
   );
