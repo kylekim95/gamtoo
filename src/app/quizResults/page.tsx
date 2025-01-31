@@ -33,7 +33,7 @@ export default function QuizResultsPage() {
   const interpretedData : DataType[] = [];
   const recentQuizData = sessionStorage.getItem('recentQuizData');
   if(!recentQuizData) redirect('/');
-  const parsedRecentQuizData = JSON.parse(recentQuizData);
+  const parsedRecentQuizData = JSON.parse(recentQuizData ?? '');
   const score = parseInt(parsedRecentQuizData.score ?? '0');
   const data : quizResults[] = JSON.parse(parsedRecentQuizData.data ?? '[]');
 

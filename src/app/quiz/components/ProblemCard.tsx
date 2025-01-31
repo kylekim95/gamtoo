@@ -38,11 +38,11 @@ export default function ProblemCard(props : ProblemCardProps) {
       flex
     ' ref={props.ref}>
       <div 
-        className={`w-[10%] h-full flex justify-center items-center bg-[#00000080] rounded-l-lg`}
+        className={`w-[10%] h-full flex justify-center items-center bg-[#000000A0] rounded-l-lg`}
         style={{backgroundImage: `url(${props.url})`, backgroundSize:'cover', backgroundPosition: 'center', backgroundBlendMode: 'multiply'}}
       >
         <div ref={refToCompIcon}>
-          { solved ? <CheckIcon width={40} height={40} color='#44FF44'/> : <CrossedIcon width={40} height={40} color='#FF4444' /> }
+          { solved ? <CheckIcon width={40} height={40} color='#33FF33'/> : <CrossedIcon width={40} height={40} color='#FF3333' /> }
         </div>
       </div>
       <div className='w-[90%] h-full flex flex-col bg-slate-50'>

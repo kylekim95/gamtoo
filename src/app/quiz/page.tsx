@@ -32,7 +32,7 @@ export default function QuizPage() {
     redirect('/login');
   }
 
-  const defaultProblemData = { id:'', problem: '', answer: '', url: '', selection: [] };
+  const defaultProblemData = { id:'', problem: '', answer: '', url: '', selection: [], linkTo:'' };
   const numProblems = 20;
   const problems = useRef<ProblemData[]>(new Array(numProblems).fill(defaultProblemData));
   const [loaded, setLoaded] = useState(0);
