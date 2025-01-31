@@ -28,15 +28,15 @@ export default function QnaPage(){
  <div className="min-h-screen py-8">
       <div className="max-w-4xl mx-auto px-4 flex flex-col gap-12">
       <div className="flex flex-col items-center gap-6">
-                <h3 className="text-3xl tracking-wide font-light"> <span className="font-semibold">총 <span className="text-[#B23742]">9</span>개</span>의 글이 등록되어 있습니다.</h3>
-                <div className=" flex gap-3 justify-center w-full items-center">
-                    <div className=" grow-0"><select  className=" bg-[#F7F7F7] p-3 box-border w-80 h-12 rounded-md" >
+                <h3 className="lg:text-3xl tracking-wide text-xl sm:text-2xl font-light"> <span className="font-semibold">총 <span className="text-[#B23742]">9</span>개</span>의 글이 등록되어 있습니다.</h3>
+                <div className=" md:flex md:flex-row gap-3 justify-center w-full flex flex-col   items-center">
+                    <div className=" md:w-80 w-full"><select  className=" bg-[#F7F7F7] p-3 box-border w-full md:w-80 h-12 rounded-md" >
                     <option value="">제목</option>
                     </select>
                   
                     </div>
-                    <div className="w-full grow"><input placeholder="검색어를 입력해주세요" className=" bg-[#F7F7F7] p-3 box-border h-12 w-full rounded-md" type="text"/></div>
-                    <div ><button className=" w-24 py-3 rounded-lg text-white h-full bg-[#B23742] "> 검색</button></div>
+                    <div className="w-full "><input placeholder="검색어를 입력해주세요" className=" bg-[#F7F7F7] p-3 box-border h-12 w-full rounded-md" type="text"/></div>
+                    <div className="w-full md:w-24" ><button className="w-full md:w-24 py-3 rounded-lg text-white h-full bg-[#B23742] "> 검색</button></div>
                 </div>
             </div>
         <div className="space-y-6">

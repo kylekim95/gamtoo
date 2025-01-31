@@ -4,7 +4,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <div className="flex flex-col gap-32 ">
-        <div className=" relative lg:h-[540px] md:h-[300px] sm:h-[250px] overflow-hidden">
+        <div className=" relative lg:h-[540px] md:h-[300px] sm:h-[250px] h-[250px]  overflow-hidden">
           <div className="w-full h-full absolute z-50 flex justify-center items-center">
             <p className="text-5xl text-white font-bold">Q&A</p>
           </div>
