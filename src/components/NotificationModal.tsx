@@ -1,9 +1,13 @@
 import React from 'react';
 import GagsiMaskIcon from "@/components/quiz/svg/GagsiMaskIcon";
+import {useAppSelector} from "@/lib/redux/store";
 
 
 export default function NotificationModal() {
   const [comment, setComment] = React.useState()
+  const { userId} = useAppSelector((state) => state.authReducer.value);
+
+
   return (
     <div className="absolute z-50 bg-white w-[500px] top-[90px] right-0 border pb-2 max-w-full overflow-scroll">
       <div className="pt-4 pl-4 pr-4">
