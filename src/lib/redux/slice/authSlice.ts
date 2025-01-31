@@ -21,14 +21,13 @@ export const auth = createSlice({
     logOut: () => {
       return initialState
     },
-    logIn: (State, action: PayloadAction<AuthStateInterface>) => {
-      return {
-        value: {
-          isAuth: action.payload.isAuth,
-          userName: action.payload.userName,
-          userId: action.payload.userId
-        }
+    logIn: (state, action: PayloadAction<AuthStateInterface>) => {
+      const newValue: AuthStateInterface = {
+        isAuth: action.payload.isAuth,
+        userName: action.payload.userName,
+        userId: action.payload.userId
       }
+      state.value =  newValue
     },
   }
 });

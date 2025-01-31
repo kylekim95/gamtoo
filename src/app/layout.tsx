@@ -17,6 +17,7 @@ import GagsiMaskIcon from "@/components/quiz/svg/GagsiMaskIcon";
 import React, { useState } from "react";
 import NotificationModal from "@/components/NotificationModal";
 import axios from "axios";
+import NotificationExtractData from "@/components/NotificationExtractData";
 
 // 감투 아이콘
 function GamtooIcon() {
@@ -89,12 +90,6 @@ function Header({ isNotification, notificationHandler }: props) {
   const router = useRouter();
 
   const {isAuth, userId} = useAppSelector((state) => state.authReducer.value);
-  if(isNotification) {
-    (async function () {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_BASIC_URL}/notifications`,{headers: {"Content-type": "application/json"}});
-      console.log("response",response)
-    })()
-  }
 
   return (
     <header className="flex justify-between items-center h-[90px] px-9 mb-6 border-b-[1px] border-stone-400 bg-[#FFFFFF] min-w-full">
