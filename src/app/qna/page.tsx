@@ -1,3 +1,6 @@
+'use client'
+
+import InfoCard from "../map/components/infoCard";
 
 export default function QnaPage(){
     const posts = [
@@ -73,6 +76,7 @@ export default function QnaPage(){
             </div>
           ))}
         </div>
+        <InfoCard/>
       </div>
     </div>
 
