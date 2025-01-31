@@ -94,7 +94,7 @@ function Header({ isNotification, notificationHandler }: props) {
   const {isAuth, userId} = useAppSelector((state) => state.authReducer.value);
 
   return (
-    <header className="flex justify-between items-center h-[70px] px-9 mb-2 border-b-[1px] border-[#F2F2F2] bg-[#FFFFFF] min-w-full">
+    <header className="flex justify-between items-center h-[70px] px-9 bg-[#FFFFFF] min-w-full">
       {/* 헤더 왼쪽 */}
 
       <div className="left gap-11 flex ">
