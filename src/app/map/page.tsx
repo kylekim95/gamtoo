@@ -10,7 +10,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import MultiRange from "@/app/map/components/rangeSlider";
 import SelectBox from "@/app/map/components/slelctBox";
 import BasicMap from "@/app/map/components/kakaoMap";
-import { MapItem, SelectProps } from "../../../types/Map";
+import { MapItem, SelectProps } from "../../types/Map";
 import { selectList } from "@/app/map/config/config";
 import { AccordionItem } from "@/app/map/components/accordionItem";
 import { Loading } from "@/app/map/components/loading";

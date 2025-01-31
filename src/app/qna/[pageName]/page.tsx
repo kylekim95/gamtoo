@@ -1,12 +1,15 @@
 'use client'
 import { AppDispatch, useAppSelector } from "@/lib/redux/store";
 import axios from "axios";
+import { useParams, useRouter } from "next/navigation";
 import { ChangeEvent, useState } from "react";
 import { useDispatch } from "react-redux";
 const url = process.env.NEXT_PUBLIC_BASIC_URL
 export default function QnaSubmitPage() {
 const [data,setData] = useState<Record<string,string>>()
-const dispatch = useDispatch<AppDispatch>();
+const { pageName } = useParams();
+
+const router = useRouter()
   const {isAuth, userName, userId} = useAppSelector((state) => state.authReducer.value);
   const handleChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) =>{
     const {name, value} = e.target
@@ -16,20 +19,21 @@ const dispatch = useDispatch<AppDispatch>();
     }))
     console.log(data)
   }
+  
   const handleSubmit = async () => {
     const formData = new FormData();
     formData.append('title',JSON.stringify(data))
-    formData.append('channelId','5004')
     formData.append('image','null')
+    formData.append('channelId','679ce5308b8d584759230494')
     console.log(isAuth)
-    const  payload = {
-      title : JSON.stringify(data),
-      channelId:"5004"
-    }
     const response = await axios.post(`${url}/posts/create`, formData);
       console.log(response.data)
       setData({})
-      alert('��문이 성공적으로 전��되었습니다.')
+    if(response.status === 200){
+      console.log(response.data)
+      setData({})
+      router.push('/qna')
+    }
  
   }
   return (

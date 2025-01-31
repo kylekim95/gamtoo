@@ -1,89 +1,193 @@
-'use client'
+"use client";
 
 import { useRouter } from "next/navigation";
-import InfoCard from "../map/components/infoCard";
+import { useAppSelector } from "@/lib/redux/store";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useInView } from "react-intersection-observer"; // 무한 스크롤 감지
+import CalcCreateTimeToLocalTime from "@/components/CalcCreateTimeToLocalTime";
+import { Post } from "@/types/PostType";
 
-export default function QnaPage(){
-    const router = useRouter()
-    const posts = [
+const url = process.env.NEXT_PUBLIC_BASIC_URL;
+
+export default function QnaPage() {
+  const { isAuth } = useAppSelector((state) => state.authReducer.value);
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [likePosts, setLikePosts] = useState<string | null>(null);
+  const [offset, setOffset] = useState(0);
+  const [isFetching, setIsFetching] = useState(false); // 로딩 상태 관리
+  const router = useRouter();
+
+  const { ref, inView } = useInView({ threshold: 0.5 }); // 마지막 요소 감지
+
+  // JSON 파싱 함수
+  const parserJson = (data: string, name: string) => {
+    try {
+      const dataJson = JSON.parse(data);
+      return name === "title" ? dataJson.title : dataJson.content;
+    } catch {
+      return "";
+    }
+  };
+
+  // 좋아요 핸들러
+  const likesPostHandler = async (id: string) => {
+    if (likePosts === id) return alert("이미 좋아요를 눌렀습니다.");
+    try {
+      const response = await axios.post(`${url}/likes/create`, { postId: id });
+      if (response.status === 200) {
+        setLikePosts(response.data.post);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // 게시글 목록 불러오기
+  const postListHandler = async () => {
+    if (isFetching) return; // 중복 요청 방지
+    setIsFetching(true);
+
+    try {
+      const response = await axios.get(
+        `${url}/posts/channel/679ce5308b8d584759230494`,
         {
-          id: 1,
-          title: '첫 번째 게시글',
-          content: '이것은 첫 번째 게시글의 내용입니다.',
-          author: '작성자1',
-          date: '2023-10-01',
-        },
-        {
-          id: 2,
-          title: '두 번째 게시글',
-          content: '이것은 두 번째 게시글의 내용입니다.',
-          author: '작성자2',
-          date: '2023-10-02',
-        },
-        {
-          id: 3,
-          title: '세 번째 게시글',
-          content: '이것은 세 번째 게시글의 내용입니다.',
-          author: '작성자3',
-          date: '2023-10-03',
-        },
-      ];
+          params: { offset, limit: 5 },
+        }
+      );
+
+      if (response.status === 200) {
+        setPosts((prev) => [...prev, ...response.data]); // 기존 데이터에 추가
+        setOffset((prev) => prev + 5); // offset 증가
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsFetching(false);
+    }
+  };
+
+  // `inView`가 true일 때 추가 데이터 로드
+  useEffect(() => {
+    if (inView && !isFetching) {
+      postListHandler();
+    }
+  }, [inView]);
+
   return (
-   <>
- <div className="min-h-screen py-8">
+    <div className="min-h-screen py-8">
       <div className="max-w-4xl mx-auto px-4 flex flex-col gap-12">
-      <div className="flex flex-col items-center gap-6">
-                <h3 className="lg:text-3xl tracking-wide text-xl sm:text-2xl font-light"> <span className="font-semibold">총 <span className="text-[#B23742]">9</span>개</span>의 글이 등록되어 있습니다.</h3>
-                <div className=" md:flex md:flex-row gap-3 justify-center w-full flex flex-col   items-center">
-                    <div className=" md:w-80 w-full"><select  className=" bg-[#F7F7F7] p-3 box-border w-full md:w-80 h-12 rounded-md" >
-                    <option value="">제목</option>
-                    </select>
-                  
-                    </div>
-                    <div className="w-full "><input placeholder="검색어를 입력해주세요" className=" bg-[#F7F7F7] p-3 box-border h-12 w-full rounded-md" type="text"/></div>
-                    <div className="w-full md:w-24" ><button className="w-full md:w-24 py-3 rounded-lg text-white h-full bg-[#B23742] "> 검색</button></div>
-                </div>
+        <div className="flex flex-col items-center gap-6">
+          <h3 className="lg:text-3xl tracking-wide text-xl sm:text-2xl font-light">
+            <span className="font-semibold">
+              총 <span className="text-[#B23742]">{posts.length}</span>개
+            </span>
+            의 글이 등록되어 있습니다.
+          </h3>
+          <div className=" md:flex md:flex-row gap-3 justify-center w-full flex flex-col   items-center">
+            <div className=" md:w-80 w-full">
+              <select className=" bg-[#F7F7F7] p-3 box-border w-full md:w-80 h-12 rounded-md">
+                <option value="">제목</option>
+              </select>
             </div>
+            <div className="w-full ">
+              <input
+                placeholder="검색어를 입력해주세요"
+                className=" bg-[#F7F7F7] p-3 box-border h-12 w-full rounded-md"
+                type="text"
+              />
+            </div>
+            <div className="w-full md:w-24">
+              <button className="w-full md:w-24 py-3 rounded-lg text-white h-full bg-[#B23742] ">
+                {" "}
+                검색
+              </button>
+            </div>
+          </div>
+          {isAuth && (
+            <div className="flex  justify-end w-full">
+              <button
+                onClick={() => router.push("qna/submit")}
+                className="w-full h-10 hover:bg-[#ac464fbe] transition-all bg-[#B23742] text-white rounded-md"
+              >
+                글쓰기
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* 게시글 목록 */}
         <div className="space-y-6">
-        {posts.map((post) => (
-            <div key={post.id} className="bg-white shadow-lg rounded-lg p-6">
-              <h2 className="text-xl font-semibold text-gray-800">{post.title}</h2>
-              <p className="mt-2 text-gray-600">{post.content}</p>
-              <div className="mt-4 flex justify-between items-center">
-                <span className="text-sm text-gray-500">작성자: {post.author}</span>
-                <span className="text-sm text-gray-500">{post.date}</span>
+          {posts.map((post, index) => (
+            <div
+              key={post._id || index}
+              className="bg-white relative shadow-lg hover:scale-105 transition-all rounded-lg p-6"
+            >
+              <div className="cursor-pointer " onClick={() => router.push(`qna/detail/${post._id}`)}>
+                <h2 className="text-xl font-semibold text-gray-800">
+                  {parserJson(post.title, "title")}
+                </h2>
+                <p className="mt-2 text-gray-600">
+                  {parserJson(post.title, "content")}
+                </p>
+                <div className="mt-4 pb-9 flex justify-between items-center">
+                  <span className="text-sm text-gray-500">
+                    작성자: {post.author.email}
+                  </span>
+                  <span className="text-sm text-gray-500">
+                    {CalcCreateTimeToLocalTime(post.createdAt)}
+                  </span>
+                </div>
               </div>
-              <div className="mt-4 flex items-center">
+
+              <div className="mt-4 absolute bottom-3 left-5 gap-5 z-40 flex items-center">
                 <button
-                  
-                  className="flex items-center text-gray-500 hover:text-red-500 focus:outline-none"
+                  disabled={!isAuth}
+                  onClick={() => likesPostHandler(post._id)}
+                  className={`flex items-center text-gray-500 ${
+                    isAuth ? "hover:text-red-500" : ""
+                  } focus:outline-none`}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    fill="none"
+                    fill={likePosts === post._id ? "red" : "none"}
                     viewBox="0 0 24 24"
-                    stroke="currentColor"
+                    strokeWidth={1.5}
+                    stroke={likePosts === post._id ? "red" : "currentColor"}
+                    className="size-6"
                   >
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                      d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
                     />
                   </svg>
-                  <span className="ml-1">3</span>
+
+                  <span className="ml-1">{post.likes.length}</span>
                 </button>
+                <div className="flex items-center text-gray-500">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="size-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M8.625 9.75a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 0 1 .778-.332 48.294 48.294 0 0 0 5.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z"
+                    />
+                  </svg>
+                  <span className="ml-1">{post.comments.length}</span>
+                </div>
               </div>
             </div>
           ))}
         </div>
-        <div className="flex pb-20 justify-end w-full">
-            <button onClick={()=>router.push('qna/submit')} className=" w-20 h-8 bg-[#B23742] text-white rounded-md">글쓰기</button>
-          </div>
       </div>
+      <div ref={ref}></div>
     </div>
-
-      </>
   );
 }

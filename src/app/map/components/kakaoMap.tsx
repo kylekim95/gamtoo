@@ -10,7 +10,7 @@ import {
 } from "react-kakao-maps-sdk";
 
 //컴포넌트 정의
-import { MapItem } from "../../../../types/Map";
+import { MapItem } from "../../../types/Map";
 import InfoCard from "./infoCard";
 
 export default function BasicMap({
