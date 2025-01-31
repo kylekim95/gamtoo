@@ -5,9 +5,9 @@ import { useRouter, redirect } from 'next/navigation';
 import ProblemCard, { DefaultProblemCard } from './components/ProblemCard';
 import { useAppSelector } from '@/lib/redux/store';
 import { heritageListRequest, heritageListResponse, getHeritageList } from './components/heritageList';
-import { getHeritageDetailed, heritageDetailedRequest, heritageDetailedResponse } from './components/heritageDetail';
 import { quizResults } from '../quizResults/page';
 import GyeongBokGungIcon from '@/components/quiz/svg/GyeongBokGungIcon';
+import { GetProblem, ProblemFactoryInput, ProblemFactoryOutput } from './components/problemFactory';
 
 type ProblemData = {
   id: string;
@@ -15,7 +15,9 @@ type ProblemData = {
   answer: string;
   url:string;
   selection: string[];
+  linkTo: string;
 }
+
 interface UserSelection {
   [index : number] : number;
 };
@@ -31,33 +33,41 @@ export default function QuizPage() {
   const numProblems = 20;
   const problems = useRef<ProblemData[]>(new Array(numProblems).fill(defaultProblemData));
   const [loaded, setLoaded] = useState(0);
+  const mounted = useRef(false);
   useEffect(()=>{
-    async function InitProblems() {
+    if(mounted.current){
+      console.log('twice?');
+      return;
+    }
+    mounted.current = true;
+    (async function InitProblems() {
       const heritageListReqObj : heritageListRequest = { pageUnit: numProblems * 4 };
       const heritageList : heritageListResponse[] = await getHeritageList(heritageListReqObj);
+      if(!mounted.current) return;
+      //TODO: 문제의 정답을 랜덥하게 고른다
       for(let i = 0; i < numProblems; i++){
         const answerInd = i * 4;
-        const heritageDetailedReqObj : heritageDetailedRequest = { ccbaAsno: heritageList[answerInd].ccbaAsno, ccbaCtcd: heritageList[answerInd].ccbaCtcd, ccbaKdcd: heritageList[answerInd].ccbaKdcd };
-        const heritageDetailed : heritageDetailedResponse | null = await getHeritageDetailed(heritageDetailedReqObj);
-        if(heritageDetailed){
-          const newProblem : ProblemData = {
-            answer: heritageList[answerInd].ccbaMnm1,
-            id: i.toString(),
-            problem: '사진 속 문화유산의 이름은?',
-            selection: [
-              heritageList[answerInd].ccbaMnm1, 
-              heritageList[answerInd + 1].ccbaMnm1, 
-              heritageList[answerInd + 2].ccbaMnm1, 
-              heritageList[answerInd + 3].ccbaMnm1
-            ],
-            url: heritageDetailed.imageUrl
-          }
-          problems.current[i] = newProblem;
+        const input : ProblemFactoryInput = {
+          Answer_ccbaAsno : heritageList[answerInd].ccbaAsno,
+          Answer_ccbaCtcd : heritageList[answerInd].ccbaCtcd,
+          Answer_ccbaKdcd : heritageList[answerInd].ccbaKdcd,
+          Answer_ccbaMnm1 : heritageList[answerInd].ccbaMnm1,
+        }
+        const problemFactoryOutput : ProblemFactoryOutput | null = await GetProblem(input);
+        if(!mounted.current) break;
+        if(problemFactoryOutput){
+          const newProblemData : ProblemData = {
+            ...problemFactoryOutput, 
+            id:i.toString(), 
+            linkTo: `ccbaAsno=${heritageList[answerInd].ccbaAsno}%26ccbaCtcd=${heritageList[answerInd].ccbaCtcd}%26ccbaKdcd=${heritageList[answerInd].ccbaKdcd}`};
+          problems.current[i] = newProblemData;
           setLoaded(i);
         }
       }
+    })();
+    return () => {
+      mounted.current = false;
     }
-    InitProblems();
   }, []);
 
   //TODO : Custom Hook
@@ -113,13 +123,17 @@ export default function QuizPage() {
         problem: problems.current[i].problem,
         selected: problems.current[i].selection[userSelected[i]],
         correct: problems.current[i].selection[userSelected[i]] === problems.current[i].answer,
+        linkTo: problems.current[i].linkTo,
       }
       if(temp.correct)
         score++;
       data.push(temp);
     }
-    const queryString = `?score=${score}&data=${JSON.stringify(data)}`;
-    router.push('/quizResults' + queryString);
+    sessionStorage.setItem('recentQuizData', JSON.stringify({
+      'score': score,
+      'data' : JSON.stringify(data)
+    }));
+    router.push('/quizResults');
   }
 
   return (
