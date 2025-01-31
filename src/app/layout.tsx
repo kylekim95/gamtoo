@@ -16,8 +16,10 @@ import { useAppSelector } from "@/lib/redux/store";
 import GagsiMaskIcon from "@/components/quiz/svg/GagsiMaskIcon";
 import React, { useState } from "react";
 import NotificationModal from "@/components/NotificationModal";
+import Logo from "../../public/logo.png"
 import axios from "axios";
 import NotificationExtractData from "@/components/NotificationExtractData";
+import Image from "next/image";
 
 // 감투 아이콘
 function GamtooIcon() {
@@ -92,10 +94,10 @@ function Header({ isNotification, notificationHandler }: props) {
   const {isAuth, userId} = useAppSelector((state) => state.authReducer.value);
 
   return (
-    <header className="flex justify-between items-center h-[90px] px-9 mb-6 border-b-[1px] border-stone-400 bg-[#FFFFFF] min-w-full">
+    <header className="flex justify-between items-center h-[70px] px-9 bg-[#FFFFFF] min-w-full">
       {/* 헤더 왼쪽 */}
 
-      <div className="left mt-1 gap-11 flex ">
+      <div className="left gap-11 flex ">
         <div
           onClick={() => {
             router.push("/");
@@ -103,15 +105,16 @@ function Header({ isNotification, notificationHandler }: props) {
           className="icon gap-4 flex flex-row justify-center items-center hover:cursor-pointer"
         >
           {" "}
-          <GamtooIcon />
-          <div className="flex flex-col text-black">
-            <span className="text-stone-500 font-semibold text-[12px]">
+          <Image className="w-[68px] h-[44px]" src={Logo} alt={""}/>
+          {/*<GamtooIcon />*/}
+          <div className="flex flex-col text-black h-[60px]">
+            <span className="text-stone-500 font-semibold text-[10px]">
               감춰진 역사 투어
             </span>
-            <span className="text-[40px] font-bold">감투</span>
+            <span className="text-4xl h-3/4 font-bold ">감투</span>
           </div>
         </div>
-        <div className="router flex items-center gap-7 font-semibold text-xl mt-2 text-black hover:cursor-pointer">
+        <div className="router flex items-center gap-7 font-semibold text-xl text-black hover:cursor-pointer">
           <span
             onClick={() => {
               router.push("/");
@@ -194,7 +197,7 @@ function Header({ isNotification, notificationHandler }: props) {
           </div>
         </div>
       ) : (
-        <div className="right mt-1 flex flex-row items-center gap-5">
+        <div className="right flex flex-row items-center gap-5">
           <UserCircleIcon
             onClick={() => {
               router.push("/user");
@@ -205,7 +208,7 @@ function Header({ isNotification, notificationHandler }: props) {
             onClick={() => {
               router.push("/login");
             }}
-            className="font-semibold text-xl text-[#424383] hover:cursor-pointer"
+            className="font-semibold text-xl hover:cursor-pointer"
           >
             로그인
           </span>
