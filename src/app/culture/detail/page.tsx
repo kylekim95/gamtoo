@@ -80,7 +80,7 @@ export default function Detail() {
       const ccceName = result.result.item?.[0]?.ccceName?.[0]; // 시대
       const ccbaPoss = result.result.item?.[0]?.ccbaPoss?.[0]; // 소유자
       const ccbaAdmin = result.result.item?.[0]?.ccbaAdmin?.[0]; // 관리자
-      const content = result.result.item?.[0]?.content?.[0]; // 국가유산 내용 (content)
+      const content = result.result.item?.[0]?.content?.[0]; // 국가유산 내용 
 
       // 상태에 저장
       setHeritageName(heritageName || '정보 없음');
@@ -96,7 +96,7 @@ export default function Detail() {
       setCcceName(ccceName || '정보 없음');
       setCcbaPoss(ccbaPoss || '정보 없음');
       setCcbaAdmin(ccbaAdmin || '정보 없음');
-      setContent(content || '여기에 국가유산에 대한 설명이 들어갑니다.'); // content 추가
+      setContent(content || '국가유산에 대한 설명.'); // content 추가
 
     } catch (error) {
       console.error('국가유산 데이터 가져오기 실패:', error);
@@ -120,57 +120,66 @@ export default function Detail() {
         <h1 className="absolute top-[75%] left-[12%] text-white text-xl font-bold"></h1>
       </div>
 
-      <div className="relative w-full flex">
-        {/* 왼쪽 콘텐츠 */}
-        <div className="w-2/3 bg-white border-2 border-solid border-black p-4 h-[550px] mt-[4.5vh] mr-32 ml-20">
-        <h1 className="text-[#FF5DAB] font-pretendard text-xl font-semibold tracking-extra-wide">ABOUT</h1>
-
-          <h1 className="text-black text-4xl font-pretendard font-semibold">국가유산 설명</h1>
-          <p className="text-black text-xl font-medium">{content}</p> 
-        </div>
-
-{/* 오른쪽 컨텐츠 */}
-<div className="w-[700px] bg-white border-2 border-solid border-black p-4 h-[550px] mt-[4.5vh] mr-20 relative">
-  {/* 회색 배경 div */}
-  <div className="bg-gray-300 opacity-20 w-full h-[22%] absolute top-[0%] left-0 z-0"></div>
-
-  <h1 className="text-[#4F6CF3] font-pretendard text-xl font-semibold tracking-extra-wide z-20 relative mt-1">INFORMATION</h1>
-
-  <h1 className="text-black font-pretendard text-4xl font-extrabold z-20 relative mt-3">
-    국가유산 정보
-    <svg className="inline-block transform -translate-y-1 translate-x-2 relative z-20" width="40" height="50" viewBox="0 0 48 51" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path fill-rule="evenodd" clip-rule="evenodd" d="M4.5 25.5C4.5 14.0574 13.2304 4.78125 24 4.78125C34.7696 4.78125 43.5 14.0574 43.5 25.5C43.5 36.9426 34.7696 46.2188 24 46.2188C13.2304 46.2188 4.5 36.9426 4.5 25.5ZM21.9125 22.4367C24.205 21.2188 26.7862 23.4188 26.1646 26.0608L24.7465 32.0874L24.8295 32.0433C25.5705 31.6496 26.4715 31.9688 26.842 32.756C27.2125 33.5433 26.9121 34.5006 26.1712 34.8943L26.0882 34.9384C23.7957 36.1562 21.2145 33.9562 21.8361 31.3143L23.2541 25.2877L23.1711 25.3318C22.4302 25.7254 21.5292 25.4063 21.1587 24.619C20.7882 23.8317 21.0885 22.8744 21.8295 22.4808L21.9125 22.4367ZM24 19.125C24.8284 19.125 25.5 18.4115 25.5 17.5312C25.5 16.651 24.8284 15.9375 24 15.9375C23.1716 15.9375 22.5 16.651 22.5 17.5312C22.5 18.4115 23.1716 19.125 24 19.125Z" fill="#0F172A"/>
-    </svg>
-  </h1>
-
-  {/* 텍스트들 */}
-  <div className="text-black text-xl font-medium z-20 relative space-y-8 mt-8">
-  <div className="flex">
-    <p className="w-40">분류</p><p>{gcodeName} / {bcodeName} / {mcodeName} / {scodeName}</p>
+      <div className="relative w-full flex items-start">
+  {/* 왼쪽 콘텐츠 */}
+  <div className="w-2/3 bg-white border-2 border-solid border-black p-4 mt-[4.5vh] mr-32 ml-20">
+    <h1 className="text-[#FF5DAB] font-pretendard text-xl font-semibold tracking-extra-wide">
+      ABOUT
+    </h1>
+    <h1 className="text-black text-4xl font-pretendard font-semibold mb-5">
+      국가유산 설명
+    </h1>
+    <p className="text-black text-lg font-pretendard font-medium whitespace-pre-line">
+      {(content ?? "").replaceAll("\n", "\n\n")}
+    </p>
   </div>
-  <div className="flex">
-    <p className="w-40">수량/면적</p><p>{ccbaQuan}</p>
-  </div>
-  <div className="flex">
-    <p className="w-40">지정(등록)일</p><p>{ccbaAsdt}</p>
-  </div>
-  <div className="flex">
-    <p className="w-40">소재지</p><p>{ccbaLcad}</p>
-  </div>
-  <div className="flex">
-    <p className="w-40">시대</p><p>{ccceName}</p>
-  </div>
-  <div className="flex">
-    <p className="w-40">소유자(소유단체)</p><p>{ccbaPoss}</p>
-  </div>
-  <div className="flex">
-    <p className="w-40">관리자(관리단체)</p><p>{ccbaAdmin}</p>
-  </div>
-</div>
 
-</div>
+  {/* 오른쪽 콘텐츠 */}
+  <div className="w-[700px] bg-white border-2 border-solid border-black p-4 mt-[4.5vh] mr-20 relative">
+    {/* 회색 배경 div */}
+    <div className="bg-gray-300 opacity-20 w-full h-[22%] absolute top-[0%] left-0 z-0"></div>
 
+    <h1 className="text-[#4F6CF3] font-pretendard text-xl font-semibold tracking-extra-wide z-20 relative mt-1">
+      INFORMATION
+    </h1>
+    <h1 className="text-black font-pretendard text-4xl font-extrabold z-20 relative mt-3">
+      국가유산 정보
+    </h1>
+
+    {/* 정보 내용 */}
+    <div className="font-pretendard text-xl font-medium z-20 relative space-y-9 mt-12">
+      <div className="flex">
+        <p className="w-40 font-semibold">분류</p>
+        <p className="text-gray-700">{gcodeName} / {bcodeName} / {mcodeName} / {scodeName}</p>
       </div>
+      <div className="flex">
+        <p className="w-40 font-semibold">수량/면적</p>
+        <p className="text-gray-700">{ccbaQuan}</p>
+      </div>
+      <div className="flex">
+        <p className="w-40 font-semibold">지정(등록)일</p>
+        <p className="text-gray-700">{ccbaAsdt}</p>
+      </div>
+      <div className="flex">
+        <p className="w-40 font-semibold">소재지</p>
+        <p className="text-gray-700">{ccbaLcad}</p>
+      </div>
+      <div className="flex">
+        <p className="w-40 font-semibold">시대</p>
+        <p className="text-gray-700">{ccceName}</p>
+      </div>
+      <div className="flex">
+        <p className="w-40 font-semibold">소유자(소유단체)</p>
+        <p className="text-gray-700">{ccbaPoss}</p>
+      </div>
+      <div className="flex">
+        <p className="w-40 font-semibold">관리자(관리단체)</p>
+        <p className="text-gray-700">{ccbaAdmin}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
         {/* 국가유산 위치 */}
         <div className="w-full border-2 border-solid border-black p-6 mt-6 overflow-x-auto">
         <h1 className="text-black text-xl font-semibold ml-20">INFORMATION</h1>            
