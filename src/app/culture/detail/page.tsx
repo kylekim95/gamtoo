@@ -68,8 +68,6 @@ export default function Detail() {
       const heritageName = result.result.item?.[0]?.ccbaMnm1?.[0];  // 국가유산명(국문)
       const heritageHanja = result.result.item?.[0]?.ccbaMnm2?.[0]; // 국가유산명(한자)
       const heritageCategory = result.result.item?.[0]?.ccmaName?.[0];  // 국가유산종목
-
-      // 추가적으로 요청하신 값들을 추출
       const gcodeName = result.result.item?.[0]?.gcodeName?.[0]; // 국가유산분류
       const bcodeName = result.result.item?.[0]?.bcodeName?.[0]; // 국가유산분류2
       const mcodeName = result.result.item?.[0]?.mcodeName?.[0]; // 국가유산분류3
@@ -115,34 +113,36 @@ export default function Detail() {
         />
 
         {/* 이미지 위 텍스트 */}
-        <h1 className="absolute top-[46%] left-[10.5%] text-white text-3xl font-semibold">{heritageCategory}</h1>
-        <h1 className="absolute top-[60%] left-[10%] text-white text-5xl font-bold">{heritageName} ({heritageHanja})</h1>
+        <h1 className="absolute top-[46%] left-[10.5%] font-pretendard text-white text-3xl font-semibold">{heritageCategory}</h1>
+        <h1 className="absolute top-[60%] left-[10%] font-pretendard text-white text-5xl font-bold">{heritageName} ({heritageHanja})</h1>
         <h1 className="absolute top-[75%] left-[12%] text-white text-xl font-bold"></h1>
       </div>
 
       <div className="relative w-full flex items-start">
   {/* 왼쪽 콘텐츠 */}
-  <div className="w-2/3 bg-white border-2 border-solid border-black p-4 mt-[4.5vh] mr-32 ml-20">
-    <h1 className="text-[#FF5DAB] font-pretendard text-xl font-semibold tracking-extra-wide">
+  <div className="w-2/3 p-4 mt-[4.5vh] mr-32 ml-20">
+    <h1 className="text-[#FF5DAB] font-pretendard text-xl mt-1 font-semibold tracking-extra-wide">
       ABOUT
     </h1>
-    <h1 className="text-black text-4xl font-pretendard font-semibold mb-5">
+    <h1 className="text-black text-4xl font-pretendard tracking-wide font-extrabold font-bold mb-3 mt-3">
       국가유산 설명
     </h1>
+    <div className="w-full h-[1px] bg-gray-400 mb-5"/>
+
     <p className="text-black text-lg font-pretendard font-medium whitespace-pre-line">
       {(content ?? "").replaceAll("\n", "\n\n")}
     </p>
   </div>
 
   {/* 오른쪽 콘텐츠 */}
-  <div className="w-[800px] bg-white border-2 border-solid border-black p-4 mt-[4.5vh] mr-20 relative">
+  <div className="w-[800px] bg-white border-2 border-solid border-gray-400 p-4 mt-[4.5vh] mr-20 relative shadow-xl">
     {/* 회색 배경 div */}
-    <div className="bg-gray-300 opacity-20 w-full h-[22%] absolute top-[0%] left-0 z-0"></div>
+    <div className="bg-gray-300 opacity-20 w-full h-[22%] absolute top-[0%] left-0 z-0"/>
 
-    <h1 className="text-[#4F6CF3] font-pretendard text-xl font-semibold tracking-extra-wide z-20 relative mt-1">
+    <h1 className="text-[#4F6CF3] font-pretendard text-xl font-semibold tracking-extra-wide z-20 relative mt-2 ml-2">
       INFORMATION
     </h1>
-    <h1 className="text-black font-pretendard text-4xl font-extrabold z-20 relative mt-3">
+    <h1 className="text-black font-pretendard text-4xl font-extrabold z-20 tracking-wide relative ml-2 mt-4">
       국가유산 정보
       <svg
       className="inline-block transform -translate-y-1 translate-x-2 relative z-20"
@@ -162,36 +162,24 @@ export default function Detail() {
     </h1>
 
     {/* 정보 내용 */}
-    <div className="font-pretendard text-xl font-medium z-20 relative space-y-9 mt-12 mb-3">
-      <div className="flex">
-        <p className="w-40 font-semibold">분류</p>
-        <p className="text-gray-700">{gcodeName} / {bcodeName} / {mcodeName} / {scodeName}</p>
-      </div>
-      <div className="flex">
-        <p className="w-40 font-semibold">수량/면적</p>
-        <p className="text-gray-700">{ccbaQuan}</p>
-      </div>
-      <div className="flex">
-        <p className="w-40 font-semibold">지정(등록)일</p>
-        <p className="text-gray-700">{ccbaAsdt}</p>
-      </div>
-      <div className="flex">
-        <p className="w-40 font-semibold">소재지</p>
-        <p className="text-gray-700">{ccbaLcad}</p>
-      </div>
-      <div className="flex">
-        <p className="w-40 font-semibold">시대</p>
-        <p className="text-gray-700">{ccceName}</p>
-      </div>
-      <div className="flex">
-        <p className="w-40 font-semibold">소유자(소유단체)</p>
-        <p className="text-gray-700">{ccbaPoss}</p>
-      </div>
-      <div className="flex">
-        <p className="w-40 font-semibold">관리자(관리단체)</p>
-        <p className="text-gray-700">{ccbaAdmin}</p>
-      </div>
+    <div className="font-pretendard text-lg font-medium z-20 relative space-y-9 mt-12 mb-3">
+  {[
+    { label: "분류", value: `${gcodeName} / ${bcodeName} / ${mcodeName} / ${scodeName}` },
+    { label: "수량/면적", value: ccbaQuan },
+    { label: "지정(등록)일", value: ccbaAsdt },
+    { label: "소재지", value: ccbaLcad },
+    { label: "시대", value: ccceName },
+    { label: "소유자(소유단체)", value: ccbaPoss },
+    { label: "관리자(관리단체)", value: ccbaAdmin },
+  ].map((item, index) => (
+    <div key={index} className="grid grid-cols-[10rem_1fr] gap-4">
+      <p className="font-semibold">{item.label}</p>
+      <p className="text-gray-700">{item.value}</p>
     </div>
+  ))}
+</div>
+
+
   </div>
 </div>
 
