@@ -13,6 +13,7 @@ export default function HeritageCard() {
     pageUnit: 25, // 페이지당 데이터 수
     pageIndex: 1, // 현재 페이지
   });
+  
 
   // 이미지 데이터 상태 추가
   const [imageData, setImageData] = useState<Map<string, string>>(new Map());
