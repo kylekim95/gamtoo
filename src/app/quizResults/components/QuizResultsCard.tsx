@@ -7,7 +7,7 @@ import { useAppSelector } from '@/lib/redux/store';
 export type DataType = {
   id: string,
   problem: string,
-  answer: string,
+  answer: React.JSX.Element,
   userSelect: string,
   result: React.JSX.Element
 }
@@ -27,7 +27,7 @@ export default function QuizResultsCard(props : QuizResultsCardProps) {
         <span className='text-black self-start text-xs mb-1'>정답을 클릭해서 해당 문화재의 상세 정보를 확인하세요!</span>
         <Table<DataType> data={props.data} spacing={[1,4,4,3,1]} desc={props.dataDesc} />
         <div className='w-full h-8 border-b flex items-center'>
-          <span className='text-black text-sm font-bold'>{ userName } : {props.score * 5}점</span>
+          <span className='text-black text-sm font-bold'>{ userName } : {props.score}점</span>
         </div>
         <GagsiMaskIcon color={"#FF4444"} className='w-[25%] aspect-square self-end mt-[-25px] -rotate-[25deg] rounded-full overflow-hidden border-[3px] border-[#FF4444]'/>
       </div>
