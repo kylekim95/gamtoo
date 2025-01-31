@@ -69,7 +69,7 @@ export default function LoginPage() {
       console.log("login error => ", response.status)
       return;
     }
-    axios.defaults.headers.common['Authorization'] = response.data.token;
+    axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
     dispatch(logIn({
       isAuth: true,
       userName: response.data.user.fullName,

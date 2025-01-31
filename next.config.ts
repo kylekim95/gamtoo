@@ -8,7 +8,12 @@ const nextConfig: NextConfig = {
 */
 module.exports = {
   images: {
-    domains: ["cdn.pixabay.com", "www.heritage.go.kr", "www.cha.go.kr"], // 외부 이미지를 허용할 도메인 추가
+    domains: [
+      "cdn.pixabay.com",
+      "www.heritage.go.kr",
+      "www.cha.go.kr",
+      "via.placeholder.com",
+    ], // 외부 이미지를 허용할 도메인 추가
   },
 };
 

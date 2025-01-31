@@ -1,82 +1,96 @@
 "use client"
 
-import React, { useEffect, useRef, createRef, useCallback, useMemo } from 'react'
-import { useRouter } from 'next/navigation';
-import ProblemCard from './components/ProblemCard';
+import React, { useEffect, useRef, createRef, useCallback, useMemo, useState } from 'react'
+import { useRouter, redirect } from 'next/navigation';
+import ProblemCard, { DefaultProblemCard } from './components/ProblemCard';
+import { useAppSelector } from '@/lib/redux/store';
+import { heritageListRequest, heritageListResponse, getHeritageList } from './components/heritageList';
+import { getHeritageDetailed, heritageDetailedRequest, heritageDetailedResponse } from './components/heritageDetail';
+import { quizResults } from '../quizResults/page';
+import GyeongBokGungIcon from '@/components/quiz/svg/GyeongBokGungIcon';
 
 type ProblemData = {
   id: string;
   problem: string;
-  answer: number;
+  answer: string;
   url:string;
   selection: string[];
 }
 interface UserSelection {
-  [index : string] : number;
+  [index : number] : number;
 };
 
 export default function QuizPage() {
-  //TEST DATA
-  const dummyImage = 'http://www.cha.go.kr/unisearch/images/treasure/1618146.jpg';
-  
-  //useCallback, useMemo 관련 경고 더미 데이터이니까 일단 놔둘것
-  //실제 데이터에는 useMemo 사용
-  const dummyData : ProblemData[] = [
-    {id:"1", problem:"이것은 문제입니다. 이것은 문제입니까?", answer:1, url:dummyImage, selection:['선택지1', '선택지2', '선택지3', '선택지4']},
-    {id:"2", problem:"이것은 문제입니다. 이것은 문제입니까?", answer:1, url:dummyImage, selection:['선택지1', '선택지2', '선택지3', '선택지4']},
-    {id:"3", problem:"이것은 문제입니다. 이것은 문제입니까?", answer:1, url:dummyImage, selection:['선택지1', '선택지2', '선택지3', '선택지4']},
-    {id:"4", problem:"이것은 문제입니다. 이것은 문제입니까?", answer:1, url:dummyImage, selection:['선택지1', '선택지2', '선택지3', '선택지4']},
-    {id:"5", problem:"이것은 문제입니다. 이것은 문제입니까?", answer:1, url:dummyImage, selection:['선택지1', '선택지2', '선택지3', '선택지4']},
-    {id:"6", problem:"이것은 문제입니다. 이것은 문제입니까?", answer:1, url:dummyImage, selection:['선택지1', '선택지2', '선택지3', '선택지4']},
-    {id:"7", problem:"이것은 문제입니다. 이것은 문제입니까?", answer:1, url:dummyImage, selection:['선택지1', '선택지2', '선택지3', '선택지4']},
-    {id:"8", problem:"이것은 문제입니다. 이것은 문제입니까?", answer:1, url:dummyImage, selection:['선택지1', '선택지2', '선택지3', '선택지4']},
-    {id:"9", problem:"이것은 문제입니다. 이것은 문제입니까?", answer:1, url:dummyImage, selection:['선택지1', '선택지2', '선택지3', '선택지4']},
-    {id:"10", problem:"이것은 문제입니다. 이것은 문제입니까?", answer:1, url:dummyImage, selection:['선택지1', '선택지2', '선택지3', '선택지4']},
-    {id:"11", problem:"이것은 문제입니다. 이것은 문제입니까?", answer:1, url:dummyImage, selection:['선택지1', '선택지2', '선택지3', '선택지4']},
-    {id:"12", problem:"이것은 문제입니다. 이것은 문제입니까?", answer:1, url:dummyImage, selection:['선택지1', '선택지2', '선택지3', '선택지4']},
-    {id:"13", problem:"이것은 문제입니다. 이것은 문제입니까?", answer:1, url:dummyImage, selection:['선택지1', '선택지2', '선택지3', '선택지4']},
-    {id:"14", problem:"이것은 문제입니다. 이것은 문제입니까?", answer:1, url:dummyImage, selection:['선택지1', '선택지2', '선택지3', '선택지4']},
-    {id:"15", problem:"이것은 문제입니다. 이것은 문제입니까?", answer:1, url:dummyImage, selection:['선택지1', '선택지2', '선택지3', '선택지4']},
-    {id:"16", problem:"이것은 문제입니다. 이것은 문제입니까?", answer:1, url:dummyImage, selection:['선택지1', '선택지2', '선택지3', '선택지4']},
-    {id:"17", problem:"이것은 문제입니다. 이것은 문제입니까?", answer:1, url:dummyImage, selection:['선택지1', '선택지2', '선택지3', '선택지4']},
-    {id:"18", problem:"이것은 문제입니다. 이것은 문제입니까?", answer:1, url:dummyImage, selection:['선택지1', '선택지2', '선택지3', '선택지4']},
-    {id:"19", problem:"이것은 문제입니다. 이것은 문제입니까?", answer:1, url:dummyImage, selection:['선택지1', '선택지2', '선택지3', '선택지4']},
-    {id:"20", problem:"이것은 문제입니다. 이것은 문제입니까?", answer:1, url:dummyImage, selection:['선택지1', '선택지2', '선택지3', '선택지4']},
-  ];
+  const router = useRouter();
+  const {isAuth, userName, userId} = useAppSelector((state) => state.authReducer.value);
+  if(!isAuth || userName==='' || userId===''){
+    redirect('/login');
+  }
+
+  const defaultProblemData = { id:'', problem: '', answer: '', url: '', selection: [] };
+  const numProblems = 20;
+  const problems = useRef<ProblemData[]>(new Array(numProblems).fill(defaultProblemData));
+  const [loaded, setLoaded] = useState(0);
+  useEffect(()=>{
+    async function InitProblems() {
+      const heritageListReqObj : heritageListRequest = { pageUnit: numProblems * 4 };
+      const heritageList : heritageListResponse[] = await getHeritageList(heritageListReqObj);
+      for(let i = 0; i < numProblems; i++){
+        const answerInd = i * 4;
+        const heritageDetailedReqObj : heritageDetailedRequest = { ccbaAsno: heritageList[answerInd].ccbaAsno, ccbaCtcd: heritageList[answerInd].ccbaCtcd, ccbaKdcd: heritageList[answerInd].ccbaKdcd };
+        const heritageDetailed : heritageDetailedResponse | null = await getHeritageDetailed(heritageDetailedReqObj);
+        if(heritageDetailed){
+          const newProblem : ProblemData = {
+            answer: heritageList[answerInd].ccbaMnm1,
+            id: i.toString(),
+            problem: '사진 속 문화유산의 이름은?',
+            selection: [
+              heritageList[answerInd].ccbaMnm1, 
+              heritageList[answerInd + 1].ccbaMnm1, 
+              heritageList[answerInd + 2].ccbaMnm1, 
+              heritageList[answerInd + 3].ccbaMnm1
+            ],
+            url: heritageDetailed.imageUrl
+          }
+          problems.current[i] = newProblem;
+          setLoaded(i);
+        }
+      }
+    }
+    InitProblems();
+  }, []);
 
   //TODO : Custom Hook
-  const refs = useRef(dummyData.map(()=>createRef<HTMLDivElement>()));
+  const refs = useRef(problems.current.map(()=>createRef<HTMLDivElement>()));
   useEffect(()=>{
     const observer = new IntersectionObserver((entries)=>{
-      entries.forEach((elem)=>{
-        if(elem.isIntersecting){
-          elem.target.classList.add('opacity-100');
-          elem.target.classList.remove('opacity-0');
-          observer.unobserve(elem.target);
+      for(let i = 0; i < entries.length; i++){
+        if(entries[i].isIntersecting){
+          entries[i].target.classList.add('opacity-100');
+          entries[i].target.classList.remove('opacity-0');
+          observer.unobserve(entries[i].target);
         }
         else{
-          elem.target.classList.add('opacity-0');
+          entries[i].target.classList.add('opacity-0');
         }
-      });
+      }
     }, { threshold: 0.5 });
     refs.current.forEach((elem)=>{
       if(elem.current !== null) observer.observe(elem.current);
     });
-  }, [refs]);
+  }, [refs, loaded]);
 
   const userSelected : UserSelection = useMemo(()=>{
     const temp : UserSelection = {};
-    dummyData.forEach((elem)=>{
-      temp[elem.id] = -1;
-    });
+    for(let i = 0; i < numProblems; i++){
+      temp[i] = -1;
+    }
     return temp;
-  }, [dummyData]);
-
+  }, []);
   const SelectAnswerCallback = useCallback((id : string, selected : number)=>{
-    userSelected[id] = selected;
+    userSelected[parseInt(id)] = selected;
     const next = parseInt(id);
     if(next < refs.current.length && refs.current[next].current !== null){
-      console.log(refs.current[next].current.offsetTop);
       window.scrollTo({
         top: refs.current[next].current.offsetTop,
         behavior: 'smooth'
@@ -89,11 +103,23 @@ export default function QuizPage() {
       top: 0, left: 0, behavior:'smooth'
     });
   }
-
-  const router = useRouter();
   function OnClickSubmit(){
-    // console.log(userSelected);
-    router.push('/quizResults');
+    const data : quizResults[] = [];
+    let score = 0;
+    for(let i = 0; i < problems.current.length; i++){
+      const temp : quizResults = {
+        answer: problems.current[i].answer,
+        id: i.toString(),
+        problem: problems.current[i].problem,
+        selected: problems.current[i].selection[userSelected[i]],
+        correct: problems.current[i].selection[userSelected[i]] === problems.current[i].answer,
+      }
+      if(temp.correct)
+        score++;
+      data.push(temp);
+    }
+    const queryString = `?score=${score}&data=${JSON.stringify(data)}`;
+    router.push('/quizResults' + queryString);
   }
 
   return (
@@ -106,26 +132,30 @@ export default function QuizPage() {
           <div className='shrink w-[15%]'></div>
           <div className='w-[70%] flex flex-col items-center'>
             <div className='w-full flex flex-col items-center mb-10'>
-              {dummyData.map((elem, index)=><ProblemCard key={elem.id} id={elem.id} ref={refs.current[index]} url={elem.url} selectAnswer={elem.selection} selectAnswerCallback={SelectAnswerCallback}/> )}
+              { problems.current.map((elem, index)=> elem.id==='' ? <DefaultProblemCard key={index} ref={refs.current[index]}/> : <ProblemCard key={elem.id} id={index} ref={refs.current[index]} url={elem.url} selectAnswer={elem.selection} problem={elem.problem} selectAnswerCallback={SelectAnswerCallback}/> ) }
             </div>
             {/* 페이지 밑의 메뉴 화면 크기가 xl이상이면 hidden */}
             <div className='xl:hidden w-full aspect-[6/1] flex justify-center items-center gap-10 mb-10'>
-              <div onClick={()=>OnClickToTop()} className='h-[50%] min-h-[150px] aspect-square bg-red-700 rounded-full flex justify-center items-center opacity-75 hover:opacity-100 transition-opacity ease-in-out cursor-pointer'>
-                <span className='text-white font-bold text-sm'>처음으로</span>
+              <div onClick={()=>OnClickToTop()} className='flex-col h-[50%] min-h-[150px] aspect-square bg-red-700 rounded-full flex justify-center items-center opacity-75 hover:opacity-100 transition-opacity ease-in-out cursor-pointer'>
+                <GyeongBokGungIcon width={40} height={40} color={'#FFFFFF'}/>
+                <span className='text-white font-bold text-sm mt-2'>처음으로</span>
               </div>
-              <div onClick={()=>OnClickSubmit()} className='h-[50%] min-h-[150px] aspect-square bg-blue-700 rounded-full flex justify-center items-center opacity-75 hover:opacity-100 transition-opacity ease-in-out cursor-pointer'>
-                <span className='text-white font-bold text-sm'>제출하기</span>
+              <div onClick={OnClickSubmit} className='flex-col h-[50%] min-h-[150px] aspect-square bg-blue-700 rounded-full flex justify-center items-center opacity-75 hover:opacity-100 transition-opacity ease-in-out cursor-pointer'>
+                <GyeongBokGungIcon width={40} height={40} color={'#FFFFFF'}/>
+                <span className='text-white font-bold text-sm mt-2'>제출하기</span>
               </div>
             </div>
           </div>
           <div className='shrink w-[15%]'>
             {/* Sticky menu 화면 크기가 xl이하면 hidden */}
             <div className='hidden w-[50%] sticky top-[30%] xl:flex flex-col justify-center items-center gap-10 mt-10'>
-              <div onClick={()=>OnClickToTop()} className='h-[50%] min-h-[150px] aspect-square bg-red-700 rounded-full flex justify-center items-center opacity-75 hover:opacity-100 transition-opacity ease-in-out cursor-pointer'>
-                <span className='text-white font-bold text-sm'>처음으로</span>
+              <div onClick={()=>OnClickToTop()} className='flex-col h-[50%] min-h-[150px] aspect-square bg-red-700 rounded-full flex justify-center items-center opacity-75 hover:opacity-100 transition-opacity ease-in-out cursor-pointer'>
+                <GyeongBokGungIcon width={40} height={40} color={'#FFFFFF'}/>
+                <span className='text-white font-bold text-sm mt-2'>처음으로</span>
               </div>
-              <div onClick={()=>OnClickSubmit()} className='h-[50%] min-h-[150px] aspect-square bg-blue-700 rounded-full flex justify-center items-center opacity-75 hover:opacity-100 transition-opacity ease-in-out cursor-pointer'>
-                <span className='text-white font-bold text-sm'>제출하기</span>
+              <div onClick={OnClickSubmit} className='flex-col h-[50%] min-h-[150px] aspect-square bg-blue-700 rounded-full flex justify-center items-center opacity-75 hover:opacity-100 transition-opacity ease-in-out cursor-pointer'>
+                <GyeongBokGungIcon width={40} height={40} color={'#FFFFFF'}/>
+                <span className='text-white font-bold text-sm mt-2'>제출하기</span>
               </div>
             </div>
           </div>
