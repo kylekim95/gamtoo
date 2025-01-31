@@ -7,7 +7,7 @@ import LoginType from "@/types/LoginType";
 import {useRouter} from "next/navigation";
 import axios from "axios";
 import {useDispatch} from "react-redux";
-import {AppDispatch} from "@/lib/redux/store";
+import {AppDispatch, useAppSelector} from "@/lib/redux/store";
 import {logIn} from "@/lib/redux/slice/authSlice";
 
 interface SignupType extends LoginType {
@@ -35,6 +35,7 @@ export default function LoginPage() {
   });
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
+  const {isAuth, userName, userId} = useAppSelector((state) => state.authReducer.value);
 
   const toggle = () => {
     setIsActive(!isActive);
@@ -74,7 +75,7 @@ export default function LoginPage() {
       isAuth: true,
       userName: response.data.user.fullName,
       userId: response.data.user._id
-    }))
+    }));
     router.push('/');
   }
 
