@@ -19,9 +19,6 @@ export type postQuizData = {
 
 export default function useQuizInfoManager() {
   const {isAuth, userName, userId} = useAppSelector((state) => state.authReducer.value);
-  if(!isAuth || userName==='' || userId===''){
-    return null;
-  }
 
   async function getAllQuizInfo() : Promise<quizInfo[]> {
     const quizChannelId = (await axios.get(`${process.env.NEXT_PUBLIC_BASIC_URL}/channels/quiz`)).data._id;
@@ -55,6 +52,10 @@ export default function useQuizInfoManager() {
     return ret;
   }
   async function postQuizResult(postData : postQuizData) {
+    if(!isAuth){
+      console.log('Not authorized but attempting to POST');
+      return;
+    }
     try{
       const quizChannelId = (await axios.get(`${process.env.NEXT_PUBLIC_BASIC_URL}/channels/quiz`)).data._id;
       const allQuizData : quizInfo[] = await getAllQuizInfo();
