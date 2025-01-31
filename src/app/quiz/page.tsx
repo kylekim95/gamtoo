@@ -129,8 +129,11 @@ export default function QuizPage() {
         score++;
       data.push(temp);
     }
-    const queryString = `?score=${score}&data=${JSON.stringify(data)}`;
-    router.push('/quizResults' + queryString);
+    sessionStorage.setItem('recentQuizData', JSON.stringify({
+      'score': score,
+      'data' : JSON.stringify(data)
+    }));
+    router.push('/quizResults');
   }
 
   return (
