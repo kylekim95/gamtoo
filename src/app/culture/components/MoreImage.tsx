@@ -71,23 +71,28 @@ const MoreImage = () => {
       <h1 className="text-black text-4xl font-pretendard font-semibold mb-3 ml-20 mt-3">
         이미지 더보기
       </h1>
-      <div className="w-[92%] h-[1px] bg-gray-400 ml-20 mb-5" />
-      <div className="w-[89vw] h-[20%] ml-[5%] flex items-center justify-start max-w-full flex-wrap">
-        <div className="flex flex-wrap gap-14">
-          {images.length > 0 ? (
-            images.map((img, index) => (
-              <img
-                key={index}
-                src={img}
-                alt={`문화재 이미지 ${index}`}
-                className="w-[17%] h-auto object-cover"
-              />
-            ))
-          ) : (
-            <p>이미지가 없습니다.</p>
-          )}
-        </div>
-      </div>
+      <div className="w-[92%] h-[1px] bg-gray-400 ml-20" />
+      
+      <div className="w-[100%] h-[330px] ml-18 overflow-hidden">
+  <div className="w-[91%] ml-[5%] flex items-center justify-start max-w-full flex-wrap h-full">
+    <div className="flex flex-wrap gap-14">
+      {images.length > 0 ? (
+        images.map((img, index) => (
+          <div key={index} className="relative w-[17%] min-w-[150px] aspect-[1/1]">
+            <img
+              src={img}
+              alt={`문화재 이미지 ${index}`}
+              className="w-full h-full object-cover rounded-lg"  // 여기서 border-radius를 적용
+            />
+          </div>
+        ))
+      ) : (
+        <p>이미지가 없습니다.</p>
+      )}
+    </div>
+  </div>
+</div>
+
     </div>
   </div>
   

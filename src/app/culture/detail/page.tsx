@@ -14,7 +14,6 @@ export default function Detail() {
   const ccbaKdcd = searchParams.get('ccbaKdcd');
   const ccbaAsno = searchParams.get('ccbaAsno');
   const ccbaCtcd = searchParams.get('ccbaCtcd');
-
   const [imageUrl, setImageUrl] = useState<string | null>(null); // 이미지를 상태로 관리
   const [heritageName, setHeritageName] = useState<string | null>(null); // 국가유산명(국문)
   const [heritageHanja, setHeritageHanja] = useState<string | null>(null); // 국가유산명(한자)
@@ -30,6 +29,11 @@ export default function Detail() {
   const [ccbaPoss, setCcbaPoss] = useState<string | null>(null); // 소유자
   const [ccbaAdmin, setCcbaAdmin] = useState<string | null>(null); // 관리자
   const [content, setContent] = useState<string | null>(null); // 국가유산 내용 (content)
+
+  const formatDate = (date: string | null | undefined) => {
+    if (!date) return ''; // null 또는 undefined일 경우 빈 문자열 반환
+    return date.replace(/(\d{4})(\d{2})(\d{2})/, '$1년 $2월 $3일');
+  };
 
   useEffect(() => {
     // ccbaKdcd, ccbaAsno, ccbaCtcd 값이 존재하면 이미지를 가져오는 함수 실행
@@ -167,7 +171,7 @@ export default function Detail() {
   {[
     { label: "분류", value: `${gcodeName} / ${bcodeName} / ${mcodeName} / ${scodeName}` },
     { label: "수량/면적", value: ccbaQuan },
-    { label: "지정(등록)일", value: ccbaAsdt },
+     { label: "지정(등록)일", value: formatDate(ccbaAsdt) },
     { label: "소재지", value: ccbaLcad },
     { label: "시대", value: ccceName },
     { label: "소유자(소유단체)", value: ccbaPoss },
