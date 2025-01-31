@@ -30,10 +30,15 @@ export default {
             transform: 'rotate(360deg)',
             transformOrigin: 'center'
           }
-        }
+        },
+        fadeIn: {
+          '0%': { opacity: '0', transform: 'translateY(40px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
       },
       animation: {
-        rotate: 'rotate 0.3s ease-in-out both'
+        rotate: 'rotate 0.3s ease-in-out both',
+        fadeIn: 'fadeIn 0.6s ease-in-out',
       },
     },
   },

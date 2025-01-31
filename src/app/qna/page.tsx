@@ -76,7 +76,6 @@ export default function QnaPage(){
             </div>
           ))}
         </div>
-        <InfoCard/>
       </div>
     </div>
 
