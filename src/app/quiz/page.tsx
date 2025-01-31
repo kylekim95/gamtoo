@@ -8,6 +8,8 @@ import { heritageListRequest, heritageListResponse, getHeritageList } from './co
 import { quizResults } from '../quizResults/page';
 import GyeongBokGungIcon from '@/components/quiz/svg/GyeongBokGungIcon';
 import { GetProblem, ProblemFactoryInput, ProblemFactoryOutput } from './components/problemFactory';
+// import axios from 'axios';
+// import { CatCode2String } from '@/components/quiz/CHCategories';
 
 type ProblemData = {
   id: string;
@@ -16,6 +18,7 @@ type ProblemData = {
   url:string;
   selection: string[];
   linkTo: string;
+  category: string;
 }
 
 interface UserSelection {
@@ -36,17 +39,16 @@ export default function QuizPage() {
   const mounted = useRef(false);
   useEffect(()=>{
     if(mounted.current){
-      console.log('twice?');
       return;
     }
     mounted.current = true;
     (async function InitProblems() {
-      const heritageListReqObj : heritageListRequest = { pageUnit: numProblems * 4 };
+      const heritageListReqObj : heritageListRequest = { pageUnit: 80 };
       const heritageList : heritageListResponse[] = await getHeritageList(heritageListReqObj);
       if(!mounted.current) return;
       //TODO: 문제의 정답을 랜덥하게 고른다
       for(let i = 0; i < numProblems; i++){
-        const answerInd = i * 4;
+        const answerInd = i * 4 + Math.trunc(Math.random() * 4);
         const input : ProblemFactoryInput = {
           Answer_ccbaAsno : heritageList[answerInd].ccbaAsno,
           Answer_ccbaCtcd : heritageList[answerInd].ccbaCtcd,
@@ -59,7 +61,9 @@ export default function QuizPage() {
           const newProblemData : ProblemData = {
             ...problemFactoryOutput, 
             id:i.toString(), 
-            linkTo: `ccbaAsno=${heritageList[answerInd].ccbaAsno}%26ccbaCtcd=${heritageList[answerInd].ccbaCtcd}%26ccbaKdcd=${heritageList[answerInd].ccbaKdcd}`};
+            linkTo: `ccbaAsno=${heritageList[answerInd].ccbaAsno}%26ccbaCtcd=${heritageList[answerInd].ccbaCtcd}%26ccbaKdcd=${heritageList[answerInd].ccbaKdcd}`,
+            category: heritageList[answerInd].ccbaKdcd,
+          };
           problems.current[i] = newProblemData;
           setLoaded(i);
         }
@@ -112,10 +116,13 @@ export default function QuizPage() {
     window.scrollTo({
       top: 0, left: 0, behavior:'smooth'
     });
-  }
-  function OnClickSubmit(){
+  }  
+
+  async function OnClickSubmit(){
     const data : quizResults[] = [];
     let score = 0;
+    const categoryMap = new Map<string, number>();
+    const correctMap = new Map<string, number>();
     for(let i = 0; i < problems.current.length; i++){
       const temp : quizResults = {
         answer: problems.current[i].answer,
@@ -127,8 +134,25 @@ export default function QuizPage() {
       }
       if(temp.correct)
         score++;
+      const currentVal = categoryMap.get(problems.current[i].category);
+      const currentCorrect = correctMap.get(problems.current[i].category);
+      if(!currentVal){
+        categoryMap.set(problems.current[i].category, 1);
+        correctMap.set(problems.current[i].category, 0);
+        if(temp.correct){
+          correctMap.set(problems.current[i].category, 1);
+        }
+      }
+      else{
+        categoryMap.set(problems.current[i].category, currentVal + 1);
+        if(temp.correct && currentCorrect){
+          correctMap.set(problems.current[i].category, currentCorrect + 1);
+        }
+      }
+      console.log(categoryMap, correctMap);
       data.push(temp);
     }
+    score = score / numProblems * 100;
     sessionStorage.setItem('recentQuizData', JSON.stringify({
       'score': score,
       'data' : JSON.stringify(data)

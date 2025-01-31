@@ -7,7 +7,7 @@ import QuizResultsCard, { DataType } from './components/QuizResultsCard';
 import GyeongBokGungIcon from '../../components/quiz/svg/GyeongBokGungIcon'
 import CheckIcon from '@/components/quiz/svg/CheckedIcon';
 import CrossedIcon from '@/components/quiz/svg/CrossedIcon';
-import { redirect, useSearchParams } from 'next/navigation';
+import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { useAppSelector } from '@/lib/redux/store';
 
@@ -38,6 +38,7 @@ export default function QuizResultsPage() {
   const data : quizResults[] = JSON.parse(parsedRecentQuizData.data ?? '[]');
 
   function linkCreator(answer:string, linkTo:string){
+    linkTo = linkTo.replaceAll('%26', '&');
     return (
       <Link href={`/culture/detail/?${linkTo}`}>{answer}</Link>
     )
