@@ -26,7 +26,7 @@ export default function ImportantRankCard(props : ImportantRankCardProps) {
         <span className='text-xs' style={{color: props.color}}>{props.header}</span>
       </div>
       <div className='text-black h-[60%] flex items-center justify-center text-sm font-bold'>
-        <GagsiMaskIcon width={80} height={80} color={"#222222"}/>
+        <GagsiMaskIcon color={"#222222"} className='h-[75%] aspect-square border-[3px] border-[#222222] rounded-full'/>
       </div>
       <div 
         onClick={OnClickDetails}

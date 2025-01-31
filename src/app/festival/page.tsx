@@ -56,7 +56,6 @@ const FestivalPage = () => {
     testData();
   },[]);
 
-
   async function testData() {
     const data = await fetch('https://www.cha.go.kr/cha/openapi/selectEventListOpenapi.do?searchYear=2024&searchMonth=6');
     const text = await data.text()
