@@ -1,8 +1,41 @@
+'use client'
+import { AppDispatch, useAppSelector } from "@/lib/redux/store";
+import axios from "axios";
+import { ChangeEvent, useState } from "react";
+import { useDispatch } from "react-redux";
+const url = process.env.NEXT_PUBLIC_BASIC_URL
 export default function QnaSubmitPage() {
+const [data,setData] = useState<Record<string,string>>()
+const dispatch = useDispatch<AppDispatch>();
+  const {isAuth, userName, userId} = useAppSelector((state) => state.authReducer.value);
+  const handleChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) =>{
+    const {name, value} = e.target
+    setData((prev)=>({
+      ...prev,
+      [name]: value,
+    }))
+    console.log(data)
+  }
+  const handleSubmit = async () => {
+    const formData = new FormData();
+    formData.append('title',JSON.stringify(data))
+    formData.append('channelId','5004')
+    formData.append('image','null')
+    console.log(isAuth)
+    const  payload = {
+      title : JSON.stringify(data),
+      channelId:"5004"
+    }
+    const response = await axios.post(`${url}/posts/create`, formData);
+      console.log(response.data)
+      setData({})
+      alert('��문이 성공적으로 전��되었습니다.')
+ 
+  }
   return (
     <>
       <div className=" w-full w-">
-        <div className="max-w-4xl mx-auto gap-10 px-4 flex flex-col">
+        <form action={()=>handleSubmit()} className="max-w-4xl mx-auto gap-10 px-4 flex flex-col">
           <div className="border-b py-3">
             <h3 className=" font-bold text-3xl py-4 leading-normal ">
               궁금하신 사항을 적어 주시면 <br />
@@ -21,9 +54,10 @@ export default function QnaSubmitPage() {
                     <span className="ml-2 text-red-500">*</span>
                   </label>
                   <input
+                   onChange={(e)=> handleChange(e)}
                     type="text"
                     id="subject"
-                    name="subject"
+                    name="title"
                     className="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:border-red-500"
                   />
                 </div>
@@ -34,7 +68,8 @@ export default function QnaSubmitPage() {
                   </label>
                   <textarea
                     id="subject"
-                    name="subject"
+                    name="content"
+                    onChange={(e)=> handleChange(e)}
                     className="w-full p-3 rounded-md border h-96 border-gray-300 focus:outline-none focus:border-red-500"
                   />
                 </div>
@@ -42,9 +77,9 @@ export default function QnaSubmitPage() {
             </div>
           </div>
           <div className="flex pb-20 justify-end w-full">
-            <button className=" w-20 h-8 bg-[#B23742] text-white rounded-md">등록</button>
+            <button type="submit" className=" w-20 h-8 bg-[#B23742] text-white rounded-md">등록</button>
           </div>
-        </div>
+        </form>
       </div>
     </>
   );

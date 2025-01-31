@@ -38,6 +38,25 @@ const formatDate = (dateString:string) => {
     <div className='absolute bottom-6 left-0'>
         
       <div className={` w-[450px] bg-white rounded-lg shadow-lg  wrap  overflow-hidden transition-all duration-300 `}>
+      <div
+          onClick={() => setOpenOverlayId(null)}
+          className="w-7 h-7 rounded-full flex items-center justify-center absolute right-2 top-2 z-50 transition-all duration-300 hover:opacity-100 opacity-30 bg-white"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="size-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M6 18 18 6M6 6l12 12"
+            />
+          </svg>
+        </div>
       {activeSection !== '#contact' && (
         <div className="relative h-80">
           <div className="absolute inset-0 bg-cover bg-center h-72  scale-125" style={{ backgroundImage: `url(${item.item.imageUrl})` }}>

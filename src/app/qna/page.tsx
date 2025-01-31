@@ -1,8 +1,10 @@
 'use client'
 
+import { useRouter } from "next/navigation";
 import InfoCard from "../map/components/infoCard";
 
 export default function QnaPage(){
+    const router = useRouter()
     const posts = [
         {
           id: 1,
@@ -76,6 +78,9 @@ export default function QnaPage(){
             </div>
           ))}
         </div>
+        <div className="flex pb-20 justify-end w-full">
+            <button onClick={()=>router.push('qna/submit')} className=" w-20 h-8 bg-[#B23742] text-white rounded-md">글쓰기</button>
+          </div>
       </div>
     </div>
 
