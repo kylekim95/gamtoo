@@ -137,7 +137,7 @@ export default function LoginPage() {
               />
             </form>
             <p className="mt-5 text-sm uppercase text-black">
-              아직 감투의 회원이 아닌신가요?{'   '}
+              아직 감투의 회원이 아니신가요?{'   '}
               <button
                 className="font-bold text-[#BF9AF0] hover:underline"
                 onClick={toggle}
