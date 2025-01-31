@@ -1,19 +1,26 @@
 export interface NotificationsResponseType {
-  seen: boolean;
+  seen: true;
   _id: string;
-  authorName: string;
-  post: string;
-  data: Like | Comment;
-}
-
-type Comment = {
-  notificationType: "comment";
-  _id: string
-  comment: string;
-  createAt: string;
-}
-type Like = {
-  notificationType: "like";
-  _id: string;
-  createAt: string;
+  author: {
+    fullName: string
+  };
+  user: string;
+  post?: string;
+  comment?: {
+    _id: string | undefined;
+    comment: string | undefined;
+    post: {
+      _id: string | undefined;
+      title: string | undefined;
+      author: string | undefined;
+    }
+  },
+  like?: {
+    post: {
+      title: string | undefined;
+    };
+    user: string | undefined;
+    _id: string | undefined;
+  };
+  createdAt: string;
 }
