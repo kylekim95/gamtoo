@@ -183,7 +183,7 @@ function Header({ isNotification, notificationHandler }: props) {
               onClick={notificationHandler}
               viewBox="0 0 24 24"
               fill="currentColor"
-              className="size-10 mr-4"
+              className="size-8 mr-4"
             >
               <path
                 fill-rule="evenodd"
@@ -192,8 +192,8 @@ function Header({ isNotification, notificationHandler }: props) {
               />
             </svg>
           )}
-          <div className="w-[75px] h-[75px] rounded-full border-4 overflow-hidden content-center border-black">
-            <GagsiMaskIcon width={68} height={70} color={"#00000"} />
+          <div className="w-[60px] h-[60px] rounded-full border-2 overflow-hidden content-center border-black">
+            <GagsiMaskIcon width={56} height={53} color={"#00000"} />
           </div>
         </div>
       ) : (
