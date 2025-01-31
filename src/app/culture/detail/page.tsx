@@ -135,7 +135,7 @@ export default function Detail() {
   </div>
 
   {/* 오른쪽 콘텐츠 */}
-  <div className="w-[700px] bg-white border-2 border-solid border-black p-4 mt-[4.5vh] mr-20 relative">
+  <div className="w-[800px] bg-white border-2 border-solid border-black p-4 mt-[4.5vh] mr-20 relative">
     {/* 회색 배경 div */}
     <div className="bg-gray-300 opacity-20 w-full h-[22%] absolute top-[0%] left-0 z-0"></div>
 
@@ -144,10 +144,25 @@ export default function Detail() {
     </h1>
     <h1 className="text-black font-pretendard text-4xl font-extrabold z-20 relative mt-3">
       국가유산 정보
+      <svg
+      className="inline-block transform -translate-y-1 translate-x-2 relative z-20"
+      width="40"
+      height="50"
+      viewBox="0 0 48 51"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M4.5 25.5C4.5 14.0574 13.2304 4.78125 24 4.78125C34.7696 4.78125 43.5 14.0574 43.5 25.5C43.5 36.9426 34.7696 46.2188 24 46.2188C13.2304 46.2188 4.5 36.9426 4.5 25.5ZM21.9125 22.4367C24.205 21.2188 26.7862 23.4188 26.1646 26.0608L24.7465 32.0874L24.8295 32.0433C25.5705 31.6496 26.4715 31.9688 26.842 32.756C27.2125 33.5433 26.9121 34.5006 26.1712 34.8943L26.0882 34.9384C23.7957 36.1562 21.2145 33.9562 21.8361 31.3143L23.2541 25.2877L23.1711 25.3318C22.4302 25.7254 21.5292 25.4063 21.1587 24.619C20.7882 23.8317 21.0885 22.8744 21.8295 22.4808L21.9125 22.4367ZM24 19.125C24.8284 19.125 25.5 18.4115 25.5 17.5312C25.5 16.651 24.8284 15.9375 24 15.9375C23.1716 15.9375 22.5 16.651 22.5 17.5312C22.5 18.4115 23.1716 19.125 24 19.125Z"
+        fill="#0F172A"
+      />
+    </svg>
     </h1>
 
     {/* 정보 내용 */}
-    <div className="font-pretendard text-xl font-medium z-20 relative space-y-9 mt-12">
+    <div className="font-pretendard text-xl font-medium z-20 relative space-y-9 mt-12 mb-3">
       <div className="flex">
         <p className="w-40 font-semibold">분류</p>
         <p className="text-gray-700">{gcodeName} / {bcodeName} / {mcodeName} / {scodeName}</p>
