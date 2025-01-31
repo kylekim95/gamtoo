@@ -29,7 +29,7 @@ export default function QuizPage() {
   }
 
   const defaultProblemData = { id:'', problem: '', answer: '', url: '', selection: [] };
-  const numProblems = 10;
+  const numProblems = 20;
   const problems = useRef<ProblemData[]>(new Array(numProblems).fill(defaultProblemData));
   const [loaded, setLoaded] = useState(0);
   const mounted = useRef(false);
@@ -39,7 +39,7 @@ export default function QuizPage() {
       return;
     }
     mounted.current = true;
-    async function InitProblems() {
+    (async function InitProblems() {
       const heritageListReqObj : heritageListRequest = { pageUnit: numProblems * 4 };
       const heritageList : heritageListResponse[] = await getHeritageList(heritageListReqObj);
       if(!mounted.current) return;
@@ -60,8 +60,7 @@ export default function QuizPage() {
           setLoaded(i);
         }
       }
-    }
-    InitProblems();
+    })();
     return () => {
       mounted.current = false;
     }

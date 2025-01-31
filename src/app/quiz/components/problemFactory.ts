@@ -36,7 +36,7 @@ async function NameProblem(input : ProblemFactoryInput) : Promise<ProblemFactory
   const heritageDetailedReqObj : heritageDetailedRequest = { ccbaAsno: input.Answer_ccbaAsno, ccbaCtcd: input.Answer_ccbaCtcd, ccbaKdcd: input.Answer_ccbaKdcd };
   const heritageDetailed : heritageDetailedResponse | null = await getHeritageDetailed(heritageDetailedReqObj);
   
-  const randNum = Math.trunc(Math.random() * 10 + 1);
+  const randNum = Math.trunc(Math.random() * 20 + 1);
   const heritageListReqObj : heritageListRequest = { pageUnit: 4, pageIndex: randNum, ccbaKdcd: input.Answer_ccbaKdcd };
   const heritageList : heritageListResponse[] = await getHeritageList(heritageListReqObj);
 

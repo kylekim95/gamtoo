@@ -15,10 +15,19 @@ export default function ProblemCard(props : ProblemCardProps) {
   const selectionButtons = useRef(props.selectAnswer.map(()=>createRef<HTMLDivElement>()));
   const selectionColors = ["bg-red-700", "bg-green-700", "bg-blue-700", "bg-yellow-700"];
   const [selected, setSelected] = useState(-1);
+  const [solved, setSolved] = useState(false);
+
+  const refToCompIcon = createRef<HTMLDivElement>();
 
   function OnClickSelectBtn(selectedNum : number){
-    setSelected(selectedNum);
+    if(selected === -1){
+      refToCompIcon.current?.classList.add('animate-rotate');
+      refToCompIcon.current?.addEventListener('animationend', ()=>{
+        setSolved(true);
+      }, { once: true });
+    }
     props.selectAnswerCallback(props.id.toString(), selectedNum);
+    setSelected(selectedNum);
   }
   
   return (
@@ -32,7 +41,9 @@ export default function ProblemCard(props : ProblemCardProps) {
         className={`w-[10%] h-full flex justify-center items-center bg-[#00000080] rounded-l-lg`}
         style={{backgroundImage: `url(${props.url})`, backgroundSize:'cover', backgroundPosition: 'center', backgroundBlendMode: 'multiply'}}
       >
-        { selected !== -1 ? <CheckIcon width={40} height={40} color='#44FF44'/> : <CrossedIcon width={40} height={40} color='#FF4444' /> }
+        <div ref={refToCompIcon}>
+          { solved ? <CheckIcon width={40} height={40} color='#44FF44'/> : <CrossedIcon width={40} height={40} color='#FF4444' /> }
+        </div>
       </div>
       <div className='w-[90%] h-full flex flex-col bg-slate-50'>
         <div className='w-full h-[10%] min-h-[50px] flex items-end ml-5'>
