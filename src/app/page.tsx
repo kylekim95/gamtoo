@@ -8,6 +8,7 @@ import CultureFestival from "@/components/main/cultureFestival";
 import TodayQuiz from "@/components/main/todayQuiz";
 import Map from "@/components/main/map";
 import VideoList from "@/components/main/videoList";
+import {useAppSelector} from "@/lib/redux/store";
 
 export default function Home() {
   return (
