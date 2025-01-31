@@ -15,6 +15,7 @@ type ProblemData = {
   answer: string;
   url:string;
   selection: string[];
+  linkTo: string;
 }
 
 interface UserSelection {
@@ -55,7 +56,10 @@ export default function QuizPage() {
         const problemFactoryOutput : ProblemFactoryOutput | null = await GetProblem(input);
         if(!mounted.current) break;
         if(problemFactoryOutput){
-          const newProblemData : ProblemData = {...problemFactoryOutput, id:i.toString()};
+          const newProblemData : ProblemData = {
+            ...problemFactoryOutput, 
+            id:i.toString(), 
+            linkTo: `ccbaAsno=${heritageList[answerInd].ccbaAsno}%26ccbaCtcd=${heritageList[answerInd].ccbaCtcd}%26ccbaKdcd=${heritageList[answerInd].ccbaKdcd}`};
           problems.current[i] = newProblemData;
           setLoaded(i);
         }
@@ -119,6 +123,7 @@ export default function QuizPage() {
         problem: problems.current[i].problem,
         selected: problems.current[i].selection[userSelected[i]],
         correct: problems.current[i].selection[userSelected[i]] === problems.current[i].answer,
+        linkTo: problems.current[i].linkTo,
       }
       if(temp.correct)
         score++;

@@ -17,6 +17,7 @@ export type quizResults = {
   answer: string;
   selected: string;
   correct: boolean;
+  linkTo: string;
 }
 
 export default function QuizResultsPage() {
@@ -33,12 +34,17 @@ export default function QuizResultsPage() {
   const searchParams = useSearchParams();
   const score = parseInt(searchParams.get('score') ?? '0');
   const data : quizResults[] = JSON.parse(searchParams.get('data') ?? '[]');
+  function linkCreator(answer:string, linkTo:string){
+    return (
+      <Link href={`/culture/detail/?${linkTo}`}>{answer}</Link>
+    )
+  }
   try{
     data.forEach((elem)=>{
       const temp : DataType = {
         id: elem.id,
         problem: elem.problem,
-        answer: elem.answer,
+        answer: linkCreator(elem.answer, elem.linkTo),
         userSelect: elem.selected,
         result: elem.correct ? smallCheck : smallCross,
       }
