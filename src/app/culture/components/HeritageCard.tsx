@@ -111,7 +111,7 @@ export default function HeritageCard() {
 </div>
   
       <div className="grid grid-cols-5 gap-14 p-5 pt-8">
-        {heritageData.map((heritage: HeritageData, index) => ( // heritage 타입 명시
+        {heritageData.map((heritage: HeritageData, index) => (
           <Link
             key={index}
             href={`/culture/detail?ccbaKdcd=${heritage.ccbaKdcd}&ccbaAsno=${heritage.ccbaAsno}&ccbaCtcd=${heritage.ccbaCtcd}`}
