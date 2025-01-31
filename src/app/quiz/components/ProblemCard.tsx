@@ -29,6 +29,10 @@ export default function ProblemCard(props : ProblemCardProps) {
     props.selectAnswerCallback(props.id.toString(), selectedNum);
     setSelected(selectedNum);
   }
+
+  if(props.url === ''){
+    return <DefaultProblemCard ref={props.ref}/>
+  }
   
   return (
     <div className='
@@ -65,7 +69,7 @@ export default function ProblemCard(props : ProblemCardProps) {
   )
 }
 
-export function DefaultProblemCard(props : {ref: React.RefObject<HTMLDivElement | null>}) {
+function DefaultProblemCard(props : {ref: React.RefObject<HTMLDivElement | null>}) : React.JSX.Element {
   return (
     <div className='
       w-full max-w-[900px] min-w-[600px] aspect-[2.5/1] m-2

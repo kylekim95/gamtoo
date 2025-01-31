@@ -2,12 +2,13 @@
 
 import React, { useEffect, useRef, createRef, useCallback, useMemo, useState } from 'react'
 import { useRouter, redirect } from 'next/navigation';
-import ProblemCard, { DefaultProblemCard } from './components/ProblemCard';
+import ProblemCard from './components/ProblemCard';
 import { useAppSelector } from '@/lib/redux/store';
 import { heritageListRequest, heritageListResponse, getHeritageList } from './components/heritageList';
 import { quizResults } from '../quizResults/page';
 import GyeongBokGungIcon from '@/components/quiz/svg/GyeongBokGungIcon';
 import { GetProblem, ProblemFactoryInput, ProblemFactoryOutput } from './components/problemFactory';
+import useQuizInfoManager, {postQuizData} from '@/components/quiz/useQuizInfoManager';
 // import axios from 'axios';
 // import { CatCode2String } from '@/components/quiz/CHCategories';
 
@@ -38,16 +39,15 @@ export default function QuizPage() {
   const [loaded, setLoaded] = useState(0);
   const mounted = useRef(false);
   useEffect(()=>{
-    if(mounted.current){
-      return;
-    }
     mounted.current = true;
-    (async function InitProblems() {
+    setLoaded(0);
+    async function InitProblems() {
       const heritageListReqObj : heritageListRequest = { pageUnit: 80 };
       const heritageList : heritageListResponse[] = await getHeritageList(heritageListReqObj);
       if(!mounted.current) return;
       //TODO: 문제의 정답을 랜덥하게 고른다
       for(let i = 0; i < numProblems; i++){
+        const problemInd = i;
         const answerInd = i * 4 + Math.trunc(Math.random() * 4);
         const input : ProblemFactoryInput = {
           Answer_ccbaAsno : heritageList[answerInd].ccbaAsno,
@@ -56,7 +56,7 @@ export default function QuizPage() {
           Answer_ccbaMnm1 : heritageList[answerInd].ccbaMnm1,
         }
         const problemFactoryOutput : ProblemFactoryOutput | null = await GetProblem(input);
-        if(!mounted.current) break;
+        if(!mounted.current) return;
         if(problemFactoryOutput){
           const newProblemData : ProblemData = {
             ...problemFactoryOutput, 
@@ -64,12 +64,14 @@ export default function QuizPage() {
             linkTo: `ccbaAsno=${heritageList[answerInd].ccbaAsno}%26ccbaCtcd=${heritageList[answerInd].ccbaCtcd}%26ccbaKdcd=${heritageList[answerInd].ccbaKdcd}`,
             category: heritageList[answerInd].ccbaKdcd,
           };
-          problems.current[i] = newProblemData;
-          setLoaded(i);
+          problems.current[problemInd] = newProblemData;
         }
       }
-    })();
-    return () => {
+    };
+    InitProblems().then(()=>{
+      setLoaded(numProblems - 1);
+    });
+    return ()=>{
       mounted.current = false;
     }
   }, []);
@@ -92,7 +94,7 @@ export default function QuizPage() {
     refs.current.forEach((elem)=>{
       if(elem.current !== null) observer.observe(elem.current);
     });
-  }, [refs, loaded]);
+  }, [loaded]);
 
   const userSelected : UserSelection = useMemo(()=>{
     const temp : UserSelection = {};
@@ -118,11 +120,14 @@ export default function QuizPage() {
     });
   }  
 
+  const quizInfoManager = useQuizInfoManager();
+
   async function OnClickSubmit(){
     const data : quizResults[] = [];
     let score = 0;
     const categoryMap = new Map<string, number>();
     const correctMap = new Map<string, number>();
+
     for(let i = 0; i < problems.current.length; i++){
       const temp : quizResults = {
         answer: problems.current[i].answer,
@@ -132,31 +137,44 @@ export default function QuizPage() {
         correct: problems.current[i].selection[userSelected[i]] === problems.current[i].answer,
         linkTo: problems.current[i].linkTo,
       }
+      
       if(temp.correct)
         score++;
+      
       const currentVal = categoryMap.get(problems.current[i].category);
-      const currentCorrect = correctMap.get(problems.current[i].category);
-      if(!currentVal){
+      if(!currentVal)
         categoryMap.set(problems.current[i].category, 1);
-        correctMap.set(problems.current[i].category, 0);
-        if(temp.correct){
-          correctMap.set(problems.current[i].category, 1);
-        }
-      }
-      else{
+      else
         categoryMap.set(problems.current[i].category, currentVal + 1);
-        if(temp.correct && currentCorrect){
-          correctMap.set(problems.current[i].category, currentCorrect + 1);
-        }
-      }
-      console.log(categoryMap, correctMap);
+      
+      const currentCorrectVal = correctMap.get(problems.current[i].category);
+      if(!currentCorrectVal)
+        correctMap.set(problems.current[i].category, (temp.correct ? 1 : 0));
+      else
+        correctMap.set(problems.current[i].category, (temp.correct ? currentCorrectVal + 1 : currentCorrectVal));
+
       data.push(temp);
     }
+
     score = score / numProblems * 100;
     sessionStorage.setItem('recentQuizData', JSON.stringify({
       'score': score,
       'data' : JSON.stringify(data)
     }));
+
+    const postData : postQuizData = {
+      score: score,
+      errRate_Total: [],
+      errRate_Correct: []
+    }
+    categoryMap.entries().forEach((tuple)=>{
+      postData.errRate_Total.push([tuple[0], tuple[1]]);
+    });
+    correctMap.entries().forEach((tuple)=>{
+      postData.errRate_Correct.push([tuple[0], tuple[1]]);
+    });
+    if(quizInfoManager)
+      quizInfoManager.postQuizResult(postData);
     router.push('/quizResults');
   }
 
@@ -170,7 +188,7 @@ export default function QuizPage() {
           <div className='shrink w-[15%]'></div>
           <div className='w-[70%] flex flex-col items-center'>
             <div className='w-full flex flex-col items-center mb-10'>
-              { problems.current.map((elem, index)=> elem.id==='' ? <DefaultProblemCard key={index} ref={refs.current[index]}/> : <ProblemCard key={elem.id} id={index} ref={refs.current[index]} url={elem.url} selectAnswer={elem.selection} problem={elem.problem} selectAnswerCallback={SelectAnswerCallback}/> ) }
+              { problems.current.map((elem, index)=><ProblemCard key={index} id={index} ref={refs.current[index]} url={elem.url} selectAnswer={elem.selection} problem={elem.problem} selectAnswerCallback={SelectAnswerCallback}/> ) }
             </div>
             {/* 페이지 밑의 메뉴 화면 크기가 xl이상이면 hidden */}
             <div className='xl:hidden w-full aspect-[6/1] flex justify-center items-center gap-10 mb-10'>
