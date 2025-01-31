@@ -178,7 +178,7 @@ export default function MapPage() {
           } transition-all duration-300 max-w-96 z-50 top-36`}
         >
           {!isLoadOpen ? (
-            <div className=" absolute w-10 h-10 flex items-center justify-center bg-white -right-10  rounded-r-lg top-10">
+            <div className=" absolute w-10 h-10 flex items-center border-y-2 border-r-2 justify-center border-[#4a4a4a]  bg-white -right-10  rounded-r-lg top-10">
               <button onClick={() => setIsNavOpen(!isNavOpen)}>
                 <div className={`${!isNavOpen ? "rotate-180" : null}`}>
                   <svg
