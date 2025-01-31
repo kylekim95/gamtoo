@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation'; // 쿼리 파라미터를 사용하기 위한 훅
 import { parseStringPromise } from 'xml2js'; // XML을 파싱하기 위한 라이브러리
+import DetailMap from '../components/DetailMap';
 
 export default function Detail() {
   const searchParams = useSearchParams();  // searchParams 훅을 사용하여 URL에서 파라미터를 가져옵니다.
@@ -94,7 +95,7 @@ export default function Detail() {
       setCcceName(ccceName || '정보 없음');
       setCcbaPoss(ccbaPoss || '정보 없음');
       setCcbaAdmin(ccbaAdmin || '정보 없음');
-      setContent(content || '국가유산에 대한 설명.'); // content 추가
+      setContent(content || '국가유산에 대한 설명.');
 
     } catch (error) {
       console.error('국가유산 데이터 가져오기 실패:', error);
@@ -120,16 +121,16 @@ export default function Detail() {
 
       <div className="relative w-full flex items-start">
   {/* 왼쪽 콘텐츠 */}
-  <div className="w-2/3 p-4 mt-[4.5vh] mr-32 ml-20">
-    <h1 className="text-[#FF5DAB] font-pretendard text-xl mt-1 font-semibold tracking-extra-wide">
+  <div className="w-2/3 p-4 mt-[3vh] mr-32 ml-20">
+    <h1 className="text-[#FF5DAB] font-pretendard text-xl ml-1 mt-1 font-semibold tracking-extra-wide">
       ABOUT
     </h1>
-    <h1 className="text-black text-4xl font-pretendard tracking-wide font-extrabold font-bold mb-3 mt-3">
+    <h1 className="text-black text-4xl font-pretendard tracking-wide font-extrabold mb-3 mt-3">
       국가유산 설명
     </h1>
     <div className="w-full h-[1px] bg-gray-400 mb-5"/>
 
-    <p className="text-black text-lg font-pretendard font-medium whitespace-pre-line">
+    <p className="text-black text-xl font-pretendard font-medium whitespace-pre-line">
       {(content ?? "").replaceAll("\n", "\n\n")}
     </p>
   </div>
@@ -139,7 +140,7 @@ export default function Detail() {
     {/* 회색 배경 div */}
     <div className="bg-gray-300 opacity-20 w-full h-[22%] absolute top-[0%] left-0 z-0"/>
 
-    <h1 className="text-[#4F6CF3] font-pretendard text-xl font-semibold tracking-extra-wide z-20 relative mt-2 ml-2">
+    <h1 className="text-[#4F6CF3] font-pretendard text-xl font-semibold tracking-extra-wide z-20 relative mt-2 ml-3">
       INFORMATION
     </h1>
     <h1 className="text-black font-pretendard text-4xl font-extrabold z-20 tracking-wide relative ml-2 mt-4">
@@ -162,7 +163,7 @@ export default function Detail() {
     </h1>
 
     {/* 정보 내용 */}
-    <div className="font-pretendard text-lg font-medium z-20 relative space-y-9 mt-12 mb-3">
+    <div className="font-pretendard text-lg font-medium z-20 relative space-y-11 mt-14 mb-2">
   {[
     { label: "분류", value: `${gcodeName} / ${bcodeName} / ${mcodeName} / ${scodeName}` },
     { label: "수량/면적", value: ccbaQuan },
@@ -172,26 +173,22 @@ export default function Detail() {
     { label: "소유자(소유단체)", value: ccbaPoss },
     { label: "관리자(관리단체)", value: ccbaAdmin },
   ].map((item, index) => (
-    <div key={index} className="grid grid-cols-[10rem_1fr] gap-4">
-      <p className="font-semibold">{item.label}</p>
-      <p className="text-gray-700">{item.value}</p>
+    <div key={index} className="relative">
+      <div className="grid grid-cols-[10rem_1fr] gap-4">
+        <p className="font-semibold">{item.label}</p>
+        <p className="text-gray-700">{item.value}</p>
+      </div>
+      {index !== 6 &&  <div className="absolute left-0 right-0 bottom-[-20px] w-full h-[1px] bg-gray-300" />}
     </div>
   ))}
 </div>
 
 
+
   </div>
 </div>
 
-        {/* 국가유산 위치 */}
-        <div className="w-full border-2 border-solid border-black p-6 mt-6 overflow-x-auto">
-        <h1 className="text-black text-xl font-semibold ml-20">INFORMATION</h1>            
-        <h1 className="text-black text-4xl font-semibold mb-4 ml-20">국가유산 위치</h1>
-        {/* 위치 내용 */}
-        <div className="w-[89vw] h-80 ml-[4%] bg-gray-200 border-2 border-solid border-black flex items-center justify-center max-w-full">
-          <p className="text-black text-xl font-medium">여기에 지도가 들어갑니다.</p>
-        </div>
-      </div>
+       <DetailMap/>
 
       {/* 댓글 및 관련 영상 */}
       <div className="relative w-full flex">
