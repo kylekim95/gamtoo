@@ -34,11 +34,10 @@ export interface HeritageData {
 }
 
 export interface PaginationInfo {
-  totalCnt: number;  // 총 데이터 건 수
-  pageUnit: number;  // 페이지당 데이터 수
-  pageIndex: number;  // 현재 페이지
-
-  
+  totalCnt: number;
+  pageUnit: number;
+  pageIndex: number;
+  searchTerm?: string; // 검색어 상태 추가
 }
 
 
@@ -46,5 +45,5 @@ export interface PaginationProps {
   currentPage: number;  // 현재 페이지
   totalCnt: number;  // 총 데이터 수
   pageUnit: number;  // 페이지당 데이터 수
-  onPageChange: (newPage: number) => void;  // 페이지 변경 함수
+  onPageChange: (newPage: number) => void;
 }

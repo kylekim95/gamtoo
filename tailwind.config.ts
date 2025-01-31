@@ -8,6 +8,12 @@ export default {
   ],
   theme: {
     extend: {
+      letterSpacing: {
+        'extra-wide': '0.2em', // 간격
+      },
+      fontFamily: {
+        pretendard: ['Pretendard-Regular', 'sans-serif'], 
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
