@@ -75,23 +75,8 @@ export default function Detail() {
 
         {/* 이미지 위 텍스트 */}
         <h1 className="absolute top-[75%] left-[12%] text-white text-xl font-bold">{heritageType}</h1>
-        <h1 className="absolute top-[46%] left-[10.5%] text-white text-3xl font-semibold">국보</h1>
-        <h1 className="absolute top-[60%] left-[10%] text-white text-5xl font-bold">{heritageName}
-        <svg
-          className="absolute top-[75.8%] left-[10.5%]" // 위치 조정
-          width="16"
-          height="21"
-          viewBox="0 0 22 27"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            fillRule="evenodd"
-            clipRule="evenodd"
-            d="M10.4247 26.604C10.4624 26.6264 10.4921 26.6437 10.5131 26.6558L10.548 26.6757C10.8266 26.8323 11.1722 26.8311 11.4511 26.6762L11.4869 26.6558C11.5079 26.6437 11.5376 26.6264 11.5753 26.604C11.6508 26.5592 11.7587 26.4939 11.8944 26.4084C12.1656 26.2374 12.5484 25.9853 13.0058 25.6545C13.9189 24.9941 15.1372 24.0143 16.3582 22.7344C18.7883 20.187 21.3125 16.3597 21.3125 11.4375C21.3125 5.60645 16.6954 0.879456 11 0.879456C5.30456 0.879456 0.6875 5.60645 0.6875 11.4375C0.6875 16.3597 3.21165 20.187 5.64182 22.7344C6.86282 24.0143 8.08114 24.9941 8.99424 25.6545C9.45156 25.9853 9.83442 26.2374 10.1056 26.4084C10.2413 26.4939 10.3492 26.5592 10.4247 26.604ZM11 15.2768C13.0711 15.2768 14.75 13.5579 14.75 11.4375C14.75 9.31711 13.0711 7.59821 11 7.59821C8.92893 7.59821 7.25 9.31711 7.25 11.4375C7.25 13.5579 8.92893 15.2768 11 15.2768Z"
-            fill="white"
-          />
-        </svg></h1>
+        <h1 className="absolute top-[60%] left-[10%] text-white text-5xl font-bold">{heritageName}</h1>
+        
       </div>
 
       <div className="relative w-full flex">
