@@ -17,6 +17,21 @@ export default {
         'festivalBg': "#FFF7EF"
 
       },
+      keyframes: {
+        rotate: {
+          '0%': {
+            transform: 'rotate(0)',
+            transformOrigin: 'center'
+          },
+          '100%': {
+            transform: 'rotate(360deg)',
+            transformOrigin: 'center'
+          }
+        }
+      },
+      animation: {
+        rotate: 'rotate 0.3s ease-in-out both'
+      },
     },
   },
   plugins: [],
