@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 import { ArrowRightCircleIcon } from "@heroicons/react/24/outline";
 
 import Ranking from "./rankingImg";
-import { useState } from "react";
+import { useState, useRef } from "react";
 type ProblemData = {
   id: string;
   problem: string;
@@ -173,15 +173,31 @@ export default function TodayQuiz() {
     "bg-blue-700",
     "bg-yellow-700",
   ];
-  const [selectedBtn, setSelectedBtn] = useState<number>(-1);
   const [resultMessage, setResultMessage] = useState<string>("");
+  const buttonRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   function checkAnswer(selectedNum: number) {
-    setSelectedBtn(selectedNum);
     setResultMessage(
       selectedNum + 1 === todayQuiz.answer ? "정답입니다!" : "정답이 아닙니다"
     );
+
+    // 이전에 클릭된 버튼이 있으면 원래 색상(검은색)으로 되돌리기
+    buttonRefs.current.forEach((btn) => {
+      if (btn) btn.classList.remove(...selectionColors);
+    });
+
+    // 클릭된 버튼에 해당 색상 적용
+    const selectedButton = buttonRefs.current[selectedNum];
+    if (selectedButton) {
+      selectedButton.classList.add(selectionColors[selectedNum]);
+    }
   }
+
+  const setButtonRef = (el: HTMLButtonElement | null, index: number) => {
+    if (el && !buttonRefs.current[index]) {
+      buttonRefs.current[index] = el;
+    }
+  };
 
   return (
     <div className="z-0 relative w-[99%] h-[550px] m-auto mt-10">
@@ -244,23 +260,17 @@ export default function TodayQuiz() {
               </div>
               {/* 답안 부분 */}
               <div className="flex flex-col justify-end items-center w-[100%] gap-5 mb-6 text-white">
-                {todayQuiz.selection.map((item, index) => {
-                  return (
-                    <button
-                      key={index}
-                      onClick={() => {
-                        checkAnswer(index);
-                      }}
-                      className={`w-[90%] h-10 rounded-lg ${
-                        selectedBtn === index
-                          ? selectionColors[index]
-                          : "bg-black"
-                      }  opacity-75 flex justify-center items-center transition-opacity ease-in-out hover:opacity-80 `}
-                    >
-                      <span className="text-sm md:text-lg">{item}</span>
-                    </button>
-                  );
-                })}
+                {todayQuiz.selection.map((item: string, index: number) => (
+                  <button
+                    key={index}
+                    ref={(el) => setButtonRef(el, index)}
+                    onClick={() => checkAnswer(index)}
+                    className="w-[90%] h-10 rounded-lg bg-black opacity-75 flex justify-center items-center transition-opacity ease-in-out hover:opacity-80"
+                  >
+                    <span className="text-sm md:text-lg">{item}</span>
+                  </button>
+                ))}
+                <p>{resultMessage}</p>
               </div>
             </div>
           </div>
