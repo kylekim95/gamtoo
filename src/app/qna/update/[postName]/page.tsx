@@ -1,17 +1,40 @@
 'use client'
 import { AppDispatch, useAppSelector } from "@/lib/redux/store";
+import { Post } from "@/types/PostType";
 import axios from "axios";
-import { useParams, useRouter } from "next/navigation";
-import { ChangeEvent, useState } from "react";
+import { notFound, useParams, useRouter } from "next/navigation";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 const url = process.env.NEXT_PUBLIC_BASIC_URL
-export default function QnaSubmitPage() {
+export default function QnaUpdatePage() {
 const [data,setData] = useState<Record<string,string>>()
-const { pageName } = useParams();
+const { postName } = useParams();
 
 const router = useRouter()
   const {isAuth, userName, userId} = useAppSelector((state) => state.authReducer.value);
-  const handleChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) =>{
+
+  const postListHandler = async () => {
+    try {
+      const response = await axios.get(
+        `${url}/posts/channel/679ce5308b8d584759230494`,
+        {}
+      );
+
+      if (response.status === 200) {
+        const data = response.data;
+        const filters = data.find((d: Post) => d._id === postName);
+        setData({
+            title:filters.title,
+
+        });      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+    }
+  };
+
+
+const handleChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) =>{
     const {name, value} = e.target
     setData((prev)=>({
       ...prev,
@@ -19,7 +42,7 @@ const router = useRouter()
     }))
     console.log(data)
   }
-  
+
   const handleSubmit = async () => {
     const formData = new FormData();
     formData.append('title',JSON.stringify(data))
@@ -36,6 +59,7 @@ const router = useRouter()
     }
  
   }
+  
   return (
     <>
       <div className=" w-full w-">

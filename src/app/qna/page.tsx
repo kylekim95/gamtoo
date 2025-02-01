@@ -11,7 +11,7 @@ import { Post } from "@/types/PostType";
 const url = process.env.NEXT_PUBLIC_BASIC_URL;
 
 export default function QnaPage() {
-  const { isAuth } = useAppSelector((state) => state.authReducer.value);
+  const { isAuth,userId } = useAppSelector((state) => state.authReducer.value);
   const [posts, setPosts] = useState<Post[]>([]);
   const [likePosts, setLikePosts] = useState<string | null>(null);
   const [offset, setOffset] = useState(0);
@@ -66,7 +66,18 @@ export default function QnaPage() {
       setIsFetching(false);
     }
   };
-
+  const postDeleteHandler = async (id:string) => { 
+    try {
+        const response = await axios.delete(`${url}/posts/delete`, {
+            data: { id } // 'data' 속성 안에 객체를 넣어야 합니다.
+          });
+      if (response.status === 200) {
+       setPosts(()=> posts.filter(post => post._id !== id)) 
+      }
+    } catch (error) {
+      console.error(error);
+    } 
+  };
   // `inView`가 true일 때 추가 데이터 로드
   useEffect(() => {
     if (inView && !isFetching) {
@@ -124,19 +135,25 @@ export default function QnaPage() {
               className="bg-white relative shadow-lg hover:scale-105 transition-all rounded-lg p-6"
             >
               <div className="cursor-pointer " onClick={() => router.push(`qna/detail/${post._id}`)}>
+                <div className=" flex justify-between">
+        
                 <h2 className="text-xl font-semibold text-gray-800">
                   {parserJson(post.title, "title")}
                 </h2>
+              
+                </div>
                 <p className="mt-2 text-gray-600">
                   {parserJson(post.title, "content")}
                 </p>
                 <div className="mt-4 pb-9 flex justify-between items-center">
+                   
                   <span className="text-sm text-gray-500">
                     작성자: {post.author.email}
                   </span>
-                  <span className="text-sm text-gray-500">
+                  <div className="text-sm text-gray-500">
+               
                     {CalcCreateTimeToLocalTime(post.createdAt)}
-                  </span>
+                  </div>
                 </div>
               </div>
 
@@ -182,6 +199,13 @@ export default function QnaPage() {
                   </svg>
                   <span className="ml-1">{post.comments.length}</span>
                 </div>
+                {userId === post.author._id && (
+                         <div className="flex gap-2">
+                         <button onClick={() => router.push(`qna/update/${post._id}`)}>수정</button>
+                         <button onClick={()=> postDeleteHandler(post._id)}>삭제</button>
+                       </div>
+                )}
+           
               </div>
             </div>
           ))}
