@@ -13,7 +13,8 @@ const QnaDetailPage = () => {
   const { isAuth } = useAppSelector((state) => state.authReducer.value);
   const [newComment, setNewComment] = useState("");
   const { postId } = useParams();
-  console.log(postId);
+
+
   const postListHandler = async () => {
     try {
       const response = await axios.get(
@@ -24,14 +25,14 @@ const QnaDetailPage = () => {
       if (response.status === 200) {
         const data = response.data;
         const filters = data.find((d: Post) => d._id === postId);
-        setDetailData(filters);
-        console.log(filters);
-      }
+        setDetailData(filters);      }
     } catch (error) {
       console.error(error);
     } finally {
     }
   };
+
+
   const formatDate = (dateString: string): string => {
     const date = new Date(dateString);
 
@@ -52,6 +53,8 @@ const QnaDetailPage = () => {
       return "";
     }
   };
+
+
   const addComment = async () => {
     if (newComment.trim() === "") return;
     const payload = {
@@ -62,6 +65,8 @@ const QnaDetailPage = () => {
 
     setNewComment("");
   };
+
+
   useEffect(() => {
     postListHandler();
   }, [newComment]);
@@ -110,7 +115,6 @@ const QnaDetailPage = () => {
                 </div>
                 <div className="flex gap-2 text-xs">
                   <p className="text-[#959595] font-medium">{CalcCreateTimeToLocalTime(comment.createAt)}</p>
-                  <span className=" text-[#B23742] font-medium">답글</span>
                 </div>
               </div>
             </li>
