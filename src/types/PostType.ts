@@ -37,7 +37,7 @@ export interface Post {
   comments: any[]; // 만약 Comment 인터페이스가 있다면 해당 타입으로 변경
   createdAt: string; // ISO 날짜 문자열
   updatedAt: string; // ISO 날짜 문자열
-  likes: Like[]; // 좋아요한 유저 정보 리스트
+  likes: any; // 좋아요한 유저 정보 리스트
   title: string; // JSON 문자열이므로 파싱 필요
   __v: number;
 }
