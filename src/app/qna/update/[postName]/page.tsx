@@ -26,12 +26,10 @@ const router = useRouter()
        
         const parseTitle = await parserJson(filters.title, 'title')
         const parseContent = await parserJson(filters.title,'contnet')
-        console.log(parseContent)
         setData({
             title:parseTitle,
             content:parseContent
         });    
-      console.log(data)
       }
     } catch (error) {
       console.error(error);
@@ -54,7 +52,6 @@ const handleChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAre
       ...prev,
       [name]: value,
     }))
-    console.log(data)
   }
 
   const handleUpdate = async () => {
@@ -64,9 +61,7 @@ const handleChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAre
     formData.append('channelId','679ce5308b8d584759230494')
     formData.append('postId',postName)
     const response = await axios.put(`${url}/posts/update`, formData);
-      console.log(response.data)
     if(response.status === 200){
-      console.log(response.data)
       setData({})
       router.push('/qna')
     }

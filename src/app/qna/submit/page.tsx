@@ -18,7 +18,6 @@ const handleChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAre
       ...prev,
       [name]: value,
     }))
-    console.log(data)
   }
 
   const handleSubmit = async () => {
@@ -26,12 +25,9 @@ const handleChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAre
     formData.append('title',JSON.stringify(data))
     formData.append('image','null')
     formData.append('channelId','679ce5308b8d584759230494')
-    console.log(isAuth)
     const response = await axios.post(`${url}/posts/create`, formData);
-      console.log(response.data)
       setData({})
     if(response.status === 200){
-      console.log(response.data)
       setData({})
       router.push('/qna')
     }
