@@ -97,7 +97,12 @@ export default function QnaPage() {
         data: { id }, // 'data' 속성 안에 객체를 넣어야 합니다.
       });
       if (response.status === 200) {
+        console.log(filteredPosts)
+        console.log(id)
         setPosts(() => posts.filter((post) => post._id !== id));
+        
+        setFilteredPosts(() => posts.filter((post) => post._id !== id));
+        console.log(filteredPosts)
       }
     } catch (error) {
       console.error(error);
