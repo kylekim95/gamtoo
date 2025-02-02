@@ -1,11 +1,13 @@
 'use client'
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useSearchParams } from 'next/navigation'; // 쿼리 파라미터를 사용하기 위한 훅
-import { parseStringPromise } from 'xml2js'; // XML을 파싱하기 위한 라이브러리
 import DetailMap from '../components/DetailMap';
 import Comments from '../components/Comments';
-import MoreImage from '../components/MoreImage';
+import DetailMoreImage from '../components/DetailMoreImage';
+import { useHeritageData } from '../types/useHeritageData';
+import DetailHeroImage from '../components/DetailHeroImage';
+import DetailVideo from '../components/DetailVideo';
 
 export default function Detail() {
   const searchParams = useSearchParams();  // searchParams 훅을 사용하여 URL에서 파라미터를 가져옵니다.
@@ -14,114 +16,30 @@ export default function Detail() {
   const ccbaKdcd = searchParams.get('ccbaKdcd');
   const ccbaAsno = searchParams.get('ccbaAsno');
   const ccbaCtcd = searchParams.get('ccbaCtcd');
-  const [imageUrl, setImageUrl] = useState<string | null>(null); // 이미지를 상태로 관리
-  const [heritageName, setHeritageName] = useState<string | null>(null); // 국가유산명(국문)
-  const [heritageHanja, setHeritageHanja] = useState<string | null>(null); // 국가유산명(한자)
-  const [heritageCategory, setHeritageCategory] = useState<string | null>(null); // 국가유산종목 (ccmaName)
-  const [gcodeName, setGcodeName] = useState<string | null>(null); // 국가유산분류
-  const [bcodeName, setBcodeName] = useState<string | null>(null); // 국가유산분류2
-  const [mcodeName, setMcodeName] = useState<string | null>(null); // 국가유산분류3
-  const [scodeName, setScodeName] = useState<string | null>(null); // 국가유산분류4
-  const [ccbaQuan, setCcbaQuan] = useState<string | null>(null); // 수량
-  const [ccbaAsdt, setCcbaAsdt] = useState<string | null>(null); // 지정일
-  const [ccbaLcad, setCcbaLcad] = useState<string | null>(null); // 소재지
-  const [ccceName, setCcceName] = useState<string | null>(null); // 시대
-  const [ccbaPoss, setCcbaPoss] = useState<string | null>(null); // 소유자
-  const [ccbaAdmin, setCcbaAdmin] = useState<string | null>(null); // 관리자
-  const [content, setContent] = useState<string | null>(null); // 국가유산 내용 (content)
+
+  // useHeritageData 훅을 사용하여 국가유산 데이터와 이미지를 가져옵니다.
+  const {
+    gcodeName,
+    bcodeName,
+    mcodeName,
+    scodeName,
+    ccbaQuan,
+    ccbaAsdt,
+    ccbaLcad,
+    ccceName,
+    ccbaPoss,
+    ccbaAdmin,
+    content,
+  } = useHeritageData(ccbaKdcd, ccbaAsno, ccbaCtcd); 
 
   const formatDate = (date: string | null | undefined) => {
-    if (!date) return ''; // null 또는 undefined일 경우 빈 문자열 반환
+    if (!date) return ''; 
     return date.replace(/(\d{4})(\d{2})(\d{2})/, '$1년 $2월 $3일');
-  };
-
-  useEffect(() => {
-    // ccbaKdcd, ccbaAsno, ccbaCtcd 값이 존재하면 이미지를 가져오는 함수 실행
-    if (ccbaKdcd && ccbaAsno && ccbaCtcd) {
-      fetchImageData(ccbaKdcd, ccbaAsno, ccbaCtcd); // 이미지 데이터 가져오는 함수
-      fetchHeritageData(ccbaKdcd, ccbaAsno, ccbaCtcd); // 국가유산 정보 가져오는 함수
-    }
-  }, [ccbaKdcd, ccbaAsno, ccbaCtcd]);
-
-  // 이미지를 가져오는 비동기 함수
-  const fetchImageData = async (ccbaKdcd: string, ccbaAsno: string, ccbaCtcd: string) => {
-    try {
-      const response = await fetch(
-        `http://www.khs.go.kr/cha/SearchImageOpenapi.do?ccbaKdcd=${ccbaKdcd}&ccbaAsno=${ccbaAsno}&ccbaCtcd=${ccbaCtcd}`
-      );
-      const xmlData = await response.text();  // 응답 받은 XML 데이터를 텍스트로 변환
-      const result = await parseStringPromise(xmlData);  // XML 텍스트를 JSON으로 파싱
-
-      // 파싱한 데이터에서 이미지 URL을 추출
-      const imageUrl = result.result.item?.[0]?.imageUrl?.[0];
-      setImageUrl(imageUrl || 'https://via.placeholder.com/150'); // 이미지 URL을 상태에 저장 (기본값 설정)
-    } catch (error) {
-      console.error('이미지 데이터 가져오기 실패:', error); // 에러가 발생하면 콘솔에 출력
-    }
-  };
-
-  // 국가유산 정보 가져오는 비동기 함수
-  const fetchHeritageData = async (ccbaKdcd: string, ccbaAsno: string, ccbaCtcd: string) => {
-    try {
-      const response = await fetch(
-        `http://www.khs.go.kr/cha/SearchKindOpenapiDt.do?ccbaKdcd=${ccbaKdcd}&ccbaAsno=${ccbaAsno}&ccbaCtcd=${ccbaCtcd}`
-      );
-      const xmlData = await response.text();  // 응답 받은 XML 데이터를 텍스트로 변환
-      const result = await parseStringPromise(xmlData);  // XML 텍스트를 JSON으로 파싱
-
-      // 파싱한 데이터에서 국가유산명(국문), 국가유산종목, ccmaName을 추출
-      const heritageName = result.result.item?.[0]?.ccbaMnm1?.[0];  // 국가유산명(국문)
-      const heritageHanja = result.result.item?.[0]?.ccbaMnm2?.[0]; // 국가유산명(한자)
-      const heritageCategory = result.result.item?.[0]?.ccmaName?.[0];  // 국가유산종목
-      const gcodeName = result.result.item?.[0]?.gcodeName?.[0]; // 국가유산분류
-      const bcodeName = result.result.item?.[0]?.bcodeName?.[0]; // 국가유산분류2
-      const mcodeName = result.result.item?.[0]?.mcodeName?.[0]; // 국가유산분류3
-      const scodeName = result.result.item?.[0]?.scodeName?.[0]; // 국가유산분류4
-      const ccbaQuan = result.result.item?.[0]?.ccbaQuan?.[0]; // 수량
-      const ccbaAsdt = result.result.item?.[0]?.ccbaAsdt?.[0]; // 지정일
-      const ccbaLcad = result.result.item?.[0]?.ccbaLcad?.[0]; // 소재지
-      const ccceName = result.result.item?.[0]?.ccceName?.[0]; // 시대
-      const ccbaPoss = result.result.item?.[0]?.ccbaPoss?.[0]; // 소유자
-      const ccbaAdmin = result.result.item?.[0]?.ccbaAdmin?.[0]; // 관리자
-      const content = result.result.item?.[0]?.content?.[0]; // 국가유산 내용 
-
-      // 상태에 저장
-      setHeritageName(heritageName || '정보 없음');
-      setHeritageCategory(heritageCategory || '정보 없음');
-      setHeritageHanja(heritageHanja || '정보 없음');
-      setGcodeName(gcodeName || '정보 없음');
-      setBcodeName(bcodeName || '정보 없음');
-      setMcodeName(mcodeName || '정보 없음');
-      setScodeName(scodeName || '정보 없음');
-      setCcbaQuan(ccbaQuan || '정보 없음');
-      setCcbaAsdt(ccbaAsdt || '정보 없음');
-      setCcbaLcad(ccbaLcad || '정보 없음');
-      setCcceName(ccceName || '정보 없음');
-      setCcbaPoss(ccbaPoss || '정보 없음');
-      setCcbaAdmin(ccbaAdmin || '정보 없음');
-      setContent(content || '국가유산에 대한 설명.');
-
-    } catch (error) {
-      console.error('국가유산 데이터 가져오기 실패:', error);
-    }
   };
 
   return (
     <div>
-      <div className="relative">
-        <div className="absolute inset-0 bg-black opacity-50"></div>
-        {/* 이미지 */}
-        <img
-          src={imageUrl || 'https://via.placeholder.com/150'}
-          alt="CultureImage"
-          className="bg-slate-300 w-full h-96 object-cover"
-        />
-
-        {/* 이미지 위 텍스트 */}
-        <h1 className="absolute top-[46%] left-[10.5%] font-pretendard text-white text-3xl font-semibold">{heritageCategory}</h1>
-        <h1 className="absolute top-[60%] left-[10%] font-pretendard text-white text-5xl font-bold">{heritageName} ({heritageHanja})</h1>
-        <h1 className="absolute top-[75%] left-[12%] text-white text-xl font-bold"></h1>
-      </div>
+      <DetailHeroImage/>
 
       <div className="relative w-full flex items-start">
   {/* 왼쪽 콘텐츠 */}
@@ -186,27 +104,14 @@ export default function Detail() {
     </div>
   ))}
 </div>
-
-
-
   </div>
 </div>
-
        <DetailMap/>
-
-      {/* 댓글 및 관련 영상 */}
-
       <div className="flex w-full"> 
-  <Comments />
-  
-  <div className="w-[1000] p-4 h-[430px] mt-[4.5vh] mr-24">
-    <h1 className="text-[#FF5DAB] font-pretendard text-xl font-semibold tracking-extra-wide z-20 relative mt-2 ml-2">VIDEO</h1>
-    <h1 className="text-black text-4xl font-pretendard font-semibold mb-3 ml-2 mt-3">관련 영상보기</h1>
-    <div className="w-[100%] h-[1px] bg-gray-400 mb-5 ml-1"/>
-    <p className="text-black text-xl font-medium">여기에 관련 영상이 표시됩니다.</p>
-  </div>
-</div>
-      <MoreImage/>
-    </div>
+     <Comments />
+      <DetailVideo/>
+      </div>
+      <DetailMoreImage/>
+     </div>
   );
 }

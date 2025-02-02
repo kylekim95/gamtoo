@@ -14,7 +14,7 @@ export default function Culture() {
     <div className="mb-10">
     <HeritageCard/>
     </div>
-    <div className="absolute top-72 left-1/2 transform -translate-x-1/2 z-20">
+    <div className="absolute top-60 left-1/2 transform -translate-x-1/2 z-20">
     <SearchBar  />
       </div>
       </div>

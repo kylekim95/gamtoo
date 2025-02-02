@@ -5,7 +5,7 @@ import axios from "axios";
 import { useSearchParams } from "next/navigation";
 import { parseStringPromise } from "xml2js"; // xml을 json으로 변환
 
-const MoreImage = () => {
+export default function DetailMoreImage(){
   const searchParams = useSearchParams();
 
   const ccbaKdcd = searchParams.get("ccbaKdcd");
@@ -30,8 +30,6 @@ const MoreImage = () => {
           }
         );
 
-        console.log("✅ API 응답 성공:", response.data);
-
         // XML -> JSON 변환
         const result = await parseStringPromise(response.data);
         console.log("🛠 변환된 JSON 데이터:", result);
@@ -47,7 +45,6 @@ const MoreImage = () => {
           return acc;
         }, []) || [];
 
-        console.log("🖼️ 추출된 이미지 리스트:", imageList);
 
         if (imageList.length === 0) {
           console.error("❌ 이미지가 존재하지 않습니다!");
@@ -99,4 +96,4 @@ const MoreImage = () => {
   );
 };
 
-export default MoreImage;
+
