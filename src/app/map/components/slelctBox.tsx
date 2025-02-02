@@ -1,4 +1,4 @@
-import { SelectProps } from "../../../../types/Map";
+import { SelectProps } from "../../../types/Map";
 
 export default function SelectBox({ checked,name, value, title, handleChange }: SelectProps) {
   return (
