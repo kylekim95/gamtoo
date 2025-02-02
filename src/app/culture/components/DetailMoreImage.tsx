@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useSearchParams } from "next/navigation";
-import { parseStringPromise } from "xml2js"; // xml을 json으로 변환
+import { parseStringPromise } from "xml2js";
 
 export default function DetailMoreImage(){
   const searchParams = useSearchParams();
@@ -30,14 +30,9 @@ export default function DetailMoreImage(){
           }
         );
 
-        // XML -> JSON 변환
         const result = await parseStringPromise(response.data);
         console.log("🛠 변환된 JSON 데이터:", result);
-
-        // 변환된 데이터 구조 확인
         console.log("📝 구조 확인:", result?.result?.item);
-
-        // 이미지 URL 추출 (각각의 item에서 imageUrl을 다 추출하여 합침)
         const imageList = result?.result?.item?.reduce((acc: string[], item: any) => {
           if (Array.isArray(item.imageUrl)) {
             acc.push(...item.imageUrl); // 이미지 URL 배열을 합침
@@ -79,7 +74,7 @@ export default function DetailMoreImage(){
             <img
               src={img}
               alt={`문화재 이미지 ${index}`}
-              className="w-full h-full object-cover rounded-lg"  // 여기서 border-radius를 적용
+              className="w-full h-full object-cover rounded-lg"
             />
           </div>
         ))

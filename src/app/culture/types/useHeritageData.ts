@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { parseStringPromise } from 'xml2js';
 
 export const useHeritageData = (ccbaKdcd: string | null, ccbaAsno: string | null, ccbaCtcd: string | null) => {
-  const [videoUrl, setVideoUrl] = useState<string | null>(null);  // 동영상 URL을 저장할 상태 추가
+  const [videoUrl, setVideoUrl] = useState<string | null>(null); 
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [heritageName, setHeritageName] = useState<string | null>(null);
   const [heritageHanja, setHeritageHanja] = useState<string | null>(null);
@@ -24,7 +24,7 @@ export const useHeritageData = (ccbaKdcd: string | null, ccbaAsno: string | null
     if (ccbaKdcd && ccbaAsno && ccbaCtcd) {
       fetchImageData(ccbaKdcd, ccbaAsno, ccbaCtcd);
       fetchHeritageData(ccbaKdcd, ccbaAsno, ccbaCtcd);
-      fetchVideoData(ccbaKdcd, ccbaAsno, ccbaCtcd);  // 동영상 URL도 가져오는 함수 호출
+      fetchVideoData(ccbaKdcd, ccbaAsno, ccbaCtcd); 
     }
   }, [ccbaKdcd, ccbaAsno, ccbaCtcd]);
 
@@ -34,15 +34,14 @@ export const useHeritageData = (ccbaKdcd: string | null, ccbaAsno: string | null
         `http://www.khs.go.kr/cha/SearchVideoOpenapi.do?ccbaKdcd=${ccbaKdcd}&ccbaAsno=${ccbaAsno}&ccbaCtcd=${ccbaCtcd}`
       );
       const xmlData = await response.text();
-      const result = await parseStringPromise(xmlData);  // xml2js로 XML 데이터를 JSON으로 파싱
-  
-      // XML에서 videoUrl 추출
+      const result = await parseStringPromise(xmlData);  
+
       const videoUrl = result.result.item?.[0]?.videoUrl?.[0];
       
       if (videoUrl) {
-        setVideoUrl(videoUrl);  // videoUrl을 상태에 저장
+        setVideoUrl(videoUrl);  
       } else {
-        setVideoUrl(null);  // videoUrl이 없을 경우 null 처리
+        setVideoUrl(null); 
       }
     } catch (error) {
       console.error('동영상 데이터 가져오기 실패:', error);
@@ -92,7 +91,7 @@ export const useHeritageData = (ccbaKdcd: string | null, ccbaAsno: string | null
 
   return {
     imageUrl,
-    videoUrl,  // videoUrl을 반환
+    videoUrl,  
     heritageName,
     heritageHanja,
     heritageCategory,

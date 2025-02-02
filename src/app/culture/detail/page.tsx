@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react';
-import { useSearchParams } from 'next/navigation'; // 쿼리 파라미터를 사용하기 위한 훅
+import { useSearchParams } from 'next/navigation';
 import DetailMap from '../components/DetailMap';
 import Comments from '../components/Comments';
 import DetailMoreImage from '../components/DetailMoreImage';
@@ -10,14 +10,10 @@ import DetailHeroImage from '../components/DetailHeroImage';
 import DetailVideo from '../components/DetailVideo';
 
 export default function Detail() {
-  const searchParams = useSearchParams();  // searchParams 훅을 사용하여 URL에서 파라미터를 가져옵니다.
-
-  // URL에서 'ccbaKdcd', 'ccbaAsno', 'ccbaCtcd' 값을 가져옵니다.
+  const searchParams = useSearchParams();  
   const ccbaKdcd = searchParams.get('ccbaKdcd');
   const ccbaAsno = searchParams.get('ccbaAsno');
   const ccbaCtcd = searchParams.get('ccbaCtcd');
-
-  // useHeritageData 훅을 사용하여 국가유산 데이터와 이미지를 가져옵니다.
   const {
     gcodeName,
     bcodeName,
@@ -42,6 +38,7 @@ export default function Detail() {
       <DetailHeroImage/>
 
       <div className="relative w-full flex items-start">
+
   {/* 왼쪽 콘텐츠 */}
   <div className="w-2/3 p-4 mt-[3vh] mr-32 ml-20">
     <h1 className="text-[#FF5DAB] font-pretendard text-xl ml-1 mt-1 font-semibold tracking-extra-wide">
@@ -59,6 +56,7 @@ export default function Detail() {
 
   {/* 오른쪽 콘텐츠 */}
   <div className="w-[800px] bg-white border-2 border-solid border-gray-400 p-4 mt-[4.5vh] mr-20 relative shadow-xl">
+   
     {/* 회색 배경 div */}
     <div className="bg-gray-300 opacity-20 w-full h-[22%] absolute top-[0%] left-0 z-0"/>
 

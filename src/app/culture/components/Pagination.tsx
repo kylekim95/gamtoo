@@ -7,11 +7,9 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalCnt, pageUnit
   const totalPages = Math.ceil(totalCnt / pageUnit);  // 전체 페이지 수 계산
   const pageGroupSize = 5;  // 한 번에 보여줄 페이지 수
 
-  // 페이지 번호의 그룹을 동적으로 계산
   const [startPage, setStartPage] = useState<number>(1);
   const [endPage, setEndPage] = useState<number>(Math.min(pageGroupSize, totalPages));
 
-  // 페이지 변경 시 startPage와 endPage를 업데이트
   useEffect(() => {
     const halfGroupSize = Math.floor(pageGroupSize / 2);
 
