@@ -123,7 +123,7 @@ export default function Card(category: Category) {
   return (
     <>
       {/* // 카드 리스트들을 차지하는 영역 */}
-      <div className=" w-[94%] ">
+      <div className=" w-[100%] ">
         <CultureCard item={paginatedItems} imageData={imageData} />
       </div>
 
