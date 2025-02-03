@@ -1,30 +1,47 @@
 import { VideoCameraIcon } from "@heroicons/react/20/solid";
+import { useState } from "react";
 
 export default function VideoList() {
+  const [playingIndex, setPlayingIndex] = useState<number | null>(null);
+
   interface videoItem {
     title: string;
     videoUrl: string;
+    imgUrl: string;
+    time: string;
   }
   const items: videoItem[] = [
     {
-      title: "옹기장이",
+      title: "천년의 고도, 경주의 밤",
       videoUrl:
-        "http://116.67.83.213/webdata/file_data/media_data/videos/gosee_vdo_flv_20080047.mp4",
+        "http://uci.k-heritage.tv/resolver/I801:1501001-001-V00057@N2R:1",
+      imgUrl:
+        "https://www.heritage.go.kr/unisearch/images/national_treasure/2021032415274702.JPG",
+      time: "2분 55초",
     },
     {
       title: "금동미륵보살반가유상",
       videoUrl:
         "http://uci.k-heritage.tv/resolver/I801:1610003-004-V00005@N2R:1",
+      imgUrl:
+        "https://www.heritage.go.kr/unisearch/images/national_treasure/2021092813404504.jpg",
+      time: "2분 15초",
     },
     {
-      title: "독도",
+      title: "동쪽 가장 끝 섬, 독도",
       videoUrl:
         "http://uci.k-heritage.tv/resolver/I801:1610002-005-V00019@N2R:1",
+      imgUrl:
+        "https://www.heritage.go.kr/unisearch/images/natural_monument/1631713.jpg",
+      time: "1분 35초",
     },
     {
-      title: "여주 고달사지 승탑",
+      title: "백제금동대향로",
       videoUrl:
-        "http://116.67.83.213/webdata/file_data/media_data/videos/gosee_vdo_flv_20080047.mp4",
+        "http://uci.k-heritage.tv/resolver/I801:1501001-001-V00079@N2R:1",
+      imgUrl:
+        "https://www.heritage.go.kr/unisearch/images/national_treasure/2021102610465405.jpg",
+      time: "8분 56초",
     },
   ];
 
@@ -64,20 +81,52 @@ export default function VideoList() {
             </div>
           </div>
         </div>
-        <div className="flex flex-wrap justify-center gap-5  ">
+        <div className="flex flex-wrap justify-center gap-5">
           {items.map((item, index) => (
             <div
               key={index}
-              className="mt-7 w-[45%] shadow-[5px_5px_5px_#ccc8c8]"
+              className="relative mt-7 w-[45%] shadow-[5px_5px_5px_#ccc8c8] rounded-lg overflow-hidden"
             >
-              <iframe
-                className="w-[100%] h-[220px]"
-                src={item.videoUrl.replace("?si=", "?")}
-                title={item.title}
-              ></iframe>
-              <div className="flex flex-row gap-4 items-center text-base text-black font-semibold py-3 ml-2 h-[60px]">
-                <VideoCameraIcon className="size-5" />
-                {item.title}
+              {playingIndex === index ? (
+                <iframe
+                  className="w-full h-[220px] rounded-lg"
+                  src={item.videoUrl.replace("?si=", "?")}
+                  title={item.title}
+                  allowFullScreen
+                ></iframe>
+              ) : (
+                <div
+                  className="relative cursor-pointer"
+                  onClick={() => setPlayingIndex(index)}
+                >
+                  <img
+                    className="w-full h-[220px] object-cover"
+                    src={item.imgUrl}
+                    alt={item.title}
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                    <svg
+                      className="w-16 h-16 text-white"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  </div>
+                </div>
+              )}
+              <div className="flex flex-col justify-center items-start ml-2">
+                <div className="flex flex-row gap-3 items-center text-base text-black font-semibold h-[60px]">
+                  <VideoCameraIcon className="size-5" />
+                  {item.title}
+                </div>
+                <div
+                  className="font-semibold text-sm text-[#636D72]
+                "
+                >
+                  {item.time}
+                </div>
               </div>
             </div>
           ))}
