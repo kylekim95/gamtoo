@@ -120,29 +120,22 @@ export default function User() {
     <>
       <div className="bg-[#F6E3C1] h-[850px] flex flex-col items-center">
         {/* 상단 */}
-        <div className="w-[50%] h-[30%] bg-white mt-10 rounded-2xl flex flex-col">
+        <div className="w-[50%] h-[30%] bg-white mt-10 rounded-2xl flex flex-col ">
           {/* 제목 */}
           <div className="flex flex-row gap-5 items-center ml-5 mt-6">
             <MegaphoneIcon className="size-9 stroke-[1]" />
             <span>공지사항</span>
           </div>
           {/* 내용 */}
-          <div className="flex flex-col items-center mt-2 gap-2">
+          <div className="flex flex-col items-start mt-4 gap-2 ml-[75px]">
+            <div>회원님의 소중한 개인정보는 안전하게 보호됩니다.</div>
             <div>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi,
-              minima?
+              변경할 정보를 입력한 후{" "}
+              <span className="font-bold">"수정하기"</span> 버튼을 눌러주세요.
             </div>
             <div>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi,
-              minima?
-            </div>
-            <div>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi,
-              minima?
-            </div>
-            <div>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi,
-              minima?
+              비밀번호 변경 시 보안 강화를 위해 영문, 숫자, 특수문자를 포함해
+              주세요.
             </div>
           </div>
         </div>

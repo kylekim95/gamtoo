@@ -1,6 +1,6 @@
 // 외부
 import { CheckIcon } from "@heroicons/react/20/solid";
-import Card from "@/components/CultureList";
+import CultureList from "@/components/CultureList";
 import { useState } from "react";
 
 export default function Heritage() {
@@ -79,7 +79,7 @@ export default function Heritage() {
       </div>
       {/* 문화재 리스트 하단 부분 */}
       <div className="flex flex-col w-[100%] items-center mt-4">
-        <Card category={category} />
+        <CultureList category={category} />
       </div>
     </>
   );
