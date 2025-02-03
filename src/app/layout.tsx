@@ -16,7 +16,7 @@ import { useAppSelector } from "@/lib/redux/store";
 import GagsiMaskIcon from "@/components/quiz/svg/GagsiMaskIcon";
 import React, { useState } from "react";
 import NotificationModal from "@/components/NotificationModal";
-import Logo from "../../public/logo.png"
+import Logo from "../../public/logo.png";
 import axios from "axios";
 import NotificationExtractData from "@/components/NotificationExtractData";
 import Image from "next/image";
@@ -91,9 +91,7 @@ interface props {
 function Header({ isNotification, notificationHandler }: props) {
   const router = useRouter();
 
-
- const {isAuth, userId} = useAppSelector((state) => state.authReducer.value);
-
+  const { isAuth, userId } = useAppSelector((state) => state.authReducer.value);
 
   return (
     <header className="flex justify-between items-center h-[70px] px-9 bg-[#FFFFFF] min-w-full">
@@ -107,7 +105,7 @@ function Header({ isNotification, notificationHandler }: props) {
           className="icon gap-4 flex flex-row justify-center items-center hover:cursor-pointer"
         >
           {" "}
-          <Image className="w-[68px] h-[44px]" src={Logo} alt={""}/>
+          <Image className="w-[68px] h-[44px]" src={Logo} alt={""} />
           {/*<GamtooIcon />*/}
           <div className="flex flex-col text-black h-[60px]">
             <span className="text-stone-500 font-semibold text-[10px]">
@@ -195,18 +193,18 @@ function Header({ isNotification, notificationHandler }: props) {
             </svg>
           )}
 
-          <div className="w-[60px] h-[60px] rounded-full border-2 overflow-hidden content-center border-black">
+          <div
+            onClick={() => {
+              router.push("/user");
+            }}
+            className="w-[60px] h-[60px] rounded-full border-2 overflow-hidden content-center border-black hover:cursor-pointer"
+          >
             <GagsiMaskIcon width={56} height={53} color={"#00000"} />
           </div>
         </div>
       ) : (
         <div className="right flex flex-row items-center gap-5">
-          <UserCircleIcon
-            onClick={() => {
-              router.push("/user");
-            }}
-            className="size-8 text-black hover:cursor-pointer"
-          />
+          <UserCircleIcon className="size-8 text-black hover:cursor-pointer" />
           <span
             onClick={() => {
               router.push("/login");
