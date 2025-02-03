@@ -37,7 +37,7 @@ export default function CapsuleSelectMenu(props : CapsuleSelectMenuProps) {
     if(props.onSelectedChanged){
       props.onSelectedChanged(Object.entries(selectedItems));
     }
-  }, [selectedItems, props]);
+  }, [selectedItems, props.onSelectedChanged]);
 
   return (
     <div className={props.className}>

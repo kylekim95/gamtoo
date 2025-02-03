@@ -3,20 +3,17 @@
 import React from 'react'
 
 import GagsiMaskIcon from '@/components/quiz/svg/GagsiMaskIcon'
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 type ImportantRankCardProps = {
   className: string;
   color: string;
   header: string;
   uid: string;
+  iconColor: string;
 }
 
-export default function ImportantRankCard(props : ImportantRankCardProps) {
-  const router = useRouter();
-  
-  function OnClickDetails(){router.push('/rankingDetail');}
-
+export default function ImportantRankCard(props : ImportantRankCardProps) { 
   return (
     <div 
       className={'bg-white overflow-hidden flex flex-col justify-center rounded-lg ' + props.className}
@@ -26,15 +23,16 @@ export default function ImportantRankCard(props : ImportantRankCardProps) {
         <span className='text-xs' style={{color: props.color}}>{props.header}</span>
       </div>
       <div className='text-black h-[60%] flex items-center justify-center text-sm font-bold'>
-        <GagsiMaskIcon color={"#222222"} className='h-[75%] aspect-square border-[3px] border-[#222222] rounded-full'/>
+        <GagsiMaskIcon color={props.iconColor} className='h-[75%] aspect-square rounded-full'/>
       </div>
-      <div 
-        onClick={OnClickDetails}
+      <Link 
+        href = {`/rankingDetail?uid=${props.uid}`}
+        // onClick={OnClickDetails}
         className='cursor-pointer text-black h-[20%] flex items-center justify-center text-sm font-bold'
         style={{backgroundColor: props.color}}
       >
         <span className='text-white text-xs'>상세 보기</span>
-      </div>
+      </Link>
     </div>
   )
 }
