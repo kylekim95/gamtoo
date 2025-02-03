@@ -4,6 +4,7 @@ import React from "react";
 import HeroImage from "./components/HeroImage";
 import HeritageCard from "./components/HeritageCard";
 import SearchBar from "./components/SearchBar";
+import SearchCard from "./components/SearchCard";
 
 export default function Culture() {
 
@@ -11,6 +12,7 @@ export default function Culture() {
     <div>
     <div className="main ">
       <HeroImage/>
+      <SearchCard/>
     <div className="mb-10">
     <HeritageCard/>
     </div>

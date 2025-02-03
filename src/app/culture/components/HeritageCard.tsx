@@ -39,7 +39,6 @@ export default function HeritageCard() {
       );
       const xmlData = await response.text();
       const result = await parseStringPromise(xmlData); 
-
       const items = result.result.item.map((item: any) => ({
         ccmaName: item.ccmaName[0], // 국가유산종목
         ccbaMnm1: item.ccbaMnm1[0], // 국가유산명(국문)
