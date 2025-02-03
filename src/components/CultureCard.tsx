@@ -1,19 +1,27 @@
 import Image from "next/image";
-import { heritage } from "@/types/heritageData";
 import { MapPinIcon } from "@heroicons/react/20/solid";
+import { HeritageData } from "@/app/culture/types/HeritageData";
+import { useRouter } from "next/navigation";
 
 interface CultureCardProps {
-  item: heritage[]; // item은 heritage 타입의 배열로 설정
+  item: HeritageData[]; // item은 heritage 타입의 배열로 설정
+  imageData: Map<string, string>;
 }
 
-export default function CultureCard({ item }: CultureCardProps) {
+export default function CultureCard({ item, imageData }: CultureCardProps) {
+  const router = useRouter();
   return (
-    <div className="w-[100%] flex flex-wrap gap-[3%] mx-[3%]">
+    <div className="w-[100%] flex flex-row justify-between items-center ">
       {item &&
-        item.map((item: heritage, index: number) => (
+        item.map((item: HeritageData, index: number) => (
           // 카드 한장의 너비와 높이를 차지하는 영역
           <div
-            className="flex flex-col w-[280px] h-[320px] rounded-md overflow-hidden shadow-[5px_5px_5px_#ccc8c8] mb-8"
+            onClick={() => {
+              router.push(
+                `/culture/detail?ccbaKdcd=${item.ccbaKdcd}&ccbaAsno=${item.ccbaAsno}&ccbaCtcd=${item.ccbaCtcd}`
+              );
+            }}
+            className="flex flex-col w-[280px] h-[320px] rounded-md overflow-hidden shadow-[5px_5px_5px_#ccc8c8] mb-8 hover:cursor-pointer"
             key={index}
           >
             {/* 이미지가 차지하는 영역 */}
@@ -22,8 +30,12 @@ export default function CultureCard({ item }: CultureCardProps) {
                   - 즉 div의 너비를 220px, 높이를 200px 설정한다
                   - 자식인 이미지는 부모 컨터에이너를 꽉 채운다 */}
               <Image
-                src={item.imageUrl}
-                alt={item.name}
+                src={
+                  imageData.get(
+                    `${item.ccbaKdcd}_${item.ccbaAsno}_${item.ccbaCtcd}`
+                  ) || "https://via.placeholder.com/150"
+                }
+                alt={item.ccbaMnm1}
                 fill // 부모 컨테이너를 채우도록 설정
                 priority // LCP로 감지된 이미지에 우선순위 부여
                 sizes="280px" // 부모 컨테이너의 고정 너비와 동일하게 설정
@@ -40,15 +52,15 @@ export default function CultureCard({ item }: CultureCardProps) {
             {/* 유형, 이름, 주소를 세로로 정렬하기 위해 flex flex-col 사용 */}
             <div className="flex flex-col justify-center gap-1 ml-2">
               <span className="text-[#4F6CF3] text-xs font-bold">
-                {item.designation}
+                {item.ccmaName}
               </span>
               <span className="text-black text-base font-bold">
-                {item.name}
+                {item.ccbaMnm1}
               </span>
               <div className="flex flex-row items-center">
                 <MapPinIcon className="size-5 text-black" />
                 <span className="text-black text-xs font-bold">
-                  {item.address}
+                  {item.ccsiName}
                 </span>
               </div>
             </div>

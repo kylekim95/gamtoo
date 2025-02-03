@@ -7,7 +7,7 @@ import LoginType from "@/types/LoginType";
 import {useRouter} from "next/navigation";
 import axios from "axios";
 import {useDispatch} from "react-redux";
-import {AppDispatch} from "@/lib/redux/store";
+import {AppDispatch, useAppSelector} from "@/lib/redux/store";
 import {logIn} from "@/lib/redux/slice/authSlice";
 
 interface SignupType extends LoginType {
@@ -35,6 +35,7 @@ export default function LoginPage() {
   });
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
+  const {isAuth, userName, userId} = useAppSelector((state) => state.authReducer.value);
 
   const toggle = () => {
     setIsActive(!isActive);
@@ -69,12 +70,12 @@ export default function LoginPage() {
       console.log("login error => ", response.status)
       return;
     }
-    axios.defaults.headers.common['Authorization'] = response.data.token;
+    axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
     dispatch(logIn({
       isAuth: true,
       userName: response.data.user.fullName,
       userId: response.data.user._id
-    }))
+    }));
     router.push('/');
   }
 
@@ -136,7 +137,7 @@ export default function LoginPage() {
               />
             </form>
             <p className="mt-5 text-sm uppercase text-black">
-              아직 감투의 회원이 아닌신가요?{'   '}
+              아직 감투의 회원이 아니신가요?{'   '}
               <button
                 className="font-bold text-[#BF9AF0] hover:underline"
                 onClick={toggle}
@@ -155,7 +156,7 @@ export default function LoginPage() {
         >
           <Image src={loginImage} alt={""} className="w-full"/>
           <div className="flex flex-col items-center justify-center h-[400px] bg-white">
-            <h1 className="mb-5 text-xl text-center">Create An Account</h1>
+            <h1 className="mb-5 text-2xl font-semibold text-center">회원가입</h1>
             <form method="post" className="flex flex-col w-[340px] gap-5">
               <input
                 type="email"

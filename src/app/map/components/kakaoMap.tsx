@@ -10,78 +10,8 @@ import {
 } from "react-kakao-maps-sdk";
 
 //컴포넌트 정의
-import { MapItem } from "../../../../types/Map";
-
-// custom 인포윈도우
-function InfoWindows({
-  item,
-  setOpenOverlayId,
-  searchLoadHandler,
-}: {
-  item: any;
-  setOpenOverlayId: any;
-  searchLoadHandler: (e: any) => void;
-}) {
-  return (
-    <CustomOverlayMap
-      position={{
-        lat: item.latitude,
-        lng: item.longitude,
-      }}
-      zIndex={1000}
-      clickable={true}
-    >
-      <div className="wrap absolute left-0 bottom-10">
-        <div
-          onClick={() => setOpenOverlayId(null)}
-          className="w-7 h-7 rounded-full flex items-center justify-center absolute right-2 top-2 z-50 transition-all duration-300 hover:opacity-100 opacity-30 bg-white"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="size-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M6 18 18 6M6 6l12 12"
-            />
-          </svg>
-        </div>
-        <div className="max-w-lg rounded relative overflow-hidden bg-white shadow-lg">
-          <img
-            className="w-full max-h-96 object-cover"
-            src={item.item.imageUrl}
-            alt="Sunset in the mountains"
-          />
-
-          <div className="px-6 py-4">
-            <div className="font-bold text-xl mb-2">
-              {item.item.bcodeName} <span>[{item.item.ccmaName}]</span>
-            </div>
-            <p className="text-gray-700 truncate text-ellipsis text-base">
-              {item.item.content}
-            </p>
-          </div>
-          <div className="px-6 justify-between items-center  flex pt-4 pb-2">
-            <p className=" flex items-center justify-center bg-gray-200 rounded-full px-3 py-1 text-xs tracking-tight font-semibold text-gray-700 ">
-              주소: {item.item.ccbaLcad}
-            </p>
-            <p
-              onClick={() => searchLoadHandler(item)}
-              className=" w-28 h-9 text-white flex justify-center items-center py-1 rounded-md hover:bg-[#b23741c2] bg-[#B23742]"
-            >
-              길찾기
-            </p>
-          </div>
-        </div>
-      </div>
-    </CustomOverlayMap>
-  );
-}
+import { MapItem } from "../../../types/Map";
+import InfoCard from "./infoCard";
 
 export default function BasicMap({
   children,
@@ -247,7 +177,7 @@ export default function BasicMap({
             />
 
             {openOverlayId === pos.no && item && (
-              <InfoWindows
+              <InfoCard
                 item={item}
                 searchLoadHandler={searchLoadHandler}
                 setOpenOverlayId={setOpenOverlayId}

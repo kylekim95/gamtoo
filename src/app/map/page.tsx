@@ -10,10 +10,11 @@ import { useRouter, useSearchParams } from "next/navigation";
 import MultiRange from "@/app/map/components/rangeSlider";
 import SelectBox from "@/app/map/components/slelctBox";
 import BasicMap from "@/app/map/components/kakaoMap";
-import { MapItem, SelectProps } from "../../../types/Map";
+import { MapItem, SelectProps } from "../../types/Map";
 import { selectList } from "@/app/map/config/config";
 import { AccordionItem } from "@/app/map/components/accordionItem";
 import { Loading } from "@/app/map/components/loading";
+import PlatformSelector from "./components/select";
 
 
 
@@ -144,11 +145,15 @@ export default function MapPage() {
     router.push(`?${params}`);
   };
 
-  function convertSecondsToTime(seconds: number) {
+  const convertSecondsToTime = (seconds: number) => {
     const hours = Math.floor(seconds / 3600); 
     const minutes = Math.floor((seconds % 3600) / 60); 
     return `${hours}시간 ${minutes}분`;
   }
+
+  const convertToKRW = (amount: number | bigint) => {
+    return new Intl.NumberFormat("ko-KR").format(amount);
+  };
 
   // 길찾기 모달창 닫는 함수
   const backLoad = () => {
@@ -178,7 +183,7 @@ export default function MapPage() {
           } transition-all duration-300 max-w-96 z-50 top-36`}
         >
           {!isLoadOpen ? (
-            <div className=" absolute w-10 h-10 flex items-center justify-center bg-white -right-10  rounded-r-lg top-10">
+            <div className=" absolute w-10 h-10 flex items-center border-y-2 border-r-2 justify-center border-[#4a4a4a]  bg-white -right-10  rounded-r-lg top-10">
               <button onClick={() => setIsNavOpen(!isNavOpen)}>
                 <div className={`${!isNavOpen ? "rotate-180" : null}`}>
                   <svg
@@ -317,6 +322,26 @@ export default function MapPage() {
                     <span className="font-normal text-gray-500 text-sm">
                       {" "}
                       KM
+                    </span>
+                  </p>
+                </div>
+                <div className="flex items-center justify-between gap-4">
+                  <p className="text-lg text-gray-400">택시요금</p>
+                  <p className="text-slate-800 font-semibold text-2xl">
+                    {convertToKRW(load?.summary?.fare.taxi) || "정보 없음"}
+                    <span className="font-normal text-gray-500 text-sm">
+                      {" "}
+                      원
+                    </span>
+                  </p>
+                </div>
+                <div className="flex items-center justify-between gap-4">
+                  <p className="text-lg text-gray-400">톨게이트 비용</p>
+                  <p className="text-slate-800 font-semibold text-2xl">
+                    {convertToKRW(load?.summary?.fare.toll) || "정보 없음"}
+                    <span className="font-normal text-gray-500 text-sm">
+                      {" "}
+                      원
                     </span>
                   </p>
                 </div>

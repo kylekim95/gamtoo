@@ -5,7 +5,6 @@ import { parseISO } from 'date-fns'
 import { ko } from 'date-fns/locale'
 import {DayPicker, getDefaultClassNames} from 'react-day-picker'
 import 'react-day-picker/dist/style.css'
-import NotificationModal from "@/components/NotificationModal";
 
 interface Item {
   seqNo: string;
@@ -56,7 +55,6 @@ const FestivalPage = () => {
     testData();
   },[]);
 
-
   async function testData() {
     const data = await fetch('https://www.cha.go.kr/cha/openapi/selectEventListOpenapi.do?searchYear=2024&searchMonth=6');
     const text = await data.text()
@@ -105,7 +103,7 @@ const FestivalPage = () => {
                   <div key={e.seqNo} className="w-1/6 ml-0">
                     <img className="rounded-lg h-4/6 w-full" src={e.imageUrl} alt={""}/>
                     <div className="absolute">
-                      <p className="relative -top-10 left-2 italic text-5xl drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">{index+1}</p>
+                      <p className="relative -top-10 left-2 italic text-white text-5xl drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">{index+1}</p>
                     </div>
                     <p className="text-black mt-2 font-semibold text-2xl">{e.subTitle}</p>
                     <p className="text-black">{e.subDesc_2}</p>
