@@ -118,7 +118,7 @@ export default function HeritageCard() {
               <div className="w-full h-48 mb-0 relative">
                 <div className="absolute top-0 left-0 w-full h-full bg-gray-200 z-10 rounded-t-lg"></div>
                 <img
-                  src={imageData.get(`${heritage.ccbaKdcd}_${heritage.ccbaAsno}_${heritage.ccbaCtcd}`) || 'https://via.placeholder.com/150'}
+                  src={imageData.get(`${heritage.ccbaKdcd}_${heritage.ccbaAsno}_${heritage.ccbaCtcd}`)}
                   alt="유산 이미지"
                   className="w-full h-full object-contain z-20 relative rounded-lg"
                 />

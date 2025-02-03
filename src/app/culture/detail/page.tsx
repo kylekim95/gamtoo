@@ -107,7 +107,9 @@ export default function Detail() {
        <DetailMap/>
       <div className="flex w-full"> 
      <Comments />
+     <div className='mb-24'>
       <DetailVideo/>
+      </div>
       </div>
       <DetailMoreImage/>
      </div>
