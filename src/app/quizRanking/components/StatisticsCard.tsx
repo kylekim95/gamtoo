@@ -77,6 +77,9 @@ export default function StatisticsCard() {
         display: true,
         text: '랭킹에서 내 위치 확인하기'
       }
+    },
+    scales: {
+      y: {min:0, max:100}
     }
   };
   const testBarVertRef = createRef<ChartJSOrUndefined<"bar", number[], string>>();
@@ -122,7 +125,7 @@ export default function StatisticsCard() {
     },
     scales: {
       y: { stacked: true },
-      x: { beginAtZero: true },
+      x: { beginAtZero: true, min:0, max:1.0 },
     },
     datasets: {
       bar: { barPercentage: 0.5 },
