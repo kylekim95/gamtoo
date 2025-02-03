@@ -1,26 +1,28 @@
 "use client"
 
-import React, { useCallback, createRef } from 'react';
+import React, { useCallback, createRef, useEffect, useState, useMemo } from 'react';
 import KoreaCloudIcon from '@/components/quiz/svg/KoreaCloudIcon';
 import { Doughnut, Bar } from 'react-chartjs-2';
-import { ChartData, ChartOptions } from 'chart.js/auto';
+import { ChartData, ChartDataset, ChartOptions } from 'chart.js/auto';
 import 'chart.js/auto';
 import CapsuleSelectMenu from './CapsuleSelectMenu';
 import { CatCode2String } from '@/components/quiz/CHCategories';
 import GagsiMaskIcon from '@/components/quiz/svg/GagsiMaskIcon';
 import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
 import { useAppSelector } from '@/lib/redux/store';
+import axios from 'axios';
+import useQuizInfoManager, {quizInfo} from '@/components/quiz/useQuizInfoManager';
 
 export default function StatisticsCard() {
-  const {isAuth, userName, userId} = useAppSelector((state) => state.authReducer.value);
+  const {isAuth, userId} = useAppSelector((state) => state.authReducer.value);
 
   // 퀴즈 참여율 관련
-  const testData : ChartData<"doughnut", number[], string> = {
+  const [testData, setTestData] = useState<ChartData<"doughnut", number[], string>>({
     labels: ['😎👍', '😢'],
     datasets: [
       {
         label: '비율',
-        data: [25, 75],
+        data: [0, 100],
         backgroundColor: [
           'rgba(255, 99, 132, 0.5)',
           'rgba(54, 162, 235, 0.5)',
@@ -32,7 +34,7 @@ export default function StatisticsCard() {
         borderWidth: 1,
       },
     ],
-  };
+  });
   const testOptions : ChartOptions<"doughnut"> = {
     responsive: true,
     plugins: {
@@ -41,13 +43,14 @@ export default function StatisticsCard() {
       }
     }
   };
+  const partRateChartRef = createRef<ChartJSOrUndefined<"doughnut", number[], string>>();
   // 랭킹 내 위치 관련
-  const testBarVertData : ChartData<"bar", number[], string> = {
+  const [testBarVertData, setTestBarVertData] = useState<ChartData<"bar", number[], string>>({
     labels: ['0~10','10~20','20~30','30~40','40~50','50~60','60~70','70~80','80~90','90~100'],
     datasets:[
       {
         label:'비율',
-        data:[10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+        data:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         backgroundColor:[
           '#CACACA',
           '#CACACA',
@@ -62,7 +65,7 @@ export default function StatisticsCard() {
         ]
       }
     ]
-  };
+  });
   const testBarVertOptions : ChartOptions<"bar"> = {
     responsive: true,
     maintainAspectRatio: false,
@@ -76,59 +79,39 @@ export default function StatisticsCard() {
       }
     }
   };
+  const testBarVertRef = createRef<ChartJSOrUndefined<"bar", number[], string>>();
   // 오답률 차트 관련
   const errRateChartRef = createRef<ChartJSOrUndefined<"bar", number[], string>>();
-  const realisticMyErrData = {
-    "11": 50,
-    "12": 50,
-    "13": 50,
-    "14": 50,
-    "15": 50,
-    "16": 50,
-    "17": 50,
-    "18": 50,
-    "21": 50,
-    "22": 50,
-    "23": 50,
-    "24": 50,
-    "25": 50,
-    "31": 50,
-    "79": 50,
-    "80": 50
-  };
-  const realisticAllErrData = {
-    "11": 40,
-    "12": 40,
-    "13": 40,
-    "14": 40,
-    "15": 40,
-    "16": 40,
-    "17": 40,
-    "18": 40,
-    "21": 60,
-    "22": 60,
-    "23": 60,
-    "24": 60,
-    "25": 60,
-    "31": 60,
-    "79": 60,
-    "80": 60
-  };
   const initErrRateData : ChartData<"bar", number[], string> = {
     labels: [...Object.values(CatCode2String)],
     datasets:[
       {
         label: '내 오답률',
-        data: isAuth ? Object.values(realisticMyErrData) : [],
+        data: isAuth ? [0,0,0,0,0,0,0,0,0,0,0,0,0] : [],
         backgroundColor: '#9999FF'
       },
       {
         label: '전체 유저 오답률',
-        data: Object.values(realisticAllErrData),
+        data: [0,0,0,0,0,0,0,0,0,0,0,0,0],
         backgroundColor: '#CACACA'
       }
     ],
   };
+  const [errRateData, setErrRateData] = useState<ChartData<"bar", number[], string>>({
+    labels: [...Object.values(CatCode2String)],
+    datasets:[
+      {
+        label: '내 오답률',
+        data: isAuth ? [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0] : [],
+        backgroundColor: '#9999FF'
+      },
+      {
+        label: '전체 유저 오답률',
+        data: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        backgroundColor: '#CACACA'
+      }
+    ],
+  });
   const initErrRateOptions : ChartOptions<"bar"> = {
     indexAxis: 'y' as const,
     responsive: true,
@@ -151,15 +134,106 @@ export default function StatisticsCard() {
     if(selectedCat.size === 0){
       selectedCat = new Set(selectedItems.map((elem)=>elem[0]));
     }
-    const selectedCatMyVals = isAuth ? Object.entries(realisticMyErrData).filter(([code])=>selectedCat.has(code)).map((elem)=>elem[1]) : [];
-    const selectedCatAllVals = Object.entries(realisticAllErrData).filter(([code])=>selectedCat.has(code)).map((elem)=>elem[1]);
-    if(errRateChartRef.current){
-      errRateChartRef.current.data.labels = [...selectedCat].map((elem)=>CatCode2StringMap.get(elem) ?? '문화재 분류');
-      errRateChartRef.current.data.datasets[0].data = selectedCatMyVals;
-      errRateChartRef.current.data.datasets[1].data = selectedCatAllVals;
-      errRateChartRef.current.update();
+    // console.log(selectedCat);
+  }, []);
+
+  const {getAllQuizInfo} = useQuizInfoManager();
+  useEffect(()=>{
+    async function Init(){
+      const allUsers = await axios.get(`${process.env.NEXT_PUBLIC_BASIC_URL}/users/get-users`);
+      const quizUsers = await getAllQuizInfo();
+      // partRateChart
+      const numAllUsers = allUsers.data.length;
+      const numQuizUsers = quizUsers.length;
+      console.log(numAllUsers, numQuizUsers);
+      setTestData({
+        labels: ['😎👍', '😢'],
+        datasets: [
+          {
+            label: '비율',
+            data: [100 * (numQuizUsers / numAllUsers), 100 * (1 - numQuizUsers / numAllUsers)],
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.5)',
+              'rgba(54, 162, 235, 0.5)',
+            ],
+            borderColor: [
+              'rgba(255, 99, 132, 1)',
+              'rgba(54, 162, 235, 1)',
+            ],
+            borderWidth: 1,
+          },
+        ],
+      });
+      // 랭킹 내 위치
+      const histogram : quizInfo[][] = [];
+      const colors : string[] = [];
+      for(let i = 0; i < 10; i++){
+        histogram.push(quizUsers.filter((elem)=>elem.highScore >= i * 10 && elem.highScore < 10 * (i + 1)));
+        if(userId !== '' && histogram[i].find((elem)=>elem.id===userId))
+          colors.push('#9999FF');
+        else
+          colors.push('#CACACA');
+      }
+      setTestBarVertData({
+        labels: ['0~10','10~20','20~30','30~40','40~50','50~60','60~70','70~80','80~90','90~100'],
+        datasets:[
+          {
+            label:'비율',
+            data: histogram.map((elem)=>100 * (elem.length / numQuizUsers)),
+            backgroundColor: colors,
+          }
+        ]
+      });
+      // 오답률
+      const newDataset : ChartDataset<"bar", number[]>[] = [];
+      const allQuizData : [[string, number][], [string, number][]] = [];
+      const countCorrect = new Map<string, number>();
+      const countAll = new Map<string, number>();
+      quizUsers.forEach((elem)=>{
+        elem.errRate_Correct.forEach((elem2)=>{
+          if(!countCorrect.get(elem2[0])) countCorrect.set(elem2[0], 0);
+          const curVal = countCorrect.get(elem2[0]) ?? 0;
+          const newVal = elem2[1] + curVal;
+          countCorrect.set(elem2[0], newVal);
+        });
+        elem.errRate_Total.forEach((elem2)=>{
+          if(!countAll.get(elem2[0])) countAll.set(elem2[0], 0);
+          const curVal = countAll.get(elem2[0]) ?? 0;
+          const newVal = elem2[1] + curVal;
+          countAll.set(elem2[0], newVal);
+        });
+      });
+      const newData : number[] = [];
+      countCorrect.forEach((elem)=>{newData.push(elem);});
+      let cnt = 0;
+      countAll.forEach((elem)=>{newData[cnt++] /= elem});
+      const formatData = newData.map((elem)=>isNaN(elem) ? 0 : elem);
+      // console.log(formatData);
+      newDataset.push({
+        label: '전체 유저 오답률',
+        data: formatData,
+        backgroundColor: '#CACACA'
+      });
+      if(userId){
+        const myQuizData = quizUsers.find((elem)=>elem.id===userId);
+        const myErrRateData = myQuizData?.errRate_Correct.map((elem)=>{
+          const total = myQuizData.errRate_Total.find((errTot)=>errTot[0]===elem[0]);
+          if(!total || total[1] === 0) return 0;
+          return elem[1] / total[1];
+        });
+        newDataset.unshift({
+          label: '내 오답률',
+          data: myErrRateData ?? [],
+          backgroundColor: '#9999FF'
+        });
+      }
+      setErrRateData({
+        labels: [...Object.values(CatCode2String)],
+        datasets: newDataset
+      });
     }
-  }, [realisticMyErrData, realisticAllErrData, errRateChartRef, isAuth]);
+    Init();
+  }, [setTestData, setTestBarVertData, setErrRateData, userId]);
 
   return (
     <div className='w-full min-w-[800px] max-w-[1000px] h-auto flex flex-col items-center backdrop-blur-xl rounded-lg shadow-2xl overflow-hidden pb-10'>
@@ -175,10 +249,10 @@ export default function StatisticsCard() {
       <div className='flex flex-col items-center w-full'>
         {/* Participation Doughnut Chart */}
         <div className='w-[20%] mb-5 flex justify-center'>
-          <Doughnut data={testData} options={testOptions}></Doughnut>
+          <Doughnut ref={partRateChartRef} data={testData} options={testOptions}></Doughnut>
         </div>
-        {isAuth && <span className='text-black font-bold text-lg'>문화재 퀴즈에 도전한 25%의 유저 중 한명입니다!</span>}
-        {!isAuth && <span className='text-black font-bold text-lg'>25%의 유저들이 이미 문화재 퀴즈에 도전했습니다!</span>}
+        {isAuth && <span className='text-black font-bold text-lg'>문화재 퀴즈에 도전한 {testData.datasets[0].data[0]}%의 유저 중 한명입니다!</span>}
+        {!isAuth && <span className='text-black font-bold text-lg'>{testData.datasets[0].data[0]}%의 유저들이 이미 문화재 퀴즈에 도전했습니다!</span>}
         {/* Capsule Select Menu */}
         <CapsuleSelectMenu className='w-[80%] h-[100px] m-3 flex flex-wrap justify-center gap-1' items={Object.entries(CatCode2String)} onSelectedChanged={testFunc}/>
         <div className='flex justify-center w-[90%]'>
@@ -189,7 +263,7 @@ export default function StatisticsCard() {
           <div className='w-[40%] h-full flex flex-col'>
             {/* 랭킹 내 위치 */}
             <div className='w-full aspect-square mb-10'>
-              <Bar data={testBarVertData} options={testBarVertOptions}></Bar>
+              <Bar ref={testBarVertRef} data={testBarVertData} options={testBarVertOptions}></Bar>
             </div>
             {/* 각시탈 아이콘 */}
             {/* TODO: 랭크에 맞게 색 설정하기 */}
