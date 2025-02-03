@@ -35,7 +35,7 @@ export default function DetailMoreImage(){
         console.log("📝 구조 확인:", result?.result?.item);
         const imageList = result?.result?.item?.reduce((acc: string[], item: any) => {
           if (Array.isArray(item.imageUrl)) {
-            acc.push(...item.imageUrl); // 이미지 URL 배열을 합침
+            acc.push(...item.imageUrl);
           }
           return acc;
         }, []) || [];

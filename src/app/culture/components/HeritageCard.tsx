@@ -24,8 +24,6 @@ export default function HeritageCard() {
       );
       const xmlData = await response.text();
       const result = await parseStringPromise(xmlData);
-
-      // 이미지 URL 추출
       const imageUrl = result.result.item?.[0]?.imageUrl?.[0];
       if (imageUrl) {
         setImageData((prev) => new Map(prev).set(`${ccbaKdcd}_${ccbaAsno}_${ccbaCtcd}`, imageUrl));
@@ -43,7 +41,6 @@ export default function HeritageCard() {
       const xmlData = await response.text();
       const result = await parseStringPromise(xmlData); 
 
-      // XML에서 필요한 데이터를 추출하여 상태에 저장
       const items = result.result.item.map((item: any) => ({
         ccmaName: item.ccmaName[0], // 국가유산종목
         ccbaMnm1: item.ccbaMnm1[0], // 국가유산명(국문)

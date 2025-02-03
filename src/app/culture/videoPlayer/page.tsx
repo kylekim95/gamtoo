@@ -5,22 +5,16 @@ import { useSearchParams } from 'next/navigation';
 import { useHeritageData } from '../types/useHeritageData';
 
 export default function Video() {
-  // URL의 쿼리 파라미터를 가져옵니다.
   const searchParams = useSearchParams();
   const ccbaKdcd = searchParams.get('ccbaKdcd');
   const ccbaAsno = searchParams.get('ccbaAsno');
   const ccbaCtcd = searchParams.get('ccbaCtcd');
-
-  // 쿼리 파라미터를 기반으로 국가유산 데이터를 가져옵니다.
   const { videoUrl, heritageName, heritageHanja } = useHeritageData(ccbaKdcd, ccbaAsno, ccbaCtcd);
-
-  // videoUrl이 유효한지 확인합니다.
   const isValidVideoUrl =
     videoUrl && videoUrl !== 'http://116.67.83.213/webdata/file_data/media_data/videos/';
 
   return (
     <div className="min-h-screen flex flex-col">
-      {/* 상단 이미지 영역 */}
       <div className="relative w-full">
         <img
           src="https://cdn.pixabay.com/photo/2022/08/05/05/59/korea-7366036_1280.jpg"
@@ -29,7 +23,6 @@ export default function Video() {
         />
         <div className="absolute top-0 left-0 w-full h-72 bg-black bg-opacity-50"></div>
 
-        {/* ✅ 국가유산명 (한글 + 한자) 추가 */}
         <div className="absolute top-[70%] left-48">
           <p className="text-white text-4xl font-bold px-4 py-2 rounded-md">
             {heritageName} ({heritageHanja})
