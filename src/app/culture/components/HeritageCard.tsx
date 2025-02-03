@@ -29,7 +29,6 @@ export default function HeritageCard() {
         setImageData((prev) => new Map(prev).set(`${ccbaKdcd}_${ccbaAsno}_${ccbaCtcd}`, imageUrl));
       }
     } catch (error) {
-      console.error('이미지 데이터 가져오기 실패:', error);
     }
   };
 
@@ -63,7 +62,6 @@ export default function HeritageCard() {
         pageIndex,
       }));
     } catch (error) {
-      console.error('데이터 가져오기 실패:', error);
     }
   };
 
