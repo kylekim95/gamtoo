@@ -17,8 +17,6 @@ import GagsiMaskIcon from "@/components/quiz/svg/GagsiMaskIcon";
 import React, { useState } from "react";
 import NotificationModal from "@/components/NotificationModal";
 import Logo from "../../public/logo.png";
-import axios from "axios";
-import NotificationExtractData from "@/components/NotificationExtractData";
 import Image from "next/image";
 
 // 감투 아이콘
@@ -90,7 +88,6 @@ interface props {
 
 function Header({ isNotification, notificationHandler }: props) {
   const router = useRouter();
-
   const { isAuth, userId } = useAppSelector((state) => state.authReducer.value);
 
   return (
@@ -168,7 +165,7 @@ function Header({ isNotification, notificationHandler }: props) {
               viewBox="0 0 24 24"
               onClick={notificationHandler}
               fill="currentColor"
-              className="size-10 mr-4"
+              className="size-8 mr-4"
             >
               <path d="M3.53 2.47a.75.75 0 0 0-1.06 1.06l18 18a.75.75 0 1 0 1.06-1.06l-18-18ZM20.57 16.476c-.223.082-.448.161-.674.238L7.319 4.137A6.75 6.75 0 0 1 18.75 9v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 0 1-.297 1.206Z" />
               <path

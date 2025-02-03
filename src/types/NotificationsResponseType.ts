@@ -1,5 +1,5 @@
 export interface NotificationsResponseType {
-  seen: true;
+  seen: boolean;
   _id: string;
   author: {
     fullName: string
