@@ -2,15 +2,13 @@
 //라이브러리 정의
 import axios from "axios";
 import { useRef, useState, useEffect, useMemo } from "react";
+import xml2 from "xml2js"
 import {
   Map,
-  MapMarker,
-  CustomOverlayMap,
-  Polyline,
-} from "react-kakao-maps-sdk";
+  MapMarker} from "react-kakao-maps-sdk";
 
 //컴포넌트 정의
-import { MapItem } from "../../../types/Map";
+import { MapItem, RoadItem } from "../../../types/Map";
 import InfoCard from "./infoCard";
 
 export default function BasicMap({
@@ -21,14 +19,14 @@ export default function BasicMap({
 }: {
   children: React.ReactNode;
   data: MapItem[];
-  load: any;
-  searchLoadHandler: (e: any) => void;
+  load?: RoadItem;
+  searchLoadHandler: (e: MapItem) => void;
 }) {
   const mapRef = useRef<kakao.maps.Map | null>(null); 
 
   //state 정의
   const [openOverlayId, setOpenOverlayId] = useState<number | null>(null);
-  const [item, setItem] = useState<any>(null);
+  const [item, setItem] = useState<MapItem | null>(null);
 
 // 지도 재설정 함수
   const bounds = useMemo(() => {
@@ -43,7 +41,7 @@ export default function BasicMap({
 
 // 길찾기 버튼 클릭시 지도 재설정 함수
   const loadbounds = useMemo(() => {
-    if (mapRef.current && load.sections) {
+    if (mapRef.current && load?.sections) {
       const bound = load.sections[0].bound;
       const bounds = new kakao.maps.LatLngBounds();
       bounds.extend(new kakao.maps.LatLng(bound.max_y, bound.max_x));
@@ -53,14 +51,14 @@ export default function BasicMap({
   }, [load]);
 
 // 마커 클릭시 상세정보 데이터 함수
-  const getDetailData = async (pos: any) => {
+  const getDetailData = async (pos: MapItem) => {
     const url = `http://www.khs.go.kr/cha/SearchKindOpenapiDt.do?ccbaKdcd=${pos.ccbaKdcd}&ccbaCtcd=${pos.ccbaCtcd}&ccbaAsno=${pos.ccbaAsno}&ccbaCpno=${pos.ccbaCpno}`;
     const response = await axios.get(url);
-    const parseString = require("xml2js").parseString;
+    const parseString = xml2.parseString;
     parseString(
       response.data,
       { explicitArray: false },
-      function (err: any, result: any) {
+      function (err, result) {
         if (result && result.result) {
           setOpenOverlayId(pos.no);
           setItem(result.result);
@@ -70,7 +68,7 @@ export default function BasicMap({
   };
 
   // 마커 클릭시 실행되는 함수
-  const handleMarkerClick = (pos: any) => {
+  const handleMarkerClick = (pos: MapItem) => {
     getDetailData(pos);
     if (mapRef.current) {
       const moveLatLng = new kakao.maps.LatLng(pos.latitude, pos.longitude);
@@ -85,7 +83,7 @@ export default function BasicMap({
   };
 //길찾기시 update 지도크기
   const updateLoadBounds = () => {
-    if (mapRef.current && load.sections) {
+    if (mapRef.current && load?.sections) {
       mapRef.current.setBounds(loadbounds!);
     }
   };
@@ -97,7 +95,7 @@ export default function BasicMap({
     if (!load || !load.sections) return;
     updateLoadBounds();
     const linePath: kakao.maps.LatLng[] = [];
-    load.sections[0].roads.forEach((router: { vertexes: any[] }) => {
+    load.sections[0].roads.forEach((router: { vertexes: number[] }) => {
       router.vertexes.forEach((vertex, index) => {
         if (index % 2 === 0) {
           linePath.push(

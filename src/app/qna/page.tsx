@@ -89,6 +89,7 @@ export default function QnaPage() {
         post.title.toLowerCase().includes(searchInput.trim().toLowerCase())
       );
       setFilteredPosts(filtered);
+      
     }
   }
   const postDeleteHandler = async (id: string) => {

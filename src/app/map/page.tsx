@@ -2,20 +2,20 @@
 
 //라이브러리 정의
 import axios from "axios";
-import { Accordion, AccordionItem as Item } from "@szhsin/react-accordion";
-import { ChangeEvent, useEffect, useMemo, useState } from "react";
+import { Accordion} from "@szhsin/react-accordion";
+import { ChangeEvent, useEffect, useState } from "react";
 import Image from "next/image";
+import xml2 from "xml2js"
+
 import { useRouter, useSearchParams } from "next/navigation";
 //컴포넌트 정의
 import MultiRange from "@/app/map/components/rangeSlider";
 import SelectBox from "@/app/map/components/slelctBox";
 import BasicMap from "@/app/map/components/kakaoMap";
-import { MapItem, SelectProps } from "../../types/Map";
+import { MapItem, RoadItem } from "../../types/Map";
 import { selectList } from "@/app/map/config/config";
 import { AccordionItem } from "@/app/map/components/accordionItem";
 import { Loading } from "@/app/map/components/loading";
-import PlatformSelector from "./components/select";
-
 
 
 export default function MapPage() {
@@ -24,19 +24,19 @@ export default function MapPage() {
 // state
   const [filters, setFilters] = useState<Record<string, string | number | undefined>>({});
   const [item, setItem] = useState<MapItem[]>([]);
-  const [load, setLoad] = useState<any>([]);
+  const [load, setLoad] = useState<RoadItem>();
   const [isOpen, setIsOpen] = useState<boolean>(true);
   const [isLoadOpen, setIsLoadOpen] = useState<boolean>(false);
   const [isNavOpen, setIsNavOpen] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
 //xml json 으로 변경해주는 함수
-  const xmlToJsonFilterHandler = (data: any) => {
-    const parseString = require("xml2js").parseString;
+  const xmlToJsonFilterHandler = (data: MapItem) => {
+    const parseString = xml2.parseString;
     parseString(
-      data.data,
+      data,
       { explicitArray: false },
-      function (err: any, result: any) {
+      function (err, result) {
         if (result.result.totalCnt === "0") {
           setIsLoading(false)
           alert("검색결과가 없습니다.");
@@ -45,7 +45,7 @@ export default function MapPage() {
 
         const filteredItems = Array.isArray(result.result.item)
           ? result.result.item.filter(
-              (item: any) =>
+              (item: { latitude: string | undefined; longitude: string | undefined; }) =>
                 item.latitude !== "0" &&
                 item.longitude !== "0" &&
                 item.latitude !== undefined &&
@@ -65,11 +65,11 @@ export default function MapPage() {
         params ? params : "&ccbaCncl=N&ccbaKdcd=13&ccbaCtcd=11"
       }`
     );
-    xmlToJsonFilterHandler(data);
+    xmlToJsonFilterHandler(data.data);
   };
 
   // 내위치 기반 길찾기 함수
-  const searchLoadHandler = async (item: any) => {
+  const searchLoadHandler = async (item: MapItem) => {
     const url = "https://apis-navi.kakaomobility.com/v1/directions?";
     const key = process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY;
     setIsLoading(true);
@@ -89,6 +89,7 @@ export default function MapPage() {
               alert("주변에 도로가 없어서 길찾기에 실패하였습니다.");
             }
             setLoad(data.data.routes[0]);
+            console.log(data.data.routes[0])
             setItem([]);
             setIsLoadOpen(true);
             setIsNavOpen(false);

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 interface MultiRangeProps {
-  value: any;
+  value?: Record<string, number>;
   fixedMinPrice: number;
   fixedMaxPrice: number;
   min: number;
@@ -46,8 +46,8 @@ export default function MultiRange({
     }
   };
   useEffect(() => {
-    setRangeMaxValue(value.enCcbaAsdt || fixedMaxPrice);
-    setRangeMinValue(value.stCcbaAsdt || fixedMinPrice);
+    setRangeMaxValue(value?.enCcbaAsdt || fixedMaxPrice);
+    setRangeMinValue(value?.stCcbaAsdt || fixedMinPrice);
   }, []);
   useEffect(() => {
     twoRangeHandler();
