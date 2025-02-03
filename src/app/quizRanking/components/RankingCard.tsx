@@ -5,7 +5,6 @@ import React, { useEffect, useState } from 'react'
 import KoreaCloudIcon from '@/components/quiz/svg/KoreaCloudIcon';
 import ImportantRankCard from './ImportantRankCard';
 import Table from '@/components/quiz/Table';
-import { useRouter } from 'next/navigation';
 import useQuizInfoManager, { quizInfo } from '@/components/quiz/useQuizInfoManager';
 import GagsiMaskIcon from '@/components/quiz/svg/GagsiMaskIcon';
 import Link from 'next/link';

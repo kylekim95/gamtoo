@@ -1,10 +1,10 @@
 "use client"
 
-import React from 'react'
+import React, { useState, useEffect} from 'react'
 import { CatCode2String } from '@/components/quiz/CHCategories';
 
 import { Bar, Line } from 'react-chartjs-2';
-import { ChartOptions, ChartData } from 'chart.js';
+import { ChartOptions, ChartData, ChartDataset } from 'chart.js';
 import 'chartjs-adapter-moment';
 import 'chart.js/auto';
 
@@ -15,64 +15,33 @@ import GagsiMaskIcon from '@/components/quiz/svg/GagsiMaskIcon';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
-import { useAppSelector } from '@/lib/redux/store';
+import useQuizInfoManager from '@/components/quiz/useQuizInfoManager';
+import { redirect, useSearchParams } from 'next/navigation';
 
 export default function RankingDetail() {
-  const {isAuth, userName, userId} = useAppSelector((state) => state.authReducer.value);
-  console.log(isAuth);
+  const searchParams = useSearchParams();
+  const uid = searchParams.get('userId');
+  if(!uid){
+    redirect('/quizRanking');
+  }
 
   // 오답률 차트 관련련
-  const realisticMyErrData = {
-    "11": 50,
-    "12": 50,
-    "13": 50,
-    "14": 50,
-    "15": 50,
-    "16": 50,
-    "17": 50,
-    "18": 50,
-    "21": 50,
-    "22": 50,
-    "23": 50,
-    "24": 50,
-    "25": 50,
-    "31": 50,
-    "79": 50,
-    "80": 50
-  };
-  const realisticAllErrData = {
-    "11": 40,
-    "12": 40,
-    "13": 40,
-    "14": 40,
-    "15": 40,
-    "16": 40,
-    "17": 40,
-    "18": 40,
-    "21": 60,
-    "22": 60,
-    "23": 60,
-    "24": 60,
-    "25": 60,
-    "31": 60,
-    "79": 60,
-    "80": 60
-  };
-  const initErrRateData : ChartData<"bar", number[], string> = {
+  const [errRateData, setErrRateData] = useState<ChartData<"bar", number[], string>>({
     labels: [...Object.values(CatCode2String)],
     datasets:[
       {
         label: '내 오답률',
-        data: Object.values(realisticMyErrData),
+        data: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
         backgroundColor: '#9999FF'
       },
       {
         label: '전체 유저 오답률',
-        data: Object.values(realisticAllErrData),
+        data: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
         backgroundColor: '#CACACA'
       }
     ],
-  };
+  });
+  const {getAllQuizInfo} = useQuizInfoManager();
   const initErrRateOptions : ChartOptions<"bar"> = {
     indexAxis: 'y' as const,
     responsive: true,
@@ -89,54 +58,16 @@ export default function RankingDetail() {
       bar: { barPercentage: 0.5 },
     }
   };
-  
-  const quizResults = [
-    { date:"2025.01.24", score:70 },
-    { date:"2025.01.18", score:30 },
-    { date:"2025.01.19", score:40 },
-    { date:"2025.01.20", score:50 },
-    { date:"2025.01.21", score:60 },
-    { date:"2025.01.22", score:70 },
-    { date:"2025.01.23", score:80 },
-    { date:"2025.01.24", score:90 },
-    { date:"2025.01.25", score:100 },
-    { date:"2025.01.26", score:10 },
-    { date:"2025.01.27", score:20 },
-    { date:"2025.01.24", score:80 },
-  ];
-  const formattedResults : {date:Date, score:number}[] = quizResults.map((elem)=>{
-    const tempDate = new Date(elem.date);
-    tempDate.setHours(0,0,0,0);
-    return {date:tempDate, score: elem.score} 
-  }).filter((elem)=>{
-    const CurrentDate = new Date();
-    const week2MilliSeconds = 6.048e+8;
-    return CurrentDate.valueOf() - elem.date.valueOf()  < week2MilliSeconds;
-  });
-  formattedResults.sort((a, b)=>{
-    if(a.date.valueOf() === b.date.valueOf()){
-      return b.score - a.score;
-    }
-    return a.date > b.date ? 1 : -1;
-  });
-  const NoDupSet = new Set<number>();
-  const formattedResultsNoDup : {date:Date, score:number}[] = [];
-  formattedResults.forEach((elem)=>{
-    if(!NoDupSet.has(elem.date.valueOf())){
-      NoDupSet.add(elem.date.valueOf());
-      formattedResultsNoDup.push(elem);
-    }
-  });
-  // 이번주 일별 최고 기록 차트
-  const scoresData : ChartData<"line", number[], string> = {
-    labels: formattedResultsNoDup.map(({date})=>date.toDateString()),
+  // 점수 차트 관련
+  const [scoresData, setScoresData] = useState<ChartData<"line", number[], string>>({
+    labels: [],
     datasets:[
       {
-        data: formattedResultsNoDup.map(({score})=>score),
+        data: [],
         backgroundColor: '#9999FF'
       }
     ],
-  }
+  });
   const scoresOption : ChartOptions<"line"> = {
     scales: {
       x: {
@@ -151,6 +82,85 @@ export default function RankingDetail() {
       title: { display: true, text: '이번주 일별 최고 기록' },
     },
   }
+
+  useEffect(()=>{
+    async function Init(){
+      const quizUsers = await getAllQuizInfo();
+      const newDataset : ChartDataset<"bar", number[]>[] = [];
+      const countCorrect = new Map<string, number>();
+      const countAll = new Map<string, number>();
+      quizUsers.forEach((elem)=>{
+        elem.errRate_Correct.forEach((elem2)=>{
+          if(!countCorrect.get(elem2[0])) countCorrect.set(elem2[0], 0);
+          const curVal = countCorrect.get(elem2[0]) ?? 0;
+          const newVal = elem2[1] + curVal;
+          countCorrect.set(elem2[0], newVal);
+        });
+        elem.errRate_Total.forEach((elem2)=>{
+          if(!countAll.get(elem2[0])) countAll.set(elem2[0], 0);
+          const curVal = countAll.get(elem2[0]) ?? 0;
+          const newVal = elem2[1] + curVal;
+          countAll.set(elem2[0], newVal);
+        });
+      });
+      const newData : number[] = [];
+      countCorrect.forEach((elem)=>{newData.push(elem);});
+      let cnt = 0;
+      countAll.forEach((elem)=>{newData[cnt++] /= elem});
+      const formatData = newData.map((elem)=>isNaN(elem) ? 0 : 1 - elem);
+      newDataset.push({
+        label: '전체 유저 오답률',
+        data: formatData,
+        backgroundColor: '#CACACA'
+      });
+      if(uid){
+        const myQuizData = quizUsers.find((elem)=>elem.id===uid);
+        const myErrRateData = myQuizData?.errRate_Correct.map((elem)=>{
+          const total = myQuizData.errRate_Total.find((errTot)=>errTot[0]===elem[0]);
+          if(!total || total[1] === 0) return 0;
+          return 1 - (elem[1] / total[1]);
+        });
+        newDataset.unshift({
+          label: '내 오답률',
+          data: myErrRateData ?? [],
+          backgroundColor: '#9999FF'
+        });
+      }
+      setErrRateData({
+        labels: [...Object.values(CatCode2String)],
+        datasets: newDataset
+      });
+
+      // 점수 차트 관련
+      function getDiffCurTime(date : Date) {
+        return (new Date()).valueOf() - date.valueOf();
+      }
+      const userQuizData = quizUsers.filter((elem)=>elem.id===uid)[0];
+      const formattedData = userQuizData.scores.map((elem)=>{
+        const _elem = elem;
+        _elem[1].setHours(0,0,0,0);
+        return _elem;
+      }).filter((elem)=>getDiffCurTime(elem[1]) < 6.048e+8).sort((a, b)=>{
+        if(a[1].valueOf() - b[1].valueOf() === 0){
+          return b[0] - a[0];
+        }
+        return (a[1].valueOf() - b[1].valueOf());
+      });
+      const noDupData = formattedData.filter((elem, index)=>{
+        return formattedData.findIndex((elem2)=>elem2[1].valueOf()===elem[1].valueOf()) === index;
+      });
+      setScoresData({
+        labels: noDupData.map((elem)=>elem[1].toDateString()),
+        datasets:[
+          {
+            data: noDupData.map((elem)=>elem[0]),
+            backgroundColor: '#9999FF'
+          }
+        ],
+      })
+    }
+    Init();
+  }, [getAllQuizInfo, uid]);
 
   const dummyImage = 'http://www.cha.go.kr/unisearch/images/treasure/1618146.jpg';
   const RecentComments = [
@@ -221,19 +231,19 @@ export default function RankingDetail() {
                 }
               }}
             >
-              {formattedResults.map(({date, score}, index)=><SwiperSlide key={index} ><QuizScoreCard className='w-[15%] min-w-[150px] aspect-[1.2/1] m-3' color='#5555ff' header={date.toLocaleDateString()} content={score.toString()} footer={date.toLocaleTimeString()} /></SwiperSlide>)}
+              {scoresData.datasets[0].data.map((score, index)=><SwiperSlide key={index} ><QuizScoreCard className='w-[15%] min-w-[150px] aspect-[1.2/1] m-3' color='#5555ff' header={scoresData.labels ? scoresData.labels[index] : ''} content={score.toString()} footer={scoresData.labels ? scoresData.labels[index] : ''} /></SwiperSlide>)}
             </Swiper>
           </div>
         </div>
         {/* 유저 통계 */}
         <div className='w-full flex flex-col justify-center items-center mb-4'>
           <div className='w-[80%] font-bold text-2xl border-t-2 pt-4'>유저 통계</div>
-          <div className='w-[80%] flex justify-center items-center'>
-            <div className='w-[40%] min-h-[500px] flex justify-center items-center m-1'>
-              <Bar data={initErrRateData} options={initErrRateOptions} />
-            </div>
-            <div className='w-[60%] min-h-[500px] flex justify-center items-center m-1'>
+          <div className='w-[80%] flex flex-col justify-center items-center'>
+            <div className='w-[80%] min-h-[200px] flex justify-center items-center m-1'>
               <Line data={scoresData} options={scoresOption} />
+            </div>
+            <div className='w-[80%] min-h-[400px] flex justify-center items-center m-1'>
+              <Bar data={errRateData} options={initErrRateOptions} />
             </div>
           </div>
         </div>
