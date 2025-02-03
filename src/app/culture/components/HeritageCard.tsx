@@ -2,12 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import { HeritageData, PaginationInfo } from '../types/HeritageData';
-import { parseStringPromise } from 'xml2js'; // xml2js 임포트
-import Link from 'next/link'; // next/link 임포트
-import Pagination from './Pagination'; // Pagination 컴포넌트 임포트
+import { parseStringPromise } from 'xml2js';
+import Link from 'next/link';
+import Pagination from './Pagination'; 
 
 export default function HeritageCard() {
-  const [heritageData, setHeritageData] = useState<HeritageData[]>([]); // 국가유산 데이터 상태
+  const [heritageData, setHeritageData] = useState<HeritageData[]>([]);
   const [paginationInfo, setPaginationInfo] = useState<PaginationInfo>({
     totalCnt: 0, // 총 데이터 수
     pageUnit: 25, // 페이지당 데이터 수
@@ -15,19 +15,15 @@ export default function HeritageCard() {
   });
   
 
-  // 이미지 데이터 상태 추가
-  const [imageData, setImageData] = useState<Map<string, string>>(new Map());
 
-  // 국가유산 코드에 맞는 이미지를 가져오는 함수
+  const [imageData, setImageData] = useState<Map<string, string>>(new Map());
   const fetchImageData = async (ccbaKdcd: string, ccbaAsno: string, ccbaCtcd: string) => {
     try {
       const response = await fetch(
         `http://www.khs.go.kr/cha/SearchImageOpenapi.do?ccbaKdcd=${ccbaKdcd}&ccbaAsno=${ccbaAsno}&ccbaCtcd=${ccbaCtcd}`
       );
-      const xmlData = await response.text(); // 응답을 텍스트로 받아오기
-      const result = await parseStringPromise(xmlData); // xml을 JSON으로 변환
-
-      // 이미지 URL 추출
+      const xmlData = await response.text();
+      const result = await parseStringPromise(xmlData);
       const imageUrl = result.result.item?.[0]?.imageUrl?.[0];
       if (imageUrl) {
         setImageData((prev) => new Map(prev).set(`${ccbaKdcd}_${ccbaAsno}_${ccbaCtcd}`, imageUrl));
@@ -37,16 +33,14 @@ export default function HeritageCard() {
     }
   };
 
-  // API에서 데이터 가져오는 함수
   const fetchHeritageData = async (pageIndex: number) => {
     try {
       const response = await fetch(
         `http://www.khs.go.kr/cha/SearchKindOpenapiList.do?pageIndex=${pageIndex}&pageUnit=${paginationInfo.pageUnit}`
       );
-      const xmlData = await response.text(); // 응답을 텍스트로 받아오기
-      const result = await parseStringPromise(xmlData); // xml을 JSON으로 변환
+      const xmlData = await response.text();
+      const result = await parseStringPromise(xmlData); 
 
-      // XML에서 필요한 데이터를 추출하여 상태에 저장
       const items = result.result.item.map((item: any) => ({
         ccmaName: item.ccmaName[0], // 국가유산종목
         ccbaMnm1: item.ccbaMnm1[0], // 국가유산명(국문)
@@ -57,17 +51,15 @@ export default function HeritageCard() {
         ccbaCtcd: item.ccbaCtcd[0], // 시도 코드
       }));
 
-      // 이미지 데이터를 각각의 카드에 맞게 가져오기
-      items.forEach((heritage: HeritageData) => { // heritage의 타입을 HeritageData로 지정
+      items.forEach((heritage: HeritageData) => {
         fetchImageData(heritage.ccbaKdcd, heritage.ccbaAsno, heritage.ccbaCtcd);
       });
 
       setHeritageData(items);
 
-      // 총 데이터 수와 페이지 정보 업데이트
       setPaginationInfo((prev) => ({
         ...prev,
-        totalCnt: parseInt(result.result.totalCnt[0], 10), // 총 데이터 건 수
+        totalCnt: parseInt(result.result.totalCnt[0], 10),
         pageIndex,
       }));
     } catch (error) {
@@ -75,16 +67,15 @@ export default function HeritageCard() {
     }
   };
 
-  // 컴포넌트가 마운트될 때 데이터 가져오기
   useEffect(() => {
-    fetchHeritageData(paginationInfo.pageIndex); // 현재 페이지 데이터 가져오기
+    fetchHeritageData(paginationInfo.pageIndex);
   }, [paginationInfo.pageIndex]);
 
   return (
     <div>
       <div className="flex items-center justify-between pt-10"></div>
      <div className="flex items-center font-pretendard text-gray-400 font-semibold text-xs pl-5 pr-4 space-x-2">
-  {/* SVG 아이콘 */} <div className="flex-grow border-t border-gray-300"></div>
+ <div className="flex-grow border-t border-gray-300"></div>
   <svg
     width="17"
     height="18"
@@ -124,7 +115,7 @@ export default function HeritageCard() {
               <div className="w-full h-48 mb-0 relative">
                 <div className="absolute top-0 left-0 w-full h-full bg-gray-200 z-10 rounded-t-lg"></div>
                 <img
-                  src={imageData.get(`${heritage.ccbaKdcd}_${heritage.ccbaAsno}_${heritage.ccbaCtcd}`) || 'https://via.placeholder.com/150'}
+                  src={imageData.get(`${heritage.ccbaKdcd}_${heritage.ccbaAsno}_${heritage.ccbaCtcd}`)}
                   alt="유산 이미지"
                   className="w-full h-full object-contain z-20 relative rounded-lg"
                 />
@@ -159,7 +150,6 @@ export default function HeritageCard() {
         ))}
       </div>
   
-      {/* 페이지네이션 컴포넌트 추가 */}
       <Pagination
         currentPage={paginationInfo.pageIndex}
         totalCnt={paginationInfo.totalCnt}
