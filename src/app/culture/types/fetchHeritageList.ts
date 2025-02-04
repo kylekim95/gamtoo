@@ -10,13 +10,18 @@ export async function fetchHeritageList(pageIndex: number, pageUnit: number, sea
   if (!response.ok) throw new Error(`API 요청 실패: ${response.statusText}`);
 
   const xmlText = await response.text();
+  console.log('🔵 API 응답:', xmlText);  // API 응답 출력
+
   const result = await parseStringPromise(xmlText);
+  console.log('🔵 XML 파싱 후 데이터:', result);  // 파싱 후 데이터 출력
+
   const items = result.result?.item || [];
+  console.log('🔵 결과 항목:', items);  // 필터링 전 항목 확인
+
   const filteredItems = searchQuery
     ? items.filter((item: any) => item.ccbaMnm1[0].includes(searchQuery))
     : items;
-
-  console.log('🔵 필터링된 데이터:', filteredItems);
+  console.log('🔵 필터링된 데이터:', filteredItems);  // 필터링 후 항목 확인
 
   return {
     items: filteredItems.map((item: any) => ({

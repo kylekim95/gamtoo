@@ -5,6 +5,7 @@ import HeroImage from "./components/HeroImage";
 import HeritageCard from "./components/HeritageCard";
 import SearchBar from "./components/SearchBar";
 import SearchCard from "./components/SearchCard";
+import SearchResult from "./components/SearchResult";
 
 export default function Culture() {
 
@@ -19,6 +20,7 @@ export default function Culture() {
     <div className="absolute top-60 left-1/2 transform -translate-x-1/2 z-20">
     <SearchBar  />
       </div>
+      <SearchResult/>
       </div>
       </div>
   );

@@ -6,7 +6,7 @@ import Pagination from './Pagination';
 import { fetchHeritageList } from '../types/useHeritageData';
 
 export default function HeritageCard() {
-  const [heritageData, setHeritageData] = useState<any[]>([]);  // 이미 필터링된 데이터
+  const [heritageData, setHeritageData] = useState<any[]>([]);
   const [paginationInfo, setPaginationInfo] = useState({
     totalCnt: 0,    // 총 데이터 수
     pageUnit: 25,   // 페이지당 데이터 수
@@ -26,6 +26,15 @@ export default function HeritageCard() {
   useEffect(() => {
     loadHeritageData(paginationInfo.pageIndex);
   }, [paginationInfo.pageIndex]);
+
+  useEffect(() => {
+    const loadHeritageData = async () => {
+      const { items } = await fetchHeritageList(1, 25);  // 여기서 페이지나 데이터 수를 조정
+      setHeritageData(items);  // 데이터를 상태로 설정
+    };
+
+    loadHeritageData();
+  }, []);
 
   return (
     <div>
@@ -108,7 +117,6 @@ export default function HeritageCard() {
           </Link>
         ))}
       </div>
-
       <Pagination
         currentPage={paginationInfo.pageIndex}
         totalCnt={paginationInfo.totalCnt}

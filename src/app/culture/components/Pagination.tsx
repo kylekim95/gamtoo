@@ -32,7 +32,7 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalCnt, pageUnit
 
   const handlePageClick = (pageNum: number) => {
     if (pageNum !== currentPage) {
-      onPageChange(pageNum);
+      onPageChange(pageNum);  // 페이지 변경시 부모 컴포넌트에서 onPageChange 호출
       window.scrollTo(0, 0); // 페이지 클릭 시 스크롤을 맨 위로 이동
     }
   };
