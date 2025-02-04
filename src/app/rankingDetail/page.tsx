@@ -159,8 +159,6 @@ export default function RankingDetail() {
         return (new Date()).valueOf() - date.valueOf();
       }
       const userQuizData = quizUsers.filter((elem)=>elem.id===uid)[0];
-      // console.log(userQuizData);
-      //deep copy load c
 
       value.current[3] = userQuizData.highScore.toString() ?? '-';
 
@@ -197,23 +195,23 @@ export default function RankingDetail() {
         ],
       });
       // 최근 퀴즈 점수
-      recentQuizResultsData.current = userQuizData.scores;
+      recentQuizResultsData.current = userQuizData.scores.filter((elem)=>getDiffCurTime(elem[1]) < 6.048e+8);
 
-      // 댓글 관련
-      const rawCommentData = userObj.data.comments.map((elem)=>{
-        if(!elem.post) return null;
-        if(!elem.comment) return null;
-        const comment = elem.comment;
-        const post = elem.post;
-        return { comment, post };
-      });
-      setCommentsData([
-        {url:dummyImage, name:"안녕하세요", comment:"이것은 테스트용 댓글입니다."},
-        {url:dummyImage, name:"안녕하세요", comment:"이것은 테스트용 댓글입니다."},
-        {url:dummyImage, name:"안녕하세요", comment:"이것은 테스트용 댓글입니다."},
-        {url:dummyImage, name:"안녕하세요", comment:"이것은 테스트용 댓글입니다."},
-        {url:dummyImage, name:"안녕하세요", comment:"이것은 테스트용 댓글입니다."}
-      ]);
+      // // 댓글 관련
+      // const rawCommentData = userObj.data.comments.map((elem)=>{
+      //   if(!elem.post) return null;
+      //   if(!elem.comment) return null;
+      //   const comment = elem.comment;
+      //   const post = elem.post;
+      //   return { comment, post };
+      // });
+      // setCommentsData([
+      //   {url:dummyImage, name:"안녕하세요", comment:"이것은 테스트용 댓글입니다."},
+      //   {url:dummyImage, name:"안녕하세요", comment:"이것은 테스트용 댓글입니다."},
+      //   {url:dummyImage, name:"안녕하세요", comment:"이것은 테스트용 댓글입니다."},
+      //   {url:dummyImage, name:"안녕하세요", comment:"이것은 테스트용 댓글입니다."},
+      //   {url:dummyImage, name:"안녕하세요", comment:"이것은 테스트용 댓글입니다."}
+      // ]);
     }
     Init();
   }, [getAllQuizInfo, uid]);
@@ -238,7 +236,7 @@ export default function RankingDetail() {
         style={{backgroundImage: 'url("/QuizRanking/bukchon.jpg")', backgroundSize:'cover', backgroundPosition: '0% 100%', backgroundAttachment:'fixed', backgroundBlendMode: 'multiply'}}
       >
       </div>
-      <div className='w-full min-w-[900px] max-w-[1200px] flex flex-col justify-center items-center'>
+      <div className='w-full min-w-[900px] max-w-[1200px] flex flex-col justify-center items-center mb-4'>
         {/* Social info */}
         <div className='w-[80%] place-content-evenly flex items-end overflow-hidden lg:mt-[-100px] mt-4 mb-4'>
           <GagsiMaskIcon color={'#000000'} className='w-[25%] aspect-square rounded-full overflow-hidden flex flex-col items-center justify-center bg-white border-4 border-black'/>
@@ -273,7 +271,7 @@ export default function RankingDetail() {
           </div>
         </div>
         {/* 최근 평가한 문화재 */}
-        <div className='w-full flex flex-col justify-center items-center mb-4'>
+        {/* <div className='w-full flex flex-col justify-center items-center mb-4'>
           <div className='w-[80%] font-bold text-2xl border-t-2 pt-4'>최근 평가한 문화재</div>
           <Swiper
             className='w-[80%] min-h-[200px]'
@@ -287,7 +285,7 @@ export default function RankingDetail() {
           >
             {commentsData.map((commentObj, index)=><SwiperSlide key={index} ><RecentCommentsCard className='w-[20%] min-w-[275px] aspect-[1.5/1] m-3' url={commentObj.url} name={commentObj.name} comment={commentObj.comment} /></SwiperSlide>)}
           </Swiper>
-        </div>
+        </div> */}
       </div>
     </div>
   )

@@ -1,6 +1,6 @@
 import { getHeritageDetailed, heritageDetailedRequest, heritageDetailedResponse } from "./heritageDetail";
 import { getHeritageList, heritageListRequest, heritageListResponse } from "./heritageList";
-import { CatCode2String } from "@/components/quiz/CHCategories";
+import { CatCode2String, TotalNumItems } from "@/components/quiz/CHCategories";
 
 export type ProblemFactoryOutput = {
   problem: string;
@@ -36,7 +36,8 @@ async function NameProblem(input : ProblemFactoryInput) : Promise<ProblemFactory
   const heritageDetailedReqObj : heritageDetailedRequest = { ccbaAsno: input.Answer_ccbaAsno, ccbaCtcd: input.Answer_ccbaCtcd, ccbaKdcd: input.Answer_ccbaKdcd };
   const heritageDetailed : heritageDetailedResponse | null = await getHeritageDetailed(heritageDetailedReqObj);
   
-  const randNum = Math.trunc(Math.random() * 20 + 1);
+  const pageIndex = Object.keys(CatCode2String).findIndex((catCode)=>catCode===input.Answer_ccbaKdcd);
+  const randNum = Math.trunc(Math.random() * Math.trunc(TotalNumItems[pageIndex] / 4)) + 1;
   const heritageListReqObj : heritageListRequest = { pageUnit: 4, pageIndex: randNum, ccbaKdcd: input.Answer_ccbaKdcd };
   const heritageList : heritageListResponse[] = await getHeritageList(heritageListReqObj);
 
