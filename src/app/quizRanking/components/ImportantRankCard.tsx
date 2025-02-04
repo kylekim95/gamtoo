@@ -26,7 +26,7 @@ export default function ImportantRankCard(props : ImportantRankCardProps) {
         <GagsiMaskIcon color={props.iconColor} className='h-[75%] aspect-square rounded-full'/>
       </div>
       <Link 
-        href = {`/rankingDetail?uid=${props.uid}`}
+        href = {`/rankingDetail?userId=${props.uid}`}
         // onClick={OnClickDetails}
         className='cursor-pointer text-black h-[20%] flex items-center justify-center text-sm font-bold'
         style={{backgroundColor: props.color}}

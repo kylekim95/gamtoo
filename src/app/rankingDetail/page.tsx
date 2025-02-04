@@ -107,6 +107,8 @@ export default function RankingDetail() {
       value.current[2] = userObj.data.comments.length ?? '0';
 
       const quizUsers = await getAllQuizInfo();
+      // console.log(quizUsers);
+
       const newDataset : ChartDataset<"bar", number[]>[] = [];
       const countCorrect = new Map<string, number>();
       const countAll = new Map<string, number>();
@@ -157,11 +159,13 @@ export default function RankingDetail() {
         return (new Date()).valueOf() - date.valueOf();
       }
       const userQuizData = quizUsers.filter((elem)=>elem.id===uid)[0];
+      // console.log(userQuizData);
+      //deep copy load c
 
       value.current[3] = userQuizData.highScore.toString() ?? '-';
 
       formattedData.current = userQuizData.scores.map((elem)=>{
-        const _elem = elem;
+        const _elem : [number, Date] = [elem[0], new Date(elem[1].getTime())];
         _elem[1].setHours(0,0,0,0);
         return _elem;
       }).filter((elem)=>getDiffCurTime(elem[1]) < 6.048e+8).sort((a, b)=>{
@@ -173,17 +177,21 @@ export default function RankingDetail() {
       const noDupData = formattedData.current.filter((elem, index)=>{
         return formattedData.current.findIndex((elem2)=>elem2[1].valueOf()===elem[1].valueOf()) === index;
       });
+      const chartData : number[] = [];
       const oneWeek : Date[] = [];
       const today = new Date();
       today.setHours(0,0,0,0);
       for(let i = 0; i < 7; i++){
-        oneWeek.push(new Date(today.valueOf() - i * 86400000));
+        const day = new Date(today.valueOf() - i * 86400000);
+        oneWeek.unshift(day);
+        const temp = noDupData.find((elem)=>elem[1].getTime()===day.getTime());
+        chartData.unshift(temp ? temp[0] : 0);
       }
       setScoresData({
         labels: oneWeek.map((e)=>e.toLocaleDateString()),
         datasets:[
           {
-            data: noDupData.map((elem)=>elem[0]),
+            data: chartData,
             backgroundColor: '#9999FF'
           }
         ],
@@ -237,21 +245,20 @@ export default function RankingDetail() {
           {labels.current.map((elem, index)=>socialData(elem, value.current[index], index))}
         </div>
         {/* 문화재 퀴즈 최근 결과 */}
-        <div className='w-full min-h-[200px] flex flex-col justify-center items-center mb-4'>
+        <div className='w-full flex flex-col justify-center items-center mb-4'>
           <div className='w-[80%] font-bold text-2xl border-t-2 pt-4'>문화재 퀴즈 최근 결과</div>
-          <div className='w-[80%] flex'>
-            <Swiper
-              spaceBetween={10} 
-              slidesPerView={3} 
-              breakpoints={{
-                1000: {
-                  slidesPerView: 5
-                }
-              }}
-            >
-              {recentQuizResultsData.current.map((elem, index)=><SwiperSlide key={index} ><QuizScoreCard className='w-[15%] min-w-[150px] aspect-[1.2/1] m-3' color='#5555ff' header={elem[1].toLocaleDateString()} content={elem[0].toString()} footer={elem[1].toLocaleTimeString()} /></SwiperSlide>)}
-            </Swiper>
-          </div>
+          <Swiper
+            spaceBetween={10} 
+            slidesPerView={3}
+            className='w-[80%] min-h-[150px]'
+            breakpoints={{
+              1000: {
+                slidesPerView: 5
+              }
+            }}
+          >
+            {recentQuizResultsData.current.map((elem, index)=><SwiperSlide key={index} ><QuizScoreCard className='w-[15%] min-w-[150px] aspect-[1.2/1] m-3' color='#5555ff' header={elem[1].toLocaleDateString()} content={elem[0].toString()} footer={elem[1].toLocaleTimeString()} /></SwiperSlide>)}
+          </Swiper>
         </div>
         {/* 유저 통계 */}
         <div className='w-full flex flex-col justify-center items-center mb-4'>
@@ -268,19 +275,18 @@ export default function RankingDetail() {
         {/* 최근 평가한 문화재 */}
         <div className='w-full flex flex-col justify-center items-center mb-4'>
           <div className='w-[80%] font-bold text-2xl border-t-2 pt-4'>최근 평가한 문화재</div>
-          <div className='w-[80%] flex min-h-[200px]'>
-            <Swiper
-              spaceBetween={20} 
-              slidesPerView={2} 
-              breakpoints={{
-                1000: {
-                  slidesPerView: 3
-                }
-              }}
-            >
-              {commentsData.map((commentObj, index)=><SwiperSlide key={index} ><RecentCommentsCard className='w-[20%] min-w-[275px] aspect-[1.5/1] m-3' url={commentObj.url} name={commentObj.name} comment={commentObj.comment} /></SwiperSlide>)}
-            </Swiper>
-          </div>
+          <Swiper
+            className='w-[80%] min-h-[200px]'
+            spaceBetween={20} 
+            slidesPerView={2} 
+            breakpoints={{
+              1000: {
+                slidesPerView: 3
+              }
+            }}
+          >
+            {commentsData.map((commentObj, index)=><SwiperSlide key={index} ><RecentCommentsCard className='w-[20%] min-w-[275px] aspect-[1.5/1] m-3' url={commentObj.url} name={commentObj.name} comment={commentObj.comment} /></SwiperSlide>)}
+          </Swiper>
         </div>
       </div>
     </div>

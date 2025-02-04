@@ -37,8 +37,7 @@ export default function useQuizInfoManager() {
           name : string;
         } = JSON.parse(post.title);
         const _scores = data.scores.map<[number, Date]>(([scoreVal, timestamp])=>{
-          // console.log(new Date(timestamp));
-          return [parseInt(scoreVal), new Date(timestamp)]
+          return [parseInt(scoreVal), new Date(timestamp)];
         });
         const _errRate_Correct = data.errRate_Correct.map<[string, number]>(([key, value])=>[key, parseInt(value)]);
         const _errRate_Total = data.errRate_Total.map<[string, number]>(([key, value])=>[key, parseInt(value)]);
@@ -91,6 +90,7 @@ export default function useQuizInfoManager() {
         }
       });
 
+      //stringify 하기 전에 변수
       const dataToJson = JSON.stringify({
         ...myQuizData, 
         name: userName,

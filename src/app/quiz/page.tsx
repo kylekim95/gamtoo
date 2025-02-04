@@ -9,6 +9,7 @@ import { quizResults } from '../quizResults/page';
 import GyeongBokGungIcon from '@/components/quiz/svg/GyeongBokGungIcon';
 import { GetProblem, ProblemFactoryInput, ProblemFactoryOutput } from './components/problemFactory';
 import useQuizInfoManager, {postQuizData} from '@/components/quiz/useQuizInfoManager';
+import { CatCode2String } from '@/components/quiz/CHCategories';
 // import axios from 'axios';
 // import { CatCode2String } from '@/components/quiz/CHCategories';
 
@@ -39,6 +40,7 @@ export default function QuizPage() {
   const [loaded, setLoaded] = useState(0);
   const mounted = useRef(false);
   useEffect(()=>{
+    // console.log('UseEffect Init');
     mounted.current = true;
     setLoaded(0);
     async function InitProblems() {
@@ -66,6 +68,7 @@ export default function QuizPage() {
           };
           problems.current[problemInd] = newProblemData;
         }
+        setLoaded(problemInd);
       }
     };
     InitProblems().then(()=>{
@@ -156,10 +159,11 @@ export default function QuizPage() {
       data.push(temp);
     }
 
+    //한번 파싱 해서 해석이 안되는 문제
     score = score / numProblems * 100;
     sessionStorage.setItem('recentQuizData', JSON.stringify({
       'score': score,
-      'data' : JSON.stringify(data)
+      'data' : data
     }));
 
     const postData : postQuizData = {
