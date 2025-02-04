@@ -38,11 +38,11 @@ export default function TodayQuiz() {
     selection: [],
     linkTo: "",
   };
-  const numProblems = 20;
+  const numProblems = 3;
   const problems = useRef<ProblemData[]>(
     new Array(numProblems).fill(defaultProblemData)
   );
-  console.log(problems);
+  // console.log(problems);
   const [loaded, setLoaded] = useState(0);
   const mounted = useRef(false);
 
@@ -50,7 +50,7 @@ export default function TodayQuiz() {
     mounted.current = true;
     setLoaded(0);
     async function InitProblems() {
-      const heritageListReqObj: heritageListRequest = { pageUnit: 80 };
+      const heritageListReqObj: heritageListRequest = { pageUnit: 30 };
       const heritageList: heritageListResponse[] = await getHeritageList(
         heritageListReqObj
       );
@@ -203,9 +203,7 @@ export default function TodayQuiz() {
                     todayQuiz.problem
                   ) : (
                     <div className="flex justify-center items-center w-full h-full bg-gray-300">
-                      <span className="text-gray-700">
-                        문제가 준비 중입니다.
-                      </span>
+                      <span className="">문제가 준비 중입니다.</span>
                     </div>
                   )}
                 </span>{" "}
