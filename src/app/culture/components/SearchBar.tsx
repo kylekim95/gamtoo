@@ -1,31 +1,28 @@
-import { useState } from "react";
-import { useHeritageSearch } from "../types/useHeritageSearch"; // useHeritageSearch 훅 가져오기
+'use client'
 
-export default function SearchBar() {
-  const [searchTerm, setSearchTerm] = useState(""); // 검색어 상태
-  const { searchHeritage } = useHeritageSearch(); // 검색 함수 가져오기
+import React from 'react';
+import { useState } from 'react';
 
-  // 검색 실행 함수
+interface SearchBarProps {
+  searchHeritage: (query: string) => void; // searchHeritage 함수 타입 정의
+}
+
+export default function SearchBar({ searchHeritage }: SearchBarProps) {
+  const [query, setQuery] = useState('');
+
   const handleSearch = () => {
-    if (searchTerm.trim() === "") return; // 빈 값 방지
-    searchHeritage(searchTerm); // API 호출
+    console.log("🔍 검색어:", query);  // 검색어가 정확하게 입력되는지 확인
+    searchHeritage(query);  // searchHeritage 함수 호출
   };
 
-  // Enter 키 입력 시 검색 실행
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      handleSearch();
-    }
-  };
 
   return (
     <div className="flex items-center space-x-2 relative">
       <input
         type="text"
         placeholder="검색어를 입력해주세요."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)} // 입력값 변경 처리
-        onKeyDown={handleKeyDown} // Enter 키 이벤트 추가
+        value={query}
+        onChange={(e) => setQuery(e.target.value)} // 입력값 변경 처리
         className="border rounded-3xl p-3 w-[33vw] bg-white bg-opacity-80
          placeholder-gray-700 placeholder:tracking-widest 
          placeholder:font-extrabold pl-6 focus:outline-none

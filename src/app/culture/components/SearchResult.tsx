@@ -1,17 +1,12 @@
-// SearchResult.tsx
-import React from "react";
-import { useHeritageSearch } from "../types/useHeritageSearch";
+interface SearchResultProps {
+  searchResults: any[];
+}
 
-export default function SearchResult() {
-  const { searchResults } = useHeritageSearch();
-
-  console.log("검색 결과:", searchResults); // 여기서 searchResults 값 확인
-
+export default function SearchResult({ searchResults }: SearchResultProps) {
   return (
     <div className="search-results-container">
       {searchResults.length > 0 ? (
         <div>
-          <h2 className="text-xl font-bold">검색된 결과</h2>
           <ul className="mt-4">
             {searchResults.map((item, index) => (
               <li key={index} className="result-item border-b py-4">
@@ -28,7 +23,7 @@ export default function SearchResult() {
           </ul>
         </div>
       ) : (
-        <p>검색 결과가 없습니다.</p>
+        <p>검색된 항목이 없습니다.</p>
       )}
     </div>
   );

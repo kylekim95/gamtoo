@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Pagination from './Pagination';
 import { fetchHeritageList } from '../types/useHeritageData';
 
+
 export default function HeritageCard() {
   const [heritageData, setHeritageData] = useState<any[]>([]);
   const [paginationInfo, setPaginationInfo] = useState({

@@ -10,7 +10,6 @@ export async function fetchHeritageList(pageIndex: number, pageUnit: number, sea
   if (!response.ok) throw new Error(`API 요청 실패: ${response.statusText}`);
 
   const xmlText = await response.text();
-  console.log('🔵 API 응답:', xmlText);  // API 응답 출력
 
   const result = await parseStringPromise(xmlText);
   console.log('🔵 XML 파싱 후 데이터:', result);  // 파싱 후 데이터 출력
@@ -23,6 +22,8 @@ export async function fetchHeritageList(pageIndex: number, pageUnit: number, sea
     : items;
   console.log('🔵 필터링된 데이터:', filteredItems);  // 필터링 후 항목 확인
 
+  
+
   return {
     items: filteredItems.map((item: any) => ({
       ccbaKdcd: item.ccbaKdcd[0],
@@ -32,7 +33,6 @@ export async function fetchHeritageList(pageIndex: number, pageUnit: number, sea
       ccbaCtcdNm: item.ccbaCtcdNm[0],
       ccsiName: item.ccsiName[0],
       ccmaName: item.ccmaName[0],
-      imageUrl: item.imageUrl?.[0] || '/no-image.png',
     })),
     totalCnt: filteredItems.length, // 필터링된 결과 개수
   };
