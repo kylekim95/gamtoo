@@ -35,7 +35,7 @@ export default function QuizResultsPage() {
   if(!recentQuizData) redirect('/');
   const parsedRecentQuizData = JSON.parse(recentQuizData ?? '');
   const score = parseInt(parsedRecentQuizData.score ?? '0');
-  const data : quizResults[] = JSON.parse(parsedRecentQuizData.data ?? '[]');
+  const data : quizResults[] = (parsedRecentQuizData.data ?? []);
 
   function linkCreator(answer:string, linkTo:string){
     linkTo = linkTo.replaceAll('%26', '&');

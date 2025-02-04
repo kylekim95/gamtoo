@@ -5,6 +5,8 @@ import { parseISO } from 'date-fns'
 import { ko } from 'date-fns/locale'
 import {DayPicker, getDefaultClassNames} from 'react-day-picker'
 import 'react-day-picker/dist/style.css'
+import { v4 as uuidv4 } from "uuid";
+
 
 interface Item {
   seqNo: string;
@@ -25,7 +27,10 @@ interface Item {
   subDate: string;
   imageUrl: string;
 }
-
+interface YearMonth {
+  year: number;
+  month: number;
+}
 
 const FestivalPage = () => {
   const [festivalItems, setFestivalItems] = React.useState<Item[]>([{
@@ -49,18 +54,31 @@ const FestivalPage = () => {
   }]);
   const defaultClassNames = getDefaultClassNames();
   const [selected, setSelected] = React.useState<Date>();
-  const partyDate = parseISO("2024-06-10");
+  const [monthState, setMonthState] = React.useState<YearMonth>({
+    year: 2024,
+    month: 6
+  })
 
   React.useEffect(() => {
-    testData();
-  },[]);
+    getFestivalMonth();
+  },[monthState.month]);
 
-  async function testData() {
-    const data = await fetch('https://www.cha.go.kr/cha/openapi/selectEventListOpenapi.do?searchYear=2024&searchMonth=6');
+  async function getFestivalMonth() {
+    const uniqueNumbers = new Set<number>();
+
+    while (uniqueNumbers.size < 40) {
+      const randomNum = Math.floor(Math.random() * (41));
+      uniqueNumbers.add(randomNum);
+    }
+    const imageNumber = uniqueNumbers.values();
+    const data = await fetch(`https://www.cha.go.kr/cha/openapi/selectEventListOpenapi.do?searchYear=${monthState.year}&searchMonth=${monthState.month}`);
     const text = await data.text()
     const result = await parseStringPromise(text);
     const items = []
-    for(let i = 0; i < 43; i++) {
+    for(let i = 0; i < 40; i++) {
+      if(!result.result.item[i].seqNo[0]){
+        break;
+      }
       items.push({
             seqNo: result.result.item[i].seqNo[0],
             siteCode: result.result.item[i].siteCode[0],
@@ -78,7 +96,7 @@ const FestivalPage = () => {
             sido: result.result.item[i].sido[0],
             gugun: result.result.item[i].gugun[0],
             subDate: result.result.item[i].subDate[0],
-            imageUrl: `/festivalPosts/${i}.jpg`
+            imageUrl: `/festivalPosts/${imageNumber.next().value}.jpg`
           }
         )
     }
@@ -90,6 +108,18 @@ const FestivalPage = () => {
       return;
     }
     const getDay = `${date}`.split(" ")[2];
+  }
+  const handleMonthSelect = (date: Date | undefined) => {
+    if(date === undefined) {
+      alert("알 수 없는 값입니다.")
+      return;
+    }
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    setMonthState({
+      year,
+      month
+    });
   }
   return (
     <div>
@@ -169,7 +199,8 @@ const FestivalPage = () => {
           <DayPicker className="ml-auto min-w-max rounded-br-3xl rounded-tr-3xl"
                      mode="single"
                      locale={ko}
-                     month={partyDate}
+                     month={parseISO(`${monthState.year}-${monthState.month < 10 ? "0"+monthState.month : monthState.month}-10`)}
+                     onMonthChange={handleMonthSelect}
                      classNames={{
                         today: `border-amber-500`, // Add a border to today's date
                         selected: `bg-amber-500 border-amber-500 text-white`, // Highlight the selected day
@@ -186,7 +217,7 @@ const FestivalPage = () => {
         <div className="grid grid-cols-5 gap-2 gap-y-12">
           {festivalItems.length === 1? (<div></div>):festivalItems.map((e) => {
             return (
-              <div key={e.seqNo} className="rounded-lg p-3 border shadow-lg">
+              <div key={uuidv4()} className="rounded-lg p-3 border shadow-lg">
                 <img className="rounded-lg h-3/5 w-full" src={e.imageUrl} alt={""}/>
                 <div className="bg-[#FA870E] pt-2 pb-2 rounded-lg mt-2 mb-2">
                   <p className="text-center font-semibold text-xl">{e.sido}</p>

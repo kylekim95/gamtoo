@@ -1,170 +1,99 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { ArrowRightCircleIcon } from "@heroicons/react/24/outline";
-
+import {
+  GetProblem,
+  ProblemFactoryInput,
+  ProblemFactoryOutput,
+} from "@/app/quiz/components/problemFactory";
 import Ranking from "./rankingImg";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
+import {
+  heritageListRequest,
+  heritageListResponse,
+  getHeritageList,
+} from "@/app/quiz/components/heritageList";
+
 type ProblemData = {
   id: string;
   problem: string;
-  answer: number;
+  answer: string;
   url: string;
   selection: string[];
+  linkTo: string;
+  category: string;
 };
 
+interface UserSelection {
+  [index: number]: number;
+}
+
+//
 export default function TodayQuiz() {
+  const defaultProblemData = {
+    id: "",
+    problem: "",
+    answer: "",
+    url: "",
+    selection: [],
+    linkTo: "",
+  };
+  const numProblems = 3;
+  const problems = useRef<ProblemData[]>(
+    new Array(numProblems).fill(defaultProblemData)
+  );
+  // console.log(problems);
+  const [loaded, setLoaded] = useState(0);
+  const mounted = useRef(false);
+
+  useEffect(() => {
+    mounted.current = true;
+    setLoaded(0);
+    async function InitProblems() {
+      const heritageListReqObj: heritageListRequest = { pageUnit: 30 };
+      const heritageList: heritageListResponse[] = await getHeritageList(
+        heritageListReqObj
+      );
+      if (!mounted.current) return;
+      //TODO: 문제의 정답을 랜덥하게 고른다
+      for (let i = 0; i < numProblems; i++) {
+        const problemInd = i;
+        const answerInd = i * 4 + Math.trunc(Math.random() * 4);
+        const input: ProblemFactoryInput = {
+          Answer_ccbaAsno: heritageList[answerInd].ccbaAsno,
+          Answer_ccbaCtcd: heritageList[answerInd].ccbaCtcd,
+          Answer_ccbaKdcd: heritageList[answerInd].ccbaKdcd,
+          Answer_ccbaMnm1: heritageList[answerInd].ccbaMnm1,
+        };
+        const problemFactoryOutput: ProblemFactoryOutput | null =
+          await GetProblem(input);
+        if (!mounted.current) return;
+        if (problemFactoryOutput) {
+          const newProblemData: ProblemData = {
+            ...problemFactoryOutput,
+            id: i.toString(),
+            linkTo: `ccbaAsno=${heritageList[answerInd].ccbaAsno}%26ccbaCtcd=${heritageList[answerInd].ccbaCtcd}%26ccbaKdcd=${heritageList[answerInd].ccbaKdcd}`,
+            category: heritageList[answerInd].ccbaKdcd,
+          };
+          problems.current[problemInd] = newProblemData;
+        }
+      }
+    }
+    InitProblems().then(() => {
+      setLoaded(numProblems - 1);
+    });
+    return () => {
+      mounted.current = false;
+    };
+  }, []);
+
   //TEST DATA
   const dummyImage =
     "http://www.cha.go.kr/unisearch/images/treasure/1618146.jpg";
 
-  //useCallback, useMemo 관련 경고 더미 데이터이니까 일단 놔둘것
-  //실제 데이터에는 useMemo 사용
-  const dummyData: ProblemData[] = [
-    {
-      id: "1",
-      problem: "이것은 문제입니다. 이것은 문제입니까?",
-      answer: 1,
-      url: dummyImage,
-      selection: ["선택지1", "선택지2", "선택지3", "선택지4"],
-    },
-    {
-      id: "2",
-      problem: "이것은 문제입니다. 이것은 문제입니까?",
-      answer: 1,
-      url: dummyImage,
-      selection: ["선택지1", "선택지2", "선택지3", "선택지4"],
-    },
-    {
-      id: "3",
-      problem: "이것은 문제입니다. 이것은 문제입니까?",
-      answer: 1,
-      url: dummyImage,
-      selection: ["선택지1", "선택지2", "선택지3", "선택지4"],
-    },
-    {
-      id: "4",
-      problem: "이것은 문제입니다. 이것은 문제입니까?",
-      answer: 1,
-      url: dummyImage,
-      selection: ["선택지1", "선택지2", "선택지3", "선택지4"],
-    },
-    {
-      id: "5",
-      problem: "이것은 문제입니다. 이것은 문제입니까?",
-      answer: 1,
-      url: dummyImage,
-      selection: ["선택지1", "선택지2", "선택지3", "선택지4"],
-    },
-    {
-      id: "6",
-      problem: "이것은 문제입니다. 이것은 문제입니까?",
-      answer: 1,
-      url: dummyImage,
-      selection: ["선택지1", "선택지2", "선택지3", "선택지4"],
-    },
-    {
-      id: "7",
-      problem: "이것은 문제입니다. 이것은 문제입니까?",
-      answer: 1,
-      url: dummyImage,
-      selection: ["선택지1", "선택지2", "선택지3", "선택지4"],
-    },
-    {
-      id: "8",
-      problem: "이것은 문제입니다. 이것은 문제입니까?",
-      answer: 1,
-      url: dummyImage,
-      selection: ["선택지1", "선택지2", "선택지3", "선택지4"],
-    },
-    {
-      id: "9",
-      problem: "이것은 문제입니다. 이것은 문제입니까?",
-      answer: 1,
-      url: dummyImage,
-      selection: ["선택지1", "선택지2", "선택지3", "선택지4"],
-    },
-    {
-      id: "10",
-      problem: "이것은 문제입니다. 이것은 문제입니까?",
-      answer: 1,
-      url: dummyImage,
-      selection: ["선택지1", "선택지2", "선택지3", "선택지4"],
-    },
-    {
-      id: "11",
-      problem: "이것은 문제입니다. 이것은 문제입니까?",
-      answer: 1,
-      url: dummyImage,
-      selection: ["선택지1", "선택지2", "선택지3", "선택지4"],
-    },
-    {
-      id: "12",
-      problem: "이것은 문제입니다. 이것은 문제입니까?",
-      answer: 1,
-      url: dummyImage,
-      selection: ["선택지1", "선택지2", "선택지3", "선택지4"],
-    },
-    {
-      id: "13",
-      problem: "이것은 문제입니다. 이것은 문제입니까?",
-      answer: 1,
-      url: dummyImage,
-      selection: ["선택지1", "선택지2", "선택지3", "선택지4"],
-    },
-    {
-      id: "14",
-      problem: "이것은 문제입니다. 이것은 문제입니까?",
-      answer: 1,
-      url: dummyImage,
-      selection: ["선택지1", "선택지2", "선택지3", "선택지4"],
-    },
-    {
-      id: "15",
-      problem: "이것은 문제입니다. 이것은 문제입니까?",
-      answer: 1,
-      url: dummyImage,
-      selection: ["선택지1", "선택지2", "선택지3", "선택지4"],
-    },
-    {
-      id: "16",
-      problem: "이것은 문제입니다. 이것은 문제입니까?",
-      answer: 1,
-      url: dummyImage,
-      selection: ["선택지1", "선택지2", "선택지3", "선택지4"],
-    },
-    {
-      id: "17",
-      problem: "이것은 문제입니다. 이것은 문제입니까?",
-      answer: 1,
-      url: dummyImage,
-      selection: ["선택지1", "선택지2", "선택지3", "선택지4"],
-    },
-    {
-      id: "18",
-      problem: "이것은 문제입니다. 이것은 문제입니까?",
-      answer: 1,
-      url: dummyImage,
-      selection: ["선택지1", "선택지2", "선택지3", "선택지4"],
-    },
-    {
-      id: "19",
-      problem: "이것은 문제입니다. 이것은 문제입니까?",
-      answer: 1,
-      url: dummyImage,
-      selection: ["선택지1", "선택지2", "선택지3", "선택지4"],
-    },
-    {
-      id: "20",
-      problem: "이것은 문제입니다. 이것은 문제입니까?",
-      answer: 1,
-      url: dummyImage,
-      selection: ["선택지1", "선택지2", "선택지3", "선택지4"],
-    },
-  ];
-
   const router = useRouter();
   const todayQuiz: ProblemData =
-    dummyData[Math.floor(Math.random() * dummyData.length)];
+    problems.current[Math.floor(Math.random() * problems.current.length)];
 
   //  상태관리
   const selectionColors = [
@@ -173,13 +102,20 @@ export default function TodayQuiz() {
     "bg-blue-700",
     "bg-yellow-700",
   ];
-  const [resultMessage, setResultMessage] = useState<string>("");
+  const [resultMessage, setResultMessage] = useState<React.ReactNode>(null);
   const buttonRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   function checkAnswer(selectedNum: number) {
-    setResultMessage(
-      selectedNum + 1 === todayQuiz.answer ? "정답입니다!" : "정답이 아닙니다"
-    );
+    // 결과 메세지 Dom 조작
+    if (resultMessageRef.current) {
+      if (todayQuiz.selection[selectedNum] === todayQuiz.answer) {
+        resultMessageRef.current.textContent = "정답입니다 ✅";
+        resultMessageRef.current.className = "text-green-600";
+      } else {
+        resultMessageRef.current.textContent = "틀렸습니다 ❌";
+        resultMessageRef.current.className = "text-red-500";
+      }
+    }
 
     // 이전에 클릭된 버튼이 있으면 원래 색상(검은색)으로 되돌리기
     buttonRefs.current.forEach((btn) => {
@@ -192,7 +128,7 @@ export default function TodayQuiz() {
       selectedButton.classList.add(selectionColors[selectedNum]);
     }
   }
-
+  const resultMessageRef = useRef<HTMLSpanElement>(null);
   const setButtonRef = (el: HTMLButtonElement | null, index: number) => {
     if (el && !buttonRefs.current[index]) {
       buttonRefs.current[index] = el;
@@ -241,22 +177,38 @@ export default function TodayQuiz() {
           <div className="flex flex-row bg-slate-100">
             {/* 퀴즈 부분 */}
             <div className="relative w-[55%] h-[360px]">
-              <Image
-                src={dummyImage}
-                alt=""
-                fill // 부모 컨테이너를 채우도록 설정
-                sizes="55vw"
-                style={{
-                  objectFit: "cover",
-                  objectPosition: "center top", // 상단 중심 정렬
-                }} // 상단 중심 정렬
-              />
+              {todayQuiz.url ? (
+                <Image
+                  src={todayQuiz.url}
+                  alt="Quiz Image"
+                  fill // 부모 컨테이너를 채우도록 설정
+                  sizes="55vw"
+                  style={{
+                    objectFit: "cover",
+                    objectPosition: "center top",
+                  }}
+                />
+              ) : (
+                // src가 비어있을 때 표시할 대체 콘텐츠
+                <div className="flex justify-center items-center w-full h-full bg-gray-300">
+                  <span className="text-gray-700">이미지가 준비 중입니다.</span>
+                </div>
+              )}
             </div>
             {/* 문제 */}
             <div className="flex flex-col items-center  justify-between w-[45%] ">
               <div className="flex flex-col gap-2 font-bold text-lg text-black mt-6">
-                <span>{todayQuiz.problem}</span> {/* 문제 */}
-                <span>{resultMessage}</span> {/* 결과 */}
+                <span>
+                  {todayQuiz.problem ? (
+                    todayQuiz.problem
+                  ) : (
+                    <div className="flex justify-center items-center w-full h-full bg-gray-300">
+                      <span className="">문제가 준비 중입니다.</span>
+                    </div>
+                  )}
+                </span>{" "}
+                {/* 문제 */}
+                <span ref={resultMessageRef}></span> {/* 결과 */}
               </div>
               {/* 답안 부분 */}
               <div className="flex flex-col justify-end items-center w-[100%] gap-5 mb-6 text-white">
@@ -270,7 +222,6 @@ export default function TodayQuiz() {
                     <span className="text-sm md:text-lg">{item}</span>
                   </button>
                 ))}
-                <p>{resultMessage}</p>
               </div>
             </div>
           </div>
@@ -282,9 +233,10 @@ export default function TodayQuiz() {
             <Ranking />
             <div
               onClick={() => {
-                router.push("/quiz");
+                console.log(problems);
+                // router.push("/quiz");
               }}
-              className="bg-[#C44440] w-[85%] h-[40px] flex flex-row justify-around items-center gap-14 mt-5 rounded-xl hover:cursor-pointer"
+              className="w-[95%] bg-[#C44440] w-[85%] h-[40px] flex flex-row justify-around items-center gap-14 mt-5 rounded-xl hover:cursor-pointer"
             >
               <button className="flex flex-row items-center gap-9 text-xl text-white font-bold">
                 퀴즈에 참가하시겠습니까

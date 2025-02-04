@@ -30,7 +30,7 @@ export default function ProblemCard(props : ProblemCardProps) {
     setSelected(selectedNum);
   }
 
-  if(props.url === ''){
+  if(props.problem === ''){
     return <DefaultProblemCard ref={props.ref}/>
   }
   
