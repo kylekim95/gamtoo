@@ -6,7 +6,7 @@ import Pagination from './Pagination';
 import { fetchHeritageList } from '../types/useHeritageData';
 
 export default function HeritageCard() {
-  const [heritageData, setHeritageData] = useState<any[]>([]);
+  const [heritageData, setHeritageData] = useState<any[]>([]);  // 이미 필터링된 데이터
   const [paginationInfo, setPaginationInfo] = useState({
     totalCnt: 0,    // 총 데이터 수
     pageUnit: 25,   // 페이지당 데이터 수
@@ -15,7 +15,7 @@ export default function HeritageCard() {
 
   const loadHeritageData = async (pageIndex: number) => {
     const { items, totalCnt } = await fetchHeritageList(pageIndex, paginationInfo.pageUnit);
-    setHeritageData(items);
+    setHeritageData(items);  // 필터링된 데이터가 items로 이미 들어온다고 가정
     setPaginationInfo((prev) => ({
       ...prev,
       totalCnt,

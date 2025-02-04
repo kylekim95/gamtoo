@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { PaginationProps } from '../types/HeritageData';
 
 const Pagination: React.FC<PaginationProps> = ({ currentPage, totalCnt, pageUnit, onPageChange }) => {
-  const totalPages = Math.ceil(totalCnt / pageUnit);  // 전체 페이지 수 계산
+  const totalPages = Math.ceil(totalCnt / pageUnit); // 검색된 데이터의 개수를 기준으로 전체 페이지 수 계산
   const pageGroupSize = 5;  // 한 번에 보여줄 페이지 수
 
   const [startPage, setStartPage] = useState<number>(1);
@@ -33,17 +33,17 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalCnt, pageUnit
   const handlePageClick = (pageNum: number) => {
     if (pageNum !== currentPage) {
       onPageChange(pageNum);
-      window.scrollTo(0, 0);
+      window.scrollTo(0, 0); // 페이지 클릭 시 스크롤을 맨 위로 이동
     }
   };
 
   const goToFirstPage = () => {
-    onPageChange(1);
+    onPageChange(1); // 첫 페이지로 이동
     window.scrollTo(0, 0);
   };
 
   const goToLastPage = () => {
-    onPageChange(totalPages);
+    onPageChange(totalPages); // 마지막 페이지로 이동
     window.scrollTo(0, 0);
   };
 
