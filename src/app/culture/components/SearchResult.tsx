@@ -23,7 +23,7 @@ export default function SearchResult({ searchResults }: SearchResultProps) {
           </ul>
         </div>
       ) : (
-        <p>검색된 항목이 없습니다.</p>
+        <p></p>
       )}
     </div>
   );
