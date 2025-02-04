@@ -174,11 +174,11 @@ export default function QnaPage() {
                   onClick={() => router.push(`qna/detail/${post._id}`)}
                 >
                   <div className=" flex justify-between">
-                    <h2 className="text-xl font-semibold text-gray-800">
+                    <h2 className="text-xl truncate font-semibold text-gray-800">
                       {parserJson(post.title, "title")}
                     </h2>
                   </div>
-                  <p className="mt-2 text-gray-600">
+                  <p className="mt-2 truncate text-gray-600">
                     {parserJson(post.title, "content")}
                   </p>
                   <div className="mt-4 pb-9 flex justify-between items-center">
