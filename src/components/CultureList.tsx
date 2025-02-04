@@ -10,9 +10,7 @@ interface Category {
 
 export default function Card(category: Category) {
   const [page, setPage] = useState(1); // 현재 페이지
-  const [itemsPerPage, setItemsPerPage] = useState(
-    Math.round(window.innerWidth / 350)
-  ); // 한 페이지에 나올 리스트 개수
+  const [itemsPerPage, setItemsPerPage] = useState<number>(0); // 한 페이지에 나올 리스트 개수
 
   const [paginatedItems, setPaginatedItems] = useState<HeritageData[]>([]); // 렌더링할 데이터
   const [ccbaKdcd, setCcbaKdcd] = useState(11); // 종목코드
@@ -84,25 +82,21 @@ export default function Card(category: Category) {
   };
 
   useEffect(() => {
-    // 모니터 브라우저 크기에 따른 리스트 계산
+    // 브라우저 크기에 따라 카드 개수를 계산 및 업데이트
     calcListNum();
-
-    // 초기 데이터 가져오기
-    fetchHeritageData(page);
-
-    /* 1. 현재 기기의 브라우저 너비를 계산
-       2. 너비를 카드 한개의 너비로 나눔 */
     window.addEventListener("resize", calcListNum);
     return () => {
-      // cleanup
       window.removeEventListener("resize", calcListNum);
     };
   }, []);
 
-  // 페이지 변경시 다음 데이터 가져오기
+  // itemsPerPage와 page가 변경될 때마다 데이터를 가져오기
   useEffect(() => {
-    fetchHeritageData(page);
-  }, [page]);
+    // itemsPerPage가 0이 아닌 경우에만 데이터를 가져옵니다.
+    if (itemsPerPage > 0) {
+      fetchHeritageData(page);
+    }
+  }, [itemsPerPage, page]);
 
   // 카테고리 버튼 클릭시 종목 코드 변경
   useEffect(() => {
