@@ -100,7 +100,7 @@ export default function VideoList() {
                   onClick={() => setPlayingIndex(index)}
                 >
                   <img
-                    className="w-full h-[220px] object-cover"
+                    className="w-full h-[240px] object-cover"
                     src={item.imgUrl}
                     alt={item.title}
                   />
@@ -116,13 +116,13 @@ export default function VideoList() {
                   </div>
                 </div>
               )}
-              <div className="flex flex-col justify-center items-start ml-2">
+              <div className="flex flex-col items-center ml-2 h-[65px]">
                 <div className="flex flex-row gap-3 items-center text-base text-black font-semibold h-[60px]">
                   <VideoCameraIcon className="size-5" />
                   {item.title}
                 </div>
                 <div
-                  className="font-semibold text-sm text-[#636D72]
+                  className="font-semibold text-sx text-[#636D72]
                 "
                 >
                   {item.time}
