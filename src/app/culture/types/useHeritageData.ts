@@ -159,6 +159,7 @@ export const useHeritageData = (
       );
       setLongitude(fetchedLongitude || null);
       setLatitude(fetchedLatitude || null);
+
     } catch (error) {
       console.error('데이터 가져오기 실패:', error);
     }

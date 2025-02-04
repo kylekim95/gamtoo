@@ -18,6 +18,7 @@ import 'swiper/css';
 import useQuizInfoManager from '@/components/quiz/useQuizInfoManager';
 import { redirect, useSearchParams } from 'next/navigation';
 import axios from 'axios';
+import GetUserRankColor from '@/components/quiz/quizRankData';
 
 export default function RankingDetail() {
   const searchParams = useSearchParams();
@@ -97,8 +98,12 @@ export default function RankingDetail() {
   };
   const [commentsData, setCommentsData] = useState<CommentDataType[]>([]);
 
+  const [iconColor, setIconColor] = useState<[string, string]>(['','']);
+
   useEffect(()=>{
     async function Init(){
+      if(uid) setIconColor(await GetUserRankColor(uid));
+
       const userObj = await axios.get(`${process.env.NEXT_PUBLIC_BASIC_URL}/users/${uid}`);
       if(userObj.status !== 200) redirect('/quizRanking');
       labels.current[0] = userObj.data.email ?? '';
@@ -239,7 +244,7 @@ export default function RankingDetail() {
       <div className='w-full min-w-[900px] max-w-[1200px] flex flex-col justify-center items-center mb-4'>
         {/* Social info */}
         <div className='w-[80%] place-content-evenly flex items-end overflow-hidden lg:mt-[-100px] mt-4 mb-4'>
-          <GagsiMaskIcon color={'#000000'} className='w-[25%] aspect-square rounded-full overflow-hidden flex flex-col items-center justify-center bg-white border-4 border-black'/>
+          <GagsiMaskIcon color={iconColor[0]} className={'w-[25%] aspect-square rounded-full overflow-hidden flex flex-col items-center justify-center bg-white border-4 ' + iconColor[1]}/>
           {labels.current.map((elem, index)=>socialData(elem, value.current[index], index))}
         </div>
         {/* 문화재 퀴즈 최근 결과 */}

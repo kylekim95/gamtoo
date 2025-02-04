@@ -42,7 +42,6 @@ export default function QuizPage() {
 
   useEffect(()=>{
     mounted.current = true;
-    setLoaded(0);
     async function InitProblems() {
       const heritageList : heritageListResponse[] = [];
       const initResPromises : Promise<heritageListResponse[]>[] = [];
@@ -72,7 +71,7 @@ export default function QuizPage() {
         const problemFactoryOutput : ProblemFactoryOutput | null = await GetProblem(input);
         if(!mounted.current) return;
         if(problemFactoryOutput){
-          if(problemFactoryOutput.url===''){
+          if(problemFactoryOutput.url==='' || problemFactoryOutput.url.includes('no_image')){
             listInd++;
             continue;
           }
@@ -93,7 +92,7 @@ export default function QuizPage() {
     return ()=>{
       mounted.current = false;
     }
-  }, [totalNumItems]);
+  }, []);
 
   //TODO : Custom Hook
   const refs = useRef(problems.current.map(()=>createRef<HTMLDivElement>()));
