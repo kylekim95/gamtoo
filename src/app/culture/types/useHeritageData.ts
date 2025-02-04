@@ -71,9 +71,6 @@ export const useHeritageData = (ccbaKdcd: string | null, ccbaAsno: string | null
       setLongitude(fetchedLongitude || null);
       setLatitude(fetchedLatitude || null);
 
-      console.log('Longitude:', fetchedLongitude);
-      console.log('Latitude:', fetchedLatitude);
-
     } catch (error) {
       console.error('데이터 가져오기 실패:', error);
     }
