@@ -77,6 +77,9 @@ export default function StatisticsCard() {
         display: true,
         text: '랭킹에서 내 위치 확인하기'
       }
+    },
+    scales: {
+      y: {min:0, max:100}
     }
   };
   const testBarVertRef = createRef<ChartJSOrUndefined<"bar", number[], string>>();
@@ -122,7 +125,7 @@ export default function StatisticsCard() {
     },
     scales: {
       y: { stacked: true },
-      x: { beginAtZero: true },
+      x: { beginAtZero: true, min:0, max:1.0 },
     },
     datasets: {
       bar: { barPercentage: 0.5 },
@@ -293,7 +296,7 @@ export default function StatisticsCard() {
         {isAuth && <span className='text-black font-bold text-lg'>문화재 퀴즈에 도전한 {testData.datasets[0].data[0]}%의 유저 중 한명입니다!</span>}
         {!isAuth && <span className='text-black font-bold text-lg'>{testData.datasets[0].data[0]}%의 유저들이 이미 문화재 퀴즈에 도전했습니다!</span>}
         {/* Capsule Select Menu */}
-        <CapsuleSelectMenu className='w-[80%] h-[100px] m-3 flex flex-wrap justify-center gap-1' items={Object.entries(CatCode2String)} onSelectedChanged={testFunc}/>
+        <CapsuleSelectMenu className='w-[80%] min-h-[100px] m-3 flex flex-wrap justify-center gap-1' items={Object.entries(CatCode2String)} onSelectedChanged={testFunc}/>
         <div className='flex justify-center w-[90%]'>
           {/* 오답률 차트 */}
           <div className='w-[60%] aspect-[1/1.1] flex justify-center'>
