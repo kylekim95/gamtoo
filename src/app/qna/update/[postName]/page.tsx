@@ -108,7 +108,7 @@ const {
                     type="text"
                     id="subject"
                     name="title"
-                    className="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:border-red-500"
+                    className={`w-full p-3 rounded-md border border-gray-300 focus:outline-none ${errors.title ? 'border-red-500': 'focus:border-green-500'}`}
                   />
                 </div>
                 <div className="pl-16">  {errors.title && <p className="text-red-500">{errors.title.message}</p>}</div>
@@ -127,7 +127,7 @@ const {
                     })}
                     id="subject"
                     name="content"
-                    className="w-full p-3 rounded-md border h-96 border-gray-300 focus:outline-none focus:border-red-500"
+                    className={`w-full p-3 rounded-md border h-96 border-gray-300 focus:outline-none ${errors.content ? 'border-red-500': 'focus:border-green-500'} `}
                   />
                 </div>
                 <div className="pl-16">  {errors.content && <p className="text-red-500">{errors.content.message}</p>}</div>
