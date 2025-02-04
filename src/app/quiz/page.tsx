@@ -9,8 +9,7 @@ import { quizResults } from '../quizResults/page';
 import GyeongBokGungIcon from '@/components/quiz/svg/GyeongBokGungIcon';
 import { GetProblem, ProblemFactoryInput, ProblemFactoryOutput } from './components/problemFactory';
 import useQuizInfoManager, {postQuizData} from '@/components/quiz/useQuizInfoManager';
-// import axios from 'axios';
-// import { CatCode2String } from '@/components/quiz/CHCategories';
+import { CatCode2String, TotalNumItems } from '@/components/quiz/CHCategories';
 
 type ProblemData = {
   id: string;
@@ -38,43 +37,63 @@ export default function QuizPage() {
   const problems = useRef<ProblemData[]>(new Array(numProblems).fill(defaultProblemData));
   const [loaded, setLoaded] = useState(0);
   const mounted = useRef(false);
+
+  const totalNumItems = useMemo(()=>[...TotalNumItems], []);
+
   useEffect(()=>{
     mounted.current = true;
     setLoaded(0);
     async function InitProblems() {
-      const heritageListReqObj : heritageListRequest = { pageUnit: 80 };
-      const heritageList : heritageListResponse[] = await getHeritageList(heritageListReqObj);
+      const heritageList : heritageListResponse[] = [];
+      const initResPromises : Promise<heritageListResponse[]>[] = [];
+      for(let i = 0; i < Object.keys(CatCode2String).length; i++){
+        const initReq : heritageListRequest = { pageUnit: 10, pageIndex: Math.trunc(Math.random() * Math.trunc(TotalNumItems[i] / 10)) + 1, ccbaKdcd: Object.keys(CatCode2String)[i] };
+        const initRes : Promise<heritageListResponse[]> = getHeritageList(initReq);
+        initResPromises.push(initRes);
+      }
+      const results : PromiseSettledResult<heritageListResponse[]>[] = await Promise.allSettled(initResPromises);
+      results.forEach((result)=>{
+        if(result.status === 'fulfilled'){
+          heritageList.push(...result.value);
+        }
+      });
+      heritageList.sort(()=>(Math.random() - 0.5));
       if(!mounted.current) return;
       //TODO: 문제의 정답을 랜덥하게 고른다
-      for(let i = 0; i < numProblems; i++){
-        const problemInd = i;
-        const answerInd = i * 4 + Math.trunc(Math.random() * 4);
+      let problemInd = 0;
+      let listInd = 0;
+      while(problemInd < numProblems){
         const input : ProblemFactoryInput = {
-          Answer_ccbaAsno : heritageList[answerInd].ccbaAsno,
-          Answer_ccbaCtcd : heritageList[answerInd].ccbaCtcd,
-          Answer_ccbaKdcd : heritageList[answerInd].ccbaKdcd,
-          Answer_ccbaMnm1 : heritageList[answerInd].ccbaMnm1,
+          Answer_ccbaAsno : heritageList[listInd].ccbaAsno,
+          Answer_ccbaCtcd : heritageList[listInd].ccbaCtcd,
+          Answer_ccbaKdcd : heritageList[listInd].ccbaKdcd,
+          Answer_ccbaMnm1 : heritageList[listInd].ccbaMnm1,
         }
         const problemFactoryOutput : ProblemFactoryOutput | null = await GetProblem(input);
         if(!mounted.current) return;
         if(problemFactoryOutput){
+          if(problemFactoryOutput.url===''){
+            listInd++;
+            continue;
+          }
           const newProblemData : ProblemData = {
             ...problemFactoryOutput, 
-            id:i.toString(), 
-            linkTo: `ccbaAsno=${heritageList[answerInd].ccbaAsno}%26ccbaCtcd=${heritageList[answerInd].ccbaCtcd}%26ccbaKdcd=${heritageList[answerInd].ccbaKdcd}`,
-            category: heritageList[answerInd].ccbaKdcd,
+            id:(problemInd + 1).toString(), 
+            linkTo: `ccbaAsno=${heritageList[listInd].ccbaAsno}%26ccbaCtcd=${heritageList[listInd].ccbaCtcd}%26ccbaKdcd=${heritageList[listInd].ccbaKdcd}`,
+            category: heritageList[listInd].ccbaKdcd,
           };
           problems.current[problemInd] = newProblemData;
+          problemInd++;
+          listInd++;
+          setLoaded(problemInd);
         }
       }
-    };
-    InitProblems().then(()=>{
-      setLoaded(numProblems - 1);
-    });
+    }
+    InitProblems();
     return ()=>{
       mounted.current = false;
     }
-  }, []);
+  }, [totalNumItems]);
 
   //TODO : Custom Hook
   const refs = useRef(problems.current.map(()=>createRef<HTMLDivElement>()));
@@ -156,10 +175,11 @@ export default function QuizPage() {
       data.push(temp);
     }
 
+    //한번 파싱 해서 해석이 안되는 문제
     score = score / numProblems * 100;
     sessionStorage.setItem('recentQuizData', JSON.stringify({
       'score': score,
-      'data' : JSON.stringify(data)
+      'data' : data
     }));
 
     const postData : postQuizData = {

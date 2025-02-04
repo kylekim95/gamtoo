@@ -52,6 +52,7 @@ export async function getHeritageList(reqObj : heritageListRequest) : Promise<he
   }
   return [];
 }
+
 async function interpretValidResponse(text : string) : Promise<heritageListResponse[]> {
   const parsedText = await parseStringPromise(text);
   const heritageList : heritageListResponse[] = [];

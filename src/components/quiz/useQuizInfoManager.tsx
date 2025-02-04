@@ -36,8 +36,9 @@ export default function useQuizInfoManager() {
           errRate_Total : [string, string][];
           name : string;
         } = JSON.parse(post.title);
-
-        const _scores = data.scores.map<[number, Date]>(([scoreVal, timestamp])=>[parseInt(scoreVal), new Date(timestamp)]);
+        const _scores = data.scores.map<[number, Date]>(([scoreVal, timestamp])=>{
+          return [parseInt(scoreVal), new Date(timestamp)];
+        });
         const _errRate_Correct = data.errRate_Correct.map<[string, number]>(([key, value])=>[key, parseInt(value)]);
         const _errRate_Total = data.errRate_Total.map<[string, number]>(([key, value])=>[key, parseInt(value)]);
         ret.push({
@@ -46,9 +47,10 @@ export default function useQuizInfoManager() {
           highScore: parseInt(data.highScore),
           errRate_Correct: _errRate_Correct,
           errRate_Total: _errRate_Total,
-          scores: _scores,
+          scores: [..._scores.map((elem)=>elem)],
           postId: post._id
         });
+        // console.log(ret);
       }
       catch(e){
         console.log(e);
@@ -88,6 +90,7 @@ export default function useQuizInfoManager() {
         }
       });
 
+      //stringify 하기 전에 변수
       const dataToJson = JSON.stringify({
         ...myQuizData, 
         name: userName,

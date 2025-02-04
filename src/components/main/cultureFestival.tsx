@@ -15,7 +15,7 @@ export default function CultureFestival() {
     eDate: string;
     imageUrl: string;
   }
-  const [filteredData, setFilteredData] = useState<Item[]>([]);
+  const [currentData, setCurrentData] = useState<Item[]>([]);
   const [festivalItems, setFestivalItems] = useState<Item[]>([]);
   function NotFound() {
     return (
@@ -107,6 +107,8 @@ export default function CultureFestival() {
       </svg>
     );
   }
+  const [loading, setLoading] = useState<boolean>(true);
+
   async function testData() {
     const data = await fetch(
       "https://www.cha.go.kr/cha/openapi/selectEventListOpenapi.do?searchYear=2024&searchMonth=6"
@@ -129,14 +131,16 @@ export default function CultureFestival() {
     }
 
     setFestivalItems(items);
+    setLoading(false); // 데이터 로딩 완료
   }
   useEffect(() => {
     testData();
   }, []);
 
   // 날짜 변경
-  const currentDate = dayjs();
-  const [selectedDate, setSelectedDate] = useState(currentDate);
+  const defaultDate = dayjs("2024-06-01"); // 2024년 6월 1일 생성
+  const [selectedDate, setSelectedDate] = useState(defaultDate);
+  const [message, setMessage] = useState<string>("행사를 가져오는 중입니다...");
 
   const handlePreviousMonth = () => {
     const newDate = selectedDate.subtract(1, "month");
@@ -146,6 +150,10 @@ export default function CultureFestival() {
   const handleNextMonth = () => {
     const newDate = selectedDate.add(1, "month");
     setSelectedDate(newDate);
+    console.log(currentData);
+    if (currentData.length === 0) {
+      setMessage("이번달 행사는 없습니다");
+    }
   };
 
   useEffect(() => {
@@ -154,8 +162,8 @@ export default function CultureFestival() {
       const formatDate = selectedDate.format("YYYY.MM");
       return formatDate === itemDate;
     });
-    setFilteredData(filteredData);
-  }, [selectedDate]);
+    setCurrentData(filteredData);
+  }, [selectedDate, festivalItems]);
 
   return (
     <>
@@ -195,7 +203,7 @@ export default function CultureFestival() {
           <span className="">모든 행사</span>
         </div>
       </div>
-      {/* 하단 부분 */}
+      {/* 하단 및 날짜 선택 등 기타 컴포넌트 */}
       <div className="flex flex-row gap-11 mt-8 w-full h-[340px]">
         {/* 날짜 조회 */}
         <div className="flex flex-col justify-center items-center w-[10%]">
@@ -212,53 +220,53 @@ export default function CultureFestival() {
         {/* 행사 카드 */}
         <div className="w-[85%] h-[340px] overflow-x-auto">
           <div className="flex flex-row gap-4">
-            {filteredData.length > 0 ? (
-              filteredData.map((item, index) => {
-                return (
-                  <div
-                    className="flex-shrink-0 flex flex-col w-[280px] h-[320px] rounded-md shadow-[5px_5px_5px_#ccc8c8]"
-                    key={index}
-                    style={{
-                      scrollbarWidth: "none",
-                      msOverflowStyle: "none",
-                    }}
-                  >
-                    {/* flex-shrink-0 추가: className="flex-shrink-0"를 자식 요소 <div>에 추가하여 크기가 줄어들지 않도록 설정*/}
-                    {/* 이미지가 차지하는 영역 */}
-                    <div className="relative w-[280px] h-[230px] mb-1">
-                      <Image
-                        src={item.imageUrl}
-                        alt=""
-                        fill // 부모 컨테이너를 채우도록 설정
-                        priority // LCP로 감지된 이미지에 우선순위 부여
-                        sizes="280px" // 부모 컨테이너의 고정 너비와 동일하게 설정
-                        style={{
-                          objectFit: "cover",
-                          objectPosition: "center top", // 상단 중심 정렬
-                        }}
-                      />
-                    </div>
-
-                    {/* 유형, 이름, 주소를 세로로 정렬하기 위해 flex flex-col 사용 */}
-                    <div className="flex flex-col justify-center gap-3 mt-3 ml-2">
-                      <span className="text-black text-base font-bold">
-                        {item.subTitle}
-                      </span>
-                      <div className="flex flex-row items-center">
-                        <span className="text-black text-xs font-bold">
-                          {item.eDate}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })
-            ) : (
+            {loading ? (
+              // 데이터 로딩 중일 때
               <div className="flex flex-col gap-9 mx-auto items-center">
                 <NotFound />
-                <span className="text-black text-xl font-medium ">
-                  아쉽게도 {selectedDate.format("YYYY.MM")} 행사는 없네요..!
-                </span>
+                <p>행사를 가져오는 중입니다...</p>
+              </div>
+            ) : currentData.length > 0 ? (
+              // 로딩이 끝났고 데이터가 있을 때
+              currentData.map((item, index) => (
+                <div
+                  className="flex-shrink-0 flex flex-col w-[280px] h-[320px] rounded-md shadow-[5px_5px_5px_#ccc8c8]"
+                  key={index}
+                  style={{
+                    scrollbarWidth: "none",
+                    msOverflowStyle: "none",
+                  }}
+                >
+                  <div className="relative w-[280px] h-[230px] mb-1">
+                    <Image
+                      src={item.imageUrl}
+                      alt=""
+                      fill
+                      priority
+                      sizes="280px"
+                      style={{
+                        objectFit: "cover",
+                        objectPosition: "center top",
+                      }}
+                    />
+                  </div>
+                  <div className="flex flex-col justify-center gap-3 mt-3 ml-2">
+                    <span className="text-black text-base font-bold">
+                      {item.subTitle}
+                    </span>
+                    <div className="flex flex-row items-center">
+                      <span className="text-black text-xs font-bold">
+                        {item.eDate}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              // 로딩은 끝났지만 해당 월에 행사가 없을 때
+              <div className="flex flex-col gap-9 mx-auto items-center">
+                <NotFound />
+                <p>이번달 행사는 없습니다</p>
               </div>
             )}
           </div>
