@@ -8,6 +8,7 @@ import Table from '@/components/quiz/Table';
 import useQuizInfoManager, { quizInfo } from '@/components/quiz/useQuizInfoManager';
 import GagsiMaskIcon from '@/components/quiz/svg/GagsiMaskIcon';
 import Link from 'next/link';
+import GetUserRankColor from '@/components/quiz/quizRankData';
 
 type DataType = {
   standings: number;
@@ -32,7 +33,7 @@ export default function RankingCard() {
   }
   useEffect(()=>{
     const temp = getAllQuizInfo();
-    temp.then((data : quizInfo[])=>{
+    temp.then(async (data : quizInfo[])=>{
       const ImpRankings : ImpRankData[] = [];
       // Weekly
       const weeklyData : [string, number, number, number][] = data.map<[string, number, number, number]>((elem)=>[
@@ -42,9 +43,9 @@ export default function RankingCard() {
         elem.scores.length
       ]);
       weeklyData.sort((a, b)=>b[2]-a[2]);
-      ImpRankings.push({userId : weeklyData[0][0], color: '#000000'});
+      ImpRankings.push({userId : weeklyData[0][0], color: (await GetUserRankColor(weeklyData[0][0]))[0] });
       weeklyData.sort((a, b)=>b[3]-a[3]);
-      ImpRankings.push({userId : weeklyData[0][0], color: '#000000'});
+      ImpRankings.push({userId : weeklyData[0][0], color: (await GetUserRankColor(weeklyData[0][0]))[0] });
       //Daily
       const dailyData : [string, number, number, number][] = data.map<[string, number, number, number]>((elem)=>[
         elem.id, 
@@ -53,23 +54,26 @@ export default function RankingCard() {
         elem.scores.length
       ]);
       dailyData.sort((a, b)=>b[2]-a[2]);
-      ImpRankings.push({userId : dailyData[0][0], color: '#000000'});
+      ImpRankings.push({userId : dailyData[0][0], color: (await GetUserRankColor(weeklyData[0][0]))[0] });
       dailyData.sort((a, b)=>b[3]-a[3]);
-      ImpRankings.push({userId : dailyData[0][0], color: '#000000'});
+      ImpRankings.push({userId : dailyData[0][0], color: (await GetUserRankColor(weeklyData[0][0]))[0] });
       setImpRankings(ImpRankings);
 
       data.sort((a, b)=>b.highScore-a.highScore);
-      setAllQuizInfo(data.map<DataType>((elem, index)=>{
+      const allConvData : DataType[] = [];
+      for(let i = 0; i < data.length; i++){
+        const elem = data[i];
         const convData : DataType = {
-          standings: index + 1,
-          rank: gagsiTalWithColor('#000000'),
+          standings: i + 1,
+          rank: gagsiTalWithColor((await GetUserRankColor(elem.id))[0]),
           id: userDetailsLink(elem.id, elem.name),
           highScore: elem.highScore,
           attempts: elem.scores.length,
           date: elem.scores.slice(-1)[0][1].toLocaleString(),
         }
-        return convData;
-      }));
+        allConvData.push(convData);
+      }
+      setAllQuizInfo(allConvData);
     });
   }, [getAllQuizInfo]);
 

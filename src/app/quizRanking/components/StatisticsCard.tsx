@@ -12,6 +12,7 @@ import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
 import { useAppSelector } from '@/lib/redux/store';
 import axios from 'axios';
 import useQuizInfoManager, {quizInfo} from '@/components/quiz/useQuizInfoManager';
+import GetUserRankColor from '@/components/quiz/quizRankData';
 
 export default function StatisticsCard() {
   const {isAuth, userId} = useAppSelector((state) => state.authReducer.value);
@@ -277,6 +278,12 @@ export default function StatisticsCard() {
     Init();
   }, [getAllQuizInfo, userId, testFunc]);
 
+  const [iconColor, setIconColor] = useState<[string, string]>(['','']);
+  useEffect(()=>{
+    async function RankColor(){ setIconColor(await GetUserRankColor(userId)); };
+    RankColor();
+  }, [userId]);
+
   return (
     <div className='w-full min-w-[800px] max-w-[1000px] h-auto flex flex-col items-center backdrop-blur-xl rounded-lg shadow-2xl overflow-hidden pb-10'>
       {/* Card Header */}
@@ -309,7 +316,8 @@ export default function StatisticsCard() {
             </div>
             {/* 각시탈 아이콘 */}
             {/* TODO: 랭크에 맞게 색 설정하기 */}
-            <GagsiMaskIcon color='#000000' className=' w-[50%] aspect-square rounded-full border-[3px] border-black overflow-hidden self-end justify-self-end -rotate-[25deg] opacity-75' />
+            {!isAuth && <GagsiMaskIcon color='#000000' className=' w-[50%] aspect-square rounded-full border-[3px] border-black overflow-hidden self-end justify-self-end -rotate-[25deg] opacity-75' />}
+            {isAuth && <GagsiMaskIcon color={iconColor[0]} className={' w-[50%] aspect-square rounded-full border-[3px] overflow-hidden self-end justify-self-end -rotate-[25deg] opacity-75 ' + iconColor[1]} />}
           </div>
         </div>
       </div>
