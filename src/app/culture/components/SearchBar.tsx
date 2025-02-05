@@ -21,6 +21,7 @@ export default function SearchBar({ searchHeritage }: SearchBarProps) {
 
   return (
     <div className="flex items-center space-x-2 relative">
+      <div className='focus:scale-105 hover:scale-105  transition-all duration-300 ease-in-out '>
   <input
     type="text"
     placeholder="검색어를 입력해주세요."
@@ -31,14 +32,14 @@ export default function SearchBar({ searchHeritage }: SearchBarProps) {
      placeholder-gray-700 placeholder:tracking-widest 
      placeholder:font-extrabold pl-6 focus:outline-none
      font-pretendard tracking-extra-wide font-semibold text-[16px]
-     transition-all duration-300 ease-in-out 
-     focus:scale-105 hover:scale-105" 
+    
+     " 
   />
   <button
     onClick={handleSearch}
     className="text-white px-4 py-2 rounded-lg transition-all duration-300 ease-in-out 
     absolute right-1 top-1/2 transform -translate-y-1/2 flex items-center 
-     hover:scale-125 hover:-right-1"
+     hover:scale-125"
   >
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -55,6 +56,7 @@ export default function SearchBar({ searchHeritage }: SearchBarProps) {
       />
     </svg>
   </button>
+</div>
 </div>
 
   );
