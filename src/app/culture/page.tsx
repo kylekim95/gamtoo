@@ -10,14 +10,11 @@ import { fetchHeritageList } from './types/fetchHeritageList';
 export default function Culture() {
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [query, setQuery] = useState('');
-  
 
-  // 검색 함수
   const searchHeritage = async (newQuery: string) => {
     if (newQuery.trim() === '') return;
     setQuery(newQuery); 
     const { items } = await fetchHeritageList(1, 25, newQuery);
-    console.log('📢 검색된 항목들:', items);  
     setSearchResults(items); 
   };
 
@@ -27,7 +24,7 @@ export default function Culture() {
         <HeroImage />
         <SearchCard />
         <div className="mb-10">
-          <HeritageCard  />
+          <HeritageCard SearchResult={searchResults}/>
         </div>
         <div className="absolute top-60 left-1/2 transform -translate-x-1/2 z-20">
           <SearchBar searchHeritage={searchHeritage} />

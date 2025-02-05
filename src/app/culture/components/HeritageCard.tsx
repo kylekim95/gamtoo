@@ -5,37 +5,45 @@ import Link from 'next/link';
 import Pagination from './Pagination';
 import { fetchHeritageList } from '../types/useHeritageData';
 
+interface HeritageCardProps {
+  SearchResult: any[];
+}
 
-export default function HeritageCard() {
-  const [heritageData, setHeritageData] = useState<any[]>([]);
+export default function HeritageCard(props: HeritageCardProps) {
+  const [heritageData, setHeritageData] = useState<any[]>([]); 
   const [paginationInfo, setPaginationInfo] = useState({
-    totalCnt: 0,    // 총 데이터 수
-    pageUnit: 25,   // 페이지당 데이터 수
-    pageIndex: 1,   // 현재 페이지
+    totalCnt: 0, 
+    pageUnit: 25, 
+    pageIndex: 1,
   });
 
   const loadHeritageData = async (pageIndex: number) => {
     const { items, totalCnt } = await fetchHeritageList(pageIndex, paginationInfo.pageUnit);
-    setHeritageData(items);  // 필터링된 데이터가 items로 이미 들어온다고 가정
-    setPaginationInfo((prev) => ({
-      ...prev,
-      totalCnt,
-      pageIndex,
-    }));
+    if (props.SearchResult && props.SearchResult.length > 0) {
+      setPaginationInfo((prev) => ({
+        ...prev,
+        totalCnt: props.SearchResult.length,
+        pageIndex,
+      }));
+    } else {
+      setPaginationInfo((prev) => ({
+        ...prev,
+        totalCnt,
+        pageIndex,
+      }));
+    }
+  
+    setHeritageData(items); 
   };
-
   useEffect(() => {
     loadHeritageData(paginationInfo.pageIndex);
   }, [paginationInfo.pageIndex]);
 
   useEffect(() => {
-    const loadHeritageData = async () => {
-      const { items } = await fetchHeritageList(1, 25);  // 여기서 페이지나 데이터 수를 조정
-      setHeritageData(items);  // 데이터를 상태로 설정
-    };
-
-    loadHeritageData();
+    loadHeritageData(1);
   }, []);
+
+  const displayHeritageData = props.SearchResult.length > 0 ? props.SearchResult : heritageData;
 
   return (
     <div>
@@ -64,14 +72,13 @@ export default function HeritageCard() {
           />
         </svg>
         <span>
-          총 {paginationInfo.totalCnt}개의 국가유산이 검색되었습니다. (부속국가유산
-          포함)
+        총 {props.SearchResult.length > 0 ? props.SearchResult.length : paginationInfo.totalCnt}개의 국가유산이 검색되었습니다. (부속국가유산 포함)
         </span>
       </div>
 
       {/* 유산 목록 그리드 */}
       <div className="grid grid-cols-5 gap-14 p-5 pt-8">
-        {heritageData.map((heritage, index) => (
+        {displayHeritageData.slice((paginationInfo.pageIndex - 1) * paginationInfo.pageUnit, paginationInfo.pageIndex * paginationInfo.pageUnit).map((heritage, index) => (
           <Link
             key={index}
             href={`/culture/detail?ccbaKdcd=${heritage.ccbaKdcd}&ccbaAsno=${heritage.ccbaAsno}&ccbaCtcd=${heritage.ccbaCtcd}`}
@@ -82,7 +89,7 @@ export default function HeritageCard() {
               <div className="w-full h-48 mb-0 relative">
                 <div className="absolute top-0 left-0 w-full h-full bg-gray-200 z-10 rounded-t-lg"></div>
                 <img
-                  src={heritage.imageUrl}
+                  src={heritage.imageUrl && heritage.imageUrl !== "" ? heritage.imageUrl : null}
                   alt="유산 이미지"
                   className="w-full h-full object-contain z-20 relative rounded-lg"
                 />
@@ -118,12 +125,13 @@ export default function HeritageCard() {
           </Link>
         ))}
       </div>
+
       <Pagination
-        currentPage={paginationInfo.pageIndex}
-        totalCnt={paginationInfo.totalCnt}
-        pageUnit={paginationInfo.pageUnit}
-        onPageChange={(newPage: number) => loadHeritageData(newPage)}
-      />
+  currentPage={paginationInfo.pageIndex}
+  totalCnt={props.SearchResult.length > 0 ? props.SearchResult.length : paginationInfo.totalCnt}  // 검색 결과가 있으면 그 길이로
+  pageUnit={paginationInfo.pageUnit}
+  onPageChange={(newPage: number) => loadHeritageData(newPage)} // 페이지 전환 시 데이터 로드
+/>
     </div>
   );
 }

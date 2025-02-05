@@ -39,7 +39,7 @@ export default function DetailMoreImage(){
 
         if (imageList.length === 0) {
         } else {
-          setImages(imageList.slice(0, 5)); // 5개만 표시
+          setImages(imageList.slice(0, 5));
         }
       } catch (error) {
       }

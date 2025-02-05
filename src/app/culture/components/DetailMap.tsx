@@ -66,7 +66,6 @@ export default function DetailMap({ longitude, latitude }: { longitude: string |
         <div className="w-[92%] h-[1px] bg-gray-400 ml-20 mb-5"/>
         
         <div className="w-[89vw] h-80 ml-[4%] flex items-center justify-center max-w-full relative">
-          {/* 카카오 맵 */}
           <div
             ref={mapContainer}
             className="w-full h-full ml-1"
