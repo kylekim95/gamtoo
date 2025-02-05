@@ -22,7 +22,7 @@ export default function DetailVideo() {
 
   return (
     <div>
-      <div className="w-[700px] p-4 h-[430px] mt-[4.5vh] mr-20">
+      <div className="w-full p-4 h-[430px] mt-[4.5vh] mr-20">
         <h1 className="text-[#FF5DAB] font-pretendard text-xl font-semibold tracking-extra-wide z-20 relative mt-2 ml-2">
           VIDEO
         </h1>

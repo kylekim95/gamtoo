@@ -57,11 +57,6 @@ export default function Comments({ccbaKdcd, ccbaAsno, ccbaCtcd}: Props) {
   const commentHandler = async () => {
     await getComments();
     if(isPost && cultureComments.postId !== ""){
-      //바로 댓글 등록 로직
-      console.log("댓글 작성", {
-          postId: cultureComments.postId,
-          comment
-        })
       const response = await axios.post(`${process.env.NEXT_PUBLIC_BASIC_URL}/comments/create`,{
         postId: cultureComments.postId,
         comment
@@ -71,8 +66,6 @@ export default function Comments({ccbaKdcd, ccbaAsno, ccbaCtcd}: Props) {
         setComment("");
       }
     } else {
-      //post 생성 후 댓글 조회
-      console.log("post가 생성되어야함")
       const createPost = await axios.post(`${process.env.NEXT_PUBLIC_BASIC_URL}/posts/create`, {
         title: JSON.stringify({ccbaKdcd, ccbaAsno, ccbaCtcd}),
         image: null,
@@ -96,14 +89,29 @@ export default function Comments({ccbaKdcd, ccbaAsno, ccbaCtcd}: Props) {
     }
   }
   return (
-    <div className="w-full">
-      <div className="w-[900px] bg-white p-4 h-[450px] mt-[4.5vh] ml-20">
-        <h1 className="text-[#FF5DAB] font-pretendard text-xl font-semibold tracking-extra-wide z-20 relative mt-2 ml-2">COMMENTS</h1>
-        <h1 className="text-black text-4xl font-pretendard font-semibold mb-3 ml-2 mt-3">댓글 {cultureComments.commentType.length}개</h1>
+    <div className="w-3/4">
+      <div className=" bg-white p-4 h-[450px] mt-[4.5vh] ml-20">
+        <h1
+          className="text-[#FF5DAB] font-pretendard text-xl font-semibold tracking-extra-wide z-20 relative mt-2 ml-2">COMMENTS</h1>
+        <h1
+          className="text-black text-4xl font-pretendard font-semibold mb-3 ml-2 mt-3">댓글 {cultureComments.commentType.length}개</h1>
         <div className="w-[100%] h-[1px] bg-gray-400 ml-1">
 
         </div>
-        <div className="w-full p-2">
+        <div className="relative ">
+          <div className="top-[350px] w-full absolute">
+            {isAuth ? <div className="flex">
+                <input className="border w-[80%] rounded h-10" placeholder="댓글을 입력해주세요..." onChange={(e) => {
+                  setComment(e.target.value)
+                }}/>
+                <button className="bg-blue-400 ml-2 rounded p-2 w-[70px]" onClick={commentHandler}>글 작성</button>
+              </div> :
+              <p onClick={() => router.push("/login")} className="hover:cursor-pointer hover:text-blue-500">로그인하시면 댓글을
+                작성할
+                수 있어요</p>}
+          </div>
+        </div>
+        <div className="w-full p-2 h-[350px] overflow-scroll">
           {cultureComments.commentType.length > 0 ? cultureComments.commentType.map((e) => {
             return (
               <div key={e._id} className="border-b">
@@ -112,13 +120,7 @@ export default function Comments({ccbaKdcd, ccbaAsno, ccbaCtcd}: Props) {
                 <p className="text-[10px] text-[#8E8E8E] mb-1.5">{e.createdAt}</p>
               </div>
             )
-          }): <p>댓글이 없습니다...</p>}
-        </div>
-        <div className="top-[300px] relative">
-          {isAuth ? <div>
-            <input className="border w-[80%] rounded h-10" placeholder="댓글을 입력해주세요..." onChange={(e) => {setComment(e.target.value)}}/>
-            <button className="bg-blue-400 ml-2 rounded p-2" onClick={commentHandler}>글 작성</button>
-          </div> : <p onClick={() => router.push("/login")} className="hover:cursor-pointer hover:text-blue-500">로그인하시면 댓글을 작성할 수 있어요</p>}
+          }) : <p>댓글이 없습니다...</p>}
         </div>
       </div>
     </div>
