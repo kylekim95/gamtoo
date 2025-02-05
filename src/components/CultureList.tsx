@@ -10,10 +10,9 @@ interface Category {
 
 export default function Card(category: Category) {
   const [page, setPage] = useState(1); // 현재 페이지
-  const [itemsPerPage, setItemsPerPage] = useState<number>(0); // 한 페이지에 나올 리스트 개수
-
   const [paginatedItems, setPaginatedItems] = useState<HeritageData[]>([]); // 렌더링할 데이터
   const [ccbaKdcd, setCcbaKdcd] = useState(11); // 종목코드
+  const [loading, setLoading] = useState(true); // 로딩 상태
 
   // 이미지 데이터 상태 추가
   const [imageData, setImageData] = useState<Map<string, string>>(new Map());
@@ -21,38 +20,41 @@ export default function Card(category: Category) {
   // itemsPerPage 리스트 개수 계산
   function calcListNum() {
     const newItemsPerPage = Math.round(window.innerWidth / 350);
-    setItemsPerPage(newItemsPerPage);
+    return newItemsPerPage;
   }
 
   // 문화유산 가져오기
   const fetchHeritageData = async (pageIndex: number) => {
+    const newItemsPerPage = calcListNum();
+    setLoading(true); // 요청 시작 시 로딩 상태 활성화
     try {
       const response = await fetch(
-        `http://www.khs.go.kr/cha/SearchKindOpenapiList.do?ccbaKdcd=${category.category}&pageIndex=${pageIndex}&pageUnit=${itemsPerPage}`
+        `http://www.khs.go.kr/cha/SearchKindOpenapiList.do?ccbaKdcd=${ccbaKdcd}&pageIndex=${pageIndex}&pageUnit=${newItemsPerPage}`
       );
-      const xmlData = await response.text(); // 응답을 텍스트로 받아오기
-      const result = await parseStringPromise(xmlData); // xml을 JSON으로 변환
+      const xmlData = await response.text(); // 텍스트로 응답 받기
+      const result = await parseStringPromise(xmlData); // XML을 JSON으로 변환
 
-      // XML에서 필요한 데이터를 추출하여 상태에 저장
+      // XML에서 필요한 데이터 추출
       const items = result.result.item.map((item: any) => ({
-        ccmaName: item.ccmaName[0], // 국가유산종목
-        ccbaMnm1: item.ccbaMnm1[0], // 국가유산명(국문)
-        ccbaCtcdNm: item.ccbaCtcdNm[0], // 시도명
-        ccsiName: item.ccsiName[0], // 시군구명
-        ccbaKdcd: item.ccbaKdcd[0], // 국가유산종목 코드
-        ccbaAsno: item.ccbaAsno[0], // 관리번호
-        ccbaCtcd: item.ccbaCtcd[0], // 시도 코드
+        ccmaName: item.ccmaName[0],
+        ccbaMnm1: item.ccbaMnm1[0],
+        ccbaCtcdNm: item.ccbaCtcdNm[0],
+        ccsiName: item.ccsiName[0],
+        ccbaKdcd: item.ccbaKdcd[0],
+        ccbaAsno: item.ccbaAsno[0],
+        ccbaCtcd: item.ccbaCtcd[0],
       }));
 
-      // // 이미지 데이터를 각각의 카드에 맞게 가져오기
+      // 각 아이템에 대해 이미지 데이터 요청
       items.forEach((heritage: HeritageData) => {
-        // heritage의 타입을 HeritageData로 지정
         fetchImageData(heritage.ccbaKdcd, heritage.ccbaAsno, heritage.ccbaCtcd);
       });
 
       setPaginatedItems(items);
     } catch (error) {
       console.error("데이터 가져오기 실패:", error);
+    } finally {
+      setLoading(false); // 요청 종료 후 로딩 상태 해제
     }
   };
 
@@ -82,21 +84,28 @@ export default function Card(category: Category) {
   };
 
   useEffect(() => {
-    // 브라우저 크기에 따라 카드 개수를 계산 및 업데이트
-    calcListNum();
-    window.addEventListener("resize", calcListNum);
+    // 초기 데이터 호출
+    fetchHeritageData(page);
+
+    // resize 이벤트 발생 시 fetchHeritageData를 호출하는 핸들러를 정의합니다.
+    const handleResize = () => {
+      fetchHeritageData(page);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    // cleanup: 컴포넌트 언마운트 시 이벤트 리스너를 제거합니다.
     return () => {
-      window.removeEventListener("resize", calcListNum);
+      window.removeEventListener("resize", handleResize);
     };
   }, []);
 
   // itemsPerPage와 page가 변경될 때마다 데이터를 가져오기
   useEffect(() => {
     // itemsPerPage가 0이 아닌 경우에만 데이터를 가져옵니다.
-    if (itemsPerPage > 0) {
-      fetchHeritageData(page);
-    }
-  }, [itemsPerPage, page]);
+
+    fetchHeritageData(page);
+  }, [page]);
 
   // 카테고리 버튼 클릭시 종목 코드 변경
   useEffect(() => {
@@ -116,49 +125,52 @@ export default function Card(category: Category) {
 
   return (
     <>
-      {/* // 카드 리스트들을 차지하는 영역 */}
-      <div className=" w-[100%] ">
-        <CultureCard item={paginatedItems} imageData={imageData} />
-      </div>
-
-      {/* Pagination */}
-      <div className="flex flex-row justify-center items-center m-auto bg-white pl-10">
-        <div className="hidden sm:flex sm:flex-1 sm:items-center">
-          <nav
-            aria-label="Pagination"
-            className="isolate inline-flex rounded-md shadow-xs"
-          >
-            <span className="relative inline-flex items-center hover:bg-gray-50">
-              <ChevronLeftIcon
-                onClick={handlePreviousPage}
-                className="size-8 text-stone-500 "
-              />
-            </span>
-            {Array.from(
-              { length: 3 },
-              (
-                _,
-                i // 길이가 12인 배열을 생성후 배열의 각 인덱스 값으로 맵핑 합니다.
-              ) => (
-                <span
-                  key={i}
-                  aria-current="page"
-                  className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 hover:bg-gray-50"
-                >
-                  {i + 1}
-                </span>
-              )
-            )}
-
-            <span className="relative inline-flex items-center hover:bg-gray-50">
-              <ChevronRightIcon
-                onClick={handleNextPage}
-                className="size-8 text-stone-500"
-              />
-            </span>
-          </nav>
+      {loading ? (
+        // 로딩 상태일 때 표시할 UI (예: 스피너 또는 메시지)
+        <div className="flex justify-center items-center h-[388px]">
+          <p>Loading...</p>
         </div>
-      </div>
+      ) : (
+        <>
+          {/* 데이터 로딩 완료 후 카드 리스트 렌더링 */}
+          <div className="w-[100%]">
+            <CultureCard item={paginatedItems} imageData={imageData} />
+          </div>
+
+          {/* Pagination */}
+          <div className="flex flex-row justify-center items-center m-auto bg-white pl-10">
+            <div className="hidden sm:flex sm:flex-1 sm:items-center">
+              <nav
+                aria-label="Pagination"
+                className="isolate inline-flex rounded-md shadow-xs"
+              >
+                <span className="relative inline-flex items-center hover:bg-gray-50">
+                  <ChevronLeftIcon
+                    onClick={handlePreviousPage}
+                    className="size-8 text-stone-500"
+                  />
+                </span>
+                {Array.from({ length: 3 }, (_, i) => (
+                  <span
+                    onClick={() => setPage(i + 1)}
+                    key={i}
+                    aria-current="page"
+                    className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 hover:bg-gray-50 hover:cursor-pointer"
+                  >
+                    {i + 1}
+                  </span>
+                ))}
+                <span className="relative inline-flex items-center hover:bg-gray-50">
+                  <ChevronRightIcon
+                    onClick={handleNextPage}
+                    className="size-8 text-stone-500"
+                  />
+                </span>
+              </nav>
+            </div>
+          </div>
+        </>
+      )}
     </>
   );
 }
