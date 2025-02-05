@@ -116,7 +116,9 @@ export default function Detail() {
       <DetailVideo/>
       </div>
       </div>
+      <div className='mb-10'>
       <DetailMoreImage/>
+      </div>
      </div>
   );
 }

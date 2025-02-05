@@ -4,8 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { PaginationProps } from '../types/HeritageData';
 
 const Pagination: React.FC<PaginationProps> = ({ currentPage, totalCnt, pageUnit, onPageChange }) => {
-  const totalPages = Math.ceil(totalCnt / pageUnit);  // 전체 페이지 수 계산
-  const pageGroupSize = 5;  // 한 번에 보여줄 페이지 수
+  const totalPages = Math.ceil(totalCnt / pageUnit);
+  const pageGroupSize = 5; 
 
   const [startPage, setStartPage] = useState<number>(1);
   const [endPage, setEndPage] = useState<number>(Math.min(pageGroupSize, totalPages));
@@ -58,13 +58,10 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalCnt, pageUnit
         {'첫번째 페이지'}
       </button>
 
-      {/* 페이지 번호 */}
       {Array.from({ length: endPage - startPage + 1 }, (_, index) => startPage + index).map((pageNum) => (
         <button
           key={pageNum}
-          className={`px-4 py-2 rounded-lg ${
-            pageNum === currentPage ? 'bg-[#4F6CF3] text-white' : 'bg-gray-200 hover:bg-gray-300'
-          }`}
+          className={`px-4 py-2 rounded-lg ${pageNum === currentPage ? 'bg-[#4F6CF3] text-white' : 'bg-gray-200 hover:bg-gray-300'}`}
           onClick={() => handlePageClick(pageNum)}
         >
           {pageNum}
