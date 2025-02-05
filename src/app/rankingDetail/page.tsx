@@ -20,7 +20,6 @@ import { redirect, useSearchParams } from 'next/navigation';
 import axios from 'axios';
 import GetUserRankColor from '@/components/quiz/quizRankData';
 import { getHeritageDetailed, heritageDetailedRequest, heritageDetailedResponse } from '../quiz/components/heritageDetail';
-import { getHeritageList, heritageListRequest, heritageListResponse } from '../quiz/components/heritageList';
 
 export default function RankingDetail() {
   const searchParams = useSearchParams();
@@ -230,16 +229,13 @@ export default function RankingDetail() {
         async function FormatCommentData(commentData : RawCommentData) : Promise<CommentDataType> {
           const commentPostData = postsData.filter((post)=>post.postId===commentData.postId)[0];
           const request : heritageDetailedRequest = JSON.parse(commentPostData.cultureId);
+          console.log(request);
           const detailedResponse : heritageDetailedResponse | null = await getHeritageDetailed(request);
-
-          //문화재 이름 조회 관련
-          const listReq : heritageListRequest = {...request, pageUnit: 1};
-          const listRes : heritageListResponse = (await getHeritageList(listReq))[0];
 
           const ret : CommentDataType = {
             comment: commentData.comment,
             url: detailedResponse?.imageUrl ?? '',
-            name: listRes.ccbaMnm1,
+            name: detailedResponse?.ccbaMnm1 ?? '',
           }
           return ret; 
         }
@@ -256,8 +252,6 @@ export default function RankingDetail() {
     }
     Init();
   }, [getAllQuizInfo, uid]);
-
-  const dummyImage = 'http://www.cha.go.kr/unisearch/images/treasure/1618146.jpg';
   
   //유저 정보
   const labels = useRef<string[]>(["", "좋아요", "댓글", "문화재 퀴즈 최고점수"]);
