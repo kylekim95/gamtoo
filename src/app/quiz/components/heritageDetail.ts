@@ -7,6 +7,7 @@ export type heritageDetailedRequest = {
   ccbaAsno:	string	// 관리번호(필수)
   ccbaCtcd:	string	// 시도코드(필수)
 }
+
 export type heritageDetailedResponse = {
   ccbaKdcd:	string	  // 종목코드
   ccbaAsno:	string	  // 관리번호

@@ -19,6 +19,8 @@ import useQuizInfoManager from '@/components/quiz/useQuizInfoManager';
 import { redirect, useSearchParams } from 'next/navigation';
 import axios from 'axios';
 import GetUserRankColor from '@/components/quiz/quizRankData';
+import { getHeritageDetailed, heritageDetailedRequest, heritageDetailedResponse } from '../quiz/components/heritageDetail';
+import { getHeritageList, heritageListRequest, heritageListResponse } from '../quiz/components/heritageList';
 
 export default function RankingDetail() {
   const searchParams = useSearchParams();
@@ -98,12 +100,17 @@ export default function RankingDetail() {
   };
   const [commentsData, setCommentsData] = useState<CommentDataType[]>([]);
 
-  const [iconColor, setIconColor] = useState<[string, string]>(['','']);
+  type PostDataType = {
+    postId: string,
+    cultureId: string
+  }
 
+  const [iconColor, setIconColor] = useState<[string, string]>(['','']);
   useEffect(()=>{
     async function Init(){
+      // 탈 아이콘 랭크에 따른 색 변경 관련
       if(uid) setIconColor(await GetUserRankColor(uid));
-
+      //유저 기본 정보 초기화 관련
       const userObj = await axios.get(`${process.env.NEXT_PUBLIC_BASIC_URL}/users/${uid}`);
       if(userObj.status !== 200) redirect('/quizRanking');
       labels.current[0] = userObj.data.email ?? '';
@@ -112,8 +119,6 @@ export default function RankingDetail() {
       value.current[2] = userObj.data.comments.length ?? '0';
 
       const quizUsers = await getAllQuizInfo();
-      // console.log(quizUsers);
-
       const newDataset : ChartDataset<"bar", number[]>[] = [];
       const countCorrect = new Map<string, number>();
       const countAll = new Map<string, number>();
@@ -164,9 +169,9 @@ export default function RankingDetail() {
         return (new Date()).valueOf() - date.valueOf();
       }
       const userQuizData = quizUsers.filter((elem)=>elem.id===uid)[0];
-
+      //유저 기본 정보 초기화 관련 -> 효율성을 위해 밑에서 초기화화
       value.current[3] = userQuizData.highScore.toString() ?? '-';
-
+      // 점수 차트 관련련
       formattedData.current = userQuizData.scores.map((elem)=>{
         const _elem : [number, Date] = [elem[0], new Date(elem[1].getTime())];
         _elem[1].setHours(0,0,0,0);
@@ -202,26 +207,58 @@ export default function RankingDetail() {
       // 최근 퀴즈 점수
       recentQuizResultsData.current = userQuizData.scores.filter((elem)=>getDiffCurTime(elem[1]) < 6.048e+8);
 
-      // // 댓글 관련
-      // const rawCommentData = userObj.data.comments.map((elem)=>{
-      //   if(!elem.post) return null;
-      //   if(!elem.comment) return null;
-      //   const comment = elem.comment;
-      //   const post = elem.post;
-      //   return { comment, post };
-      // });
-      // setCommentsData([
-      //   {url:dummyImage, name:"안녕하세요", comment:"이것은 테스트용 댓글입니다."},
-      //   {url:dummyImage, name:"안녕하세요", comment:"이것은 테스트용 댓글입니다."},
-      //   {url:dummyImage, name:"안녕하세요", comment:"이것은 테스트용 댓글입니다."},
-      //   {url:dummyImage, name:"안녕하세요", comment:"이것은 테스트용 댓글입니다."},
-      //   {url:dummyImage, name:"안녕하세요", comment:"이것은 테스트용 댓글입니다."}
-      // ]);
+      // 댓글 관련
+      type RawCommentData = { comment:string, postId:string };
+      const rawCommentData : RawCommentData[] = userObj.data.comments.map((elem)=>{
+        const comment = elem.comment;
+        const post = elem.post;
+        const ret : RawCommentData = {
+          comment: comment,
+          postId: post,
+        }
+        return ret;
+      });
+      const cultureDetailsChannelId = (await axios.get(`${process.env.NEXT_PUBLIC_BASIC_URL}/channels/cultureDetails`)).data._id;
+      const postsData : PostDataType[] = (await axios.get(`${process.env.NEXT_PUBLIC_BASIC_URL}/posts/channel/${cultureDetailsChannelId}`)).data.map((item)=>{
+        return {
+          postId: item._id,
+          cultureId: item.title,
+        }
+      });
+      const commentsFormatPromise : Promise<CommentDataType>[] = [];
+      for(let i = 0; i < rawCommentData.length; i++){
+        async function FormatCommentData(commentData : RawCommentData) : Promise<CommentDataType> {
+          const commentPostData = postsData.filter((post)=>post.postId===commentData.postId)[0];
+          const request : heritageDetailedRequest = JSON.parse(commentPostData.cultureId);
+          const detailedResponse : heritageDetailedResponse | null = await getHeritageDetailed(request);
+
+          //문화재 이름 조회 관련
+          const listReq : heritageListRequest = {...request, pageUnit: 1};
+          const listRes : heritageListResponse = (await getHeritageList(listReq))[0];
+
+          const ret : CommentDataType = {
+            comment: commentData.comment,
+            url: detailedResponse?.imageUrl ?? '',
+            name: listRes.ccbaMnm1,
+          }
+          return ret; 
+        }
+        commentsFormatPromise.push(FormatCommentData(rawCommentData[i]));
+      }
+      const commentsFormatPromiseSettled = await Promise.allSettled(commentsFormatPromise);
+      const formattedCommentsData = commentsFormatPromiseSettled.map((promise)=>{
+        if(promise.status === 'fulfilled'){
+          return promise.value;
+        };
+        return null
+      }).filter((res)=>res !== null);
+      setCommentsData([...formattedCommentsData]);
     }
     Init();
   }, [getAllQuizInfo, uid]);
 
   const dummyImage = 'http://www.cha.go.kr/unisearch/images/treasure/1618146.jpg';
+  
   //유저 정보
   const labels = useRef<string[]>(["", "좋아요", "댓글", "문화재 퀴즈 최고점수"]);
   const value = useRef<string[]>(["", "", "", ""]);
@@ -276,7 +313,7 @@ export default function RankingDetail() {
           </div>
         </div>
         {/* 최근 평가한 문화재 */}
-        {/* <div className='w-full flex flex-col justify-center items-center mb-4'>
+        <div className='w-full flex flex-col justify-center items-center mb-4'>
           <div className='w-[80%] font-bold text-2xl border-t-2 pt-4'>최근 평가한 문화재</div>
           <Swiper
             className='w-[80%] min-h-[200px]'
@@ -290,7 +327,7 @@ export default function RankingDetail() {
           >
             {commentsData.map((commentObj, index)=><SwiperSlide key={index} ><RecentCommentsCard className='w-[20%] min-w-[275px] aspect-[1.5/1] m-3' url={commentObj.url} name={commentObj.name} comment={commentObj.comment} /></SwiperSlide>)}
           </Swiper>
-        </div> */}
+        </div>
       </div>
     </div>
   )
