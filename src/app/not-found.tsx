@@ -1,7 +1,6 @@
 "use client";
 import Image from "next/image";
 import { HomeIcon } from "@heroicons/react/20/solid";
-import chumsungdae from "../../public/QuizRanking/chumsungdae.png";
 import { useRouter } from "next/navigation";
 export default function Custom404() {
   const router = useRouter();
