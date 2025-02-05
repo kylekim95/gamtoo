@@ -229,7 +229,6 @@ export default function RankingDetail() {
         async function FormatCommentData(commentData : RawCommentData) : Promise<CommentDataType> {
           const commentPostData = postsData.filter((post)=>post.postId===commentData.postId)[0];
           const request : heritageDetailedRequest = JSON.parse(commentPostData.cultureId);
-          console.log(request);
           const detailedResponse : heritageDetailedResponse | null = await getHeritageDetailed(request);
 
           const ret : CommentDataType = {
