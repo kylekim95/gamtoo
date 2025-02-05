@@ -42,10 +42,11 @@ export default function RankingCard() {
         Math.max(...elem.scores.filter((scores)=>getDiffCurTime(scores[1]) < 6.048e+8).map((elem)=>elem[0])),
         elem.scores.length
       ]);
+      //TODO : 성능 개선 필요
       weeklyData.sort((a, b)=>b[2]-a[2]);
-      ImpRankings.push({userId : weeklyData[0][0], color: (await GetUserRankColor(weeklyData[0][0]))[0] });
+      ImpRankings.push({userId : weeklyData[0][0], color: ''});
       weeklyData.sort((a, b)=>b[3]-a[3]);
-      ImpRankings.push({userId : weeklyData[0][0], color: (await GetUserRankColor(weeklyData[0][0]))[0] });
+      ImpRankings.push({userId : weeklyData[0][0], color: ''});
       //Daily
       const dailyData : [string, number, number, number][] = data.map<[string, number, number, number]>((elem)=>[
         elem.id, 
@@ -54,9 +55,20 @@ export default function RankingCard() {
         elem.scores.length
       ]);
       dailyData.sort((a, b)=>b[2]-a[2]);
-      ImpRankings.push({userId : dailyData[0][0], color: (await GetUserRankColor(weeklyData[0][0]))[0] });
+      ImpRankings.push({userId : dailyData[0][0], color: '' });
       dailyData.sort((a, b)=>b[3]-a[3]);
-      ImpRankings.push({userId : dailyData[0][0], color: (await GetUserRankColor(weeklyData[0][0]))[0] });
+      ImpRankings.push({userId : dailyData[0][0], color: '' });
+
+      const rankColorsPromise : Promise<[string, string]>[] = [];
+      ImpRankings.forEach((impRankData : ImpRankData)=>{
+        rankColorsPromise.push(GetUserRankColor(impRankData.userId));
+      });
+      const response = await Promise.allSettled(rankColorsPromise);
+      response.forEach((res, index)=>{
+        if(res.status === 'fulfilled'){
+          ImpRankings[index].color = res.value[0];
+        }
+      });
       setImpRankings(ImpRankings);
 
       data.sort((a, b)=>b.highScore-a.highScore);

@@ -1,11 +1,13 @@
 "use client";
 
-import CalcCreateTimeToLocalTime from "@/components/CalcCreateTimeToLocalTime";
+
 import { useAppSelector } from "@/lib/redux/store";
-import { Post } from "@/types/PostType";
 import axios from "axios";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
+
+import CalcCreateTimeToLocalTime from "@/components/CalcCreateTimeToLocalTime";
+import { Post } from "@/types/PostType";
 
 const url = process.env.NEXT_PUBLIC_BASIC_URL;
 const QnaDetailPage = () => {
@@ -35,9 +37,8 @@ const QnaDetailPage = () => {
 
   const formatDate = (dateString: string): string => {
     const date = new Date(dateString);
-
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0"); // 월은 0부터 시작하므로 1을 더해줍니다.
+    const month = String(date.getMonth() + 1).padStart(2, "0"); 
     const day = String(date.getDate()).padStart(2, "0");
     const hours = String(date.getHours()).padStart(2, "0");
     const minutes = String(date.getMinutes()).padStart(2, "0");
@@ -61,8 +62,7 @@ const QnaDetailPage = () => {
       postId,
       comment: newComment,
     };
-    const data = await axios.post(`${url}/comments/create`, payload);
-
+    await axios.post(`${url}/comments/create`, payload);
     setNewComment("");
   };
 

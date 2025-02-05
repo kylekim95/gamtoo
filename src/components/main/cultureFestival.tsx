@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { parseStringPromise } from "xml2js";
-import { parseISO } from "date-fns";
 import dayjs from "dayjs";
 import {
   ChevronUpIcon,
@@ -150,7 +149,6 @@ export default function CultureFestival() {
   const handleNextMonth = () => {
     const newDate = selectedDate.add(1, "month");
     setSelectedDate(newDate);
-    console.log(currentData);
     if (currentData.length === 0) {
       setMessage("이번달 행사는 없습니다");
     }

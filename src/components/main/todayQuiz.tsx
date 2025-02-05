@@ -28,7 +28,6 @@ interface UserSelection {
   [index: number]: number;
 }
 
-//
 export default function TodayQuiz() {
   const defaultProblemData = {
     id: "",
@@ -102,7 +101,6 @@ export default function TodayQuiz() {
     "bg-blue-700",
     "bg-yellow-700",
   ];
-  const [resultMessage, setResultMessage] = useState<React.ReactNode>(null);
   const buttonRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   function checkAnswer(selectedNum: number) {
@@ -233,8 +231,7 @@ export default function TodayQuiz() {
             <Ranking />
             <div
               onClick={() => {
-                console.log(problems);
-                // router.push("/quiz");
+                router.push("/quiz");
               }}
               className="w-[95%] bg-[#C44440] w-[85%] h-[40px] flex flex-row justify-around items-center gap-14 mt-5 rounded-xl hover:cursor-pointer"
             >
