@@ -111,12 +111,14 @@ export default function Detail() {
 </div>
 <DetailMap longitude={longitude} latitude={latitude} />
       <div className="flex w-full"> 
-     <Comments />
-     <div className='mb-24'>
+     <Comments ccbaAsno={ccbaAsno as string} ccbaCtcd={ccbaCtcd as string} ccbaKdcd={ccbaKdcd as string}/>
+     <div className='mb-24 w-full pr-20'>
       <DetailVideo/>
       </div>
       </div>
+      <div className='mb-10'>
       <DetailMoreImage/>
+      </div>
      </div>
   );
 }

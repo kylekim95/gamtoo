@@ -7,6 +7,7 @@ export type heritageDetailedRequest = {
   ccbaAsno:	string	// 관리번호(필수)
   ccbaCtcd:	string	// 시도코드(필수)
 }
+
 export type heritageDetailedResponse = {
   ccbaKdcd:	string	  // 종목코드
   ccbaAsno:	string	  // 관리번호
@@ -27,6 +28,8 @@ export type heritageDetailedResponse = {
   ccbaAdmin:	string	// 관리자
   imageUrl:	string	  // 메인노출이미지URL
   content:	string	  // 내용
+
+  ccbaMnm1: string    //국문 이름 : 명세에 없는데 실제 데이터에는 있음
 }
 
 export async function getHeritageDetailed(reqObj : heritageDetailedRequest) : Promise<heritageDetailedResponse | null> {
@@ -64,7 +67,8 @@ async function interpretValidResponse(text : string) : Promise<heritageDetailedR
       ccbaPoss	: parsedText.result.item[0].ccbaPoss[0],
       ccbaAdmin	: parsedText.result.item[0].ccbaAdmin[0],
       imageUrl	: parsedText.result.item[0].imageUrl[0],
-      content	  : parsedText.result.item[0].content[0]
+      content	  : parsedText.result.item[0].content[0],
+      ccbaMnm1	  : parsedText.result.item[0].ccbaMnm1[0],
     }
     return heritageDetail;
   }

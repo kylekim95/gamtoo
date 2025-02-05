@@ -28,12 +28,8 @@ export default function Video() {
             {heritageName} ({heritageHanja})
           </p>
         </div>
-
-        {/* 흰색 줄 */}
         <div className="absolute top-[90%] left-48 w-[80%] h-[2px] bg-white" />
       </div>
-
-      {/* 동영상 영역 */}
       <div className="w-[70vw] mx-auto my-8 p-4">
         {isValidVideoUrl ? (
           <video width="100%" height="auto" controls>

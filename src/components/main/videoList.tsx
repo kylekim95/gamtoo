@@ -89,7 +89,7 @@ export default function VideoList() {
             >
               {playingIndex === index ? (
                 <iframe
-                  className="w-full h-[220px] rounded-lg"
+                  className="w-full h-[240px] rounded-lg"
                   src={item.videoUrl.replace("?si=", "?")}
                   title={item.title}
                   allowFullScreen

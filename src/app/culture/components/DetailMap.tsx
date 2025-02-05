@@ -7,7 +7,6 @@ export default function DetailMap({ longitude, latitude }: { longitude: string |
 
   const initializeMap = () => {
     if (window.kakao && mapContainer.current) {
-      console.log("정상적으로 로드되었습니다.");
       const { kakao } = window;
 
       const centerLatitude = latitude ? parseFloat(latitude) : 37.5665;
@@ -43,7 +42,6 @@ export default function DetailMap({ longitude, latitude }: { longitude: string |
       const zoomControl = new kakao.maps.ZoomControl();
       map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
     } else {
-      console.log("카카오 맵 API 로드 실패");
     }
   };
 
@@ -68,10 +66,9 @@ export default function DetailMap({ longitude, latitude }: { longitude: string |
         <div className="w-[92%] h-[1px] bg-gray-400 ml-20 mb-5"/>
         
         <div className="w-[89vw] h-80 ml-[4%] flex items-center justify-center max-w-full relative">
-          {/* 카카오 맵 */}
           <div
             ref={mapContainer}
-            className="w-full h-full"
+            className="w-full h-full ml-1"
             style={{ height: '300px' }}
           ></div>
         </div>

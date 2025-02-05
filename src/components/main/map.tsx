@@ -1,9 +1,16 @@
 import Image from "next/image";
 import mapImage from "../../../public/mapImage.png";
+import { useRouter } from "next/navigation";
 
 export default function Map() {
+  const router = useRouter();
   return (
-    <div className="w-[47%] mx-[1%] ">
+    <div
+      onClick={() => {
+        router.push("/map");
+      }}
+      className="w-[47%] mx-[1%] "
+    >
       <div className="border-b mb-7">
         <div className="flex flex-col">
           <div className=" text-[#F09AFF]">
@@ -37,7 +44,7 @@ export default function Map() {
         </div>
       </div>
       {/* 지도 */}
-      <div className="relative w-[100%] h-[87%]">
+      <div className="relative w-[100%] h-[87%] hover:cursor-pointer">
         <Image
           src={mapImage}
           alt=""

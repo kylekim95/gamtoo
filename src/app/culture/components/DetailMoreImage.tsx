@@ -16,13 +16,11 @@ export default function DetailMoreImage(){
 
   useEffect(() => {
     if (!ccbaKdcd || !ccbaAsno || !ccbaCtcd) {
-      console.error("❌ 필수 쿼리 파라미터가 없습니다.");
       return;
     }
 
     const fetchImages = async () => {
       try {
-        console.log("📡 API 요청 보내는 중...");
         const response = await axios.get(
           `http://www.khs.go.kr/cha/SearchImageOpenapi.do`,
           {
@@ -31,8 +29,6 @@ export default function DetailMoreImage(){
         );
 
         const result = await parseStringPromise(response.data);
-        console.log("🛠 변환된 JSON 데이터:", result);
-        console.log("📝 구조 확인:", result?.result?.item);
         const imageList = result?.result?.item?.reduce((acc: string[], item: any) => {
           if (Array.isArray(item.imageUrl)) {
             acc.push(...item.imageUrl);
@@ -42,12 +38,10 @@ export default function DetailMoreImage(){
 
 
         if (imageList.length === 0) {
-          console.error("❌ 이미지가 존재하지 않습니다!");
         } else {
-          setImages(imageList.slice(0, 5)); // 5개만 표시
+          setImages(imageList.slice(0, 5));
         }
       } catch (error) {
-        console.error("❌ API 요청 실패:", error);
       }
     };
 
@@ -64,13 +58,13 @@ export default function DetailMoreImage(){
         이미지 더보기
       </h1>
       <div className="w-[92%] h-[1px] bg-gray-400 ml-20" />
-      
-      <div className="w-[100%] h-[330px] ml-18 overflow-hidden">
-  <div className="w-[91%] ml-[5%] flex items-center justify-start max-w-full flex-wrap h-full">
-    <div className="flex flex-wrap gap-14">
+
+      <div className="w-full h-auto">
+  <div className="w-[91%] ml-20 flex items-center justify-center h-full">
+    <div className="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-6 w-full pt-8 pb-8">
       {images.length > 0 ? (
         images.map((img, index) => (
-          <div key={index} className="relative w-[17%] min-w-[150px] aspect-[1/1]">
+          <div key={index} className="relative w-full aspect-square pb-6">
             <img
               src={img}
               alt={`문화재 이미지 ${index}`}
@@ -79,12 +73,11 @@ export default function DetailMoreImage(){
           </div>
         ))
       ) : (
-        <p>이미지가 없습니다.</p>
+        <p className="w-full text-center">이미지가 없습니다.</p>
       )}
     </div>
   </div>
 </div>
-
     </div>
   </div>
   

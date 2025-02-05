@@ -1,5 +1,13 @@
 import { useState } from "react";
 
+
+type Platform = {
+  value: string;
+  label: string;
+  icon?: string;
+  color?: string;
+}
+
 export default function PlatformSelector() {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedPlatform, setSelectedPlatform] = useState("Select a platform");
@@ -13,7 +21,7 @@ export default function PlatformSelector() {
     { value: "freecodecamp", label: "FreeCodeCamp", icon: "fab fa-free-code-camp", color: "#006400" },
   ];
 
-  const handlePlatformSelect = (platform: { value?: string; label: any; icon?: string; color?: string; }) => {
+  const handlePlatformSelect = (platform: Platform) => {
     setSelectedPlatform(platform.label);
     setIsOpen(false);
   };
