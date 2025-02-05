@@ -44,7 +44,7 @@ export default function Map() {
         </div>
       </div>
       {/* 지도 */}
-      <div className="relative w-[100%] h-[87%]">
+      <div className="relative w-[100%] h-[87%] hover:cursor-pointer">
         <Image
           src={mapImage}
           alt=""
