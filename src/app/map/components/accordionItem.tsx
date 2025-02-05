@@ -1,7 +1,7 @@
-import { Accordion, AccordionItem as Item } from "@szhsin/react-accordion";
+import { AccordionItem as Item } from "@szhsin/react-accordion";
 
 //custom 아코디언 스타일
-export const AccordionItem = ({ header, ...rest }: any) => (
+export const AccordionItem = ({ header, ...rest }) => (
     <Item
       {...rest}
       header={({ state: { isEnter } }) => (
