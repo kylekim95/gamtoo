@@ -26,20 +26,26 @@ interface UserSelection {
 };
 
 export default function QuizPage() {
+  // 로그인 x -> redirect
   const router = useRouter();
   const {isAuth, userName, userId} = useAppSelector((state) => state.authReducer.value);
   if(!isAuth || userName==='' || userId===''){
     redirect('/login');
   }
 
+  // 퀴즈 초기화 관련
   const defaultProblemData = { id:'', problem: '', answer: '', url: '', selection: [], linkTo:'' };
   const numProblems = 20;
   const problems = useRef<ProblemData[]>(new Array(numProblems).fill(defaultProblemData));
   const [loaded, setLoaded] = useState(0);
   const mounted = useRef(false);
 
-  const totalNumItems = useMemo(()=>[...TotalNumItems], []);
+  //Intersection Observer 사용하기 위해서 실제 html element 가져오기
+  const refs = useRef(problems.current.map(()=>createRef<HTMLDivElement>()));
 
+  const quizInfoManager = useQuizInfoManager();
+
+  // Init useEffect
   useEffect(()=>{
     mounted.current = true;
     async function InitProblems() {
@@ -93,9 +99,7 @@ export default function QuizPage() {
       mounted.current = false;
     }
   }, []);
-
-  //TODO : Custom Hook
-  const refs = useRef(problems.current.map(()=>createRef<HTMLDivElement>()));
+  // Intersection observer: opacity increases when it enters the visible screen
   useEffect(()=>{
     const observer = new IntersectionObserver((entries)=>{
       for(let i = 0; i < entries.length; i++){
@@ -114,6 +118,7 @@ export default function QuizPage() {
     });
   }, [loaded]);
 
+  // Problem card answer selected related
   const userSelected : UserSelection = useMemo(()=>{
     const temp : UserSelection = {};
     for(let i = 0; i < numProblems; i++){
@@ -130,16 +135,14 @@ export default function QuizPage() {
         behavior: 'smooth'
       });
     }
-  }, [userSelected]); //userSelected 로 뭔가를 하는 것은 아니어서 빈칸이지만 찝찝하다
+  }, [userSelected]);
 
+  // Button click handlers
   function OnClickToTop(){
     window.scrollTo({
       top: 0, left: 0, behavior:'smooth'
     });
   }  
-
-  const quizInfoManager = useQuizInfoManager();
-
   async function OnClickSubmit(){
     const data : quizResults[] = [];
     let score = 0;
@@ -149,7 +152,7 @@ export default function QuizPage() {
     for(let i = 0; i < problems.current.length; i++){
       const temp : quizResults = {
         answer: problems.current[i].answer,
-        id: i.toString(),
+        id: (i + 1).toString(),
         problem: problems.current[i].problem,
         selected: problems.current[i].selection[userSelected[i]],
         correct: problems.current[i].selection[userSelected[i]] === problems.current[i].answer,

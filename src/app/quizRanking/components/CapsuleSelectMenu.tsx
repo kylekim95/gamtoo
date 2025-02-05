@@ -10,12 +10,12 @@ type CapsuleSelectItemProps = {
 function CapsuleSelectItem(props : CapsuleSelectItemProps){
   return (
     <div className={
-        'min-w-[100px] border-2 border-solid rounded-full flex justify-center items-center px-2 transition-colors cursor-pointer ' + 
+        'min-w-[100px] min-h-[30px] border-2 border-solid rounded-full flex justify-center items-center px-2 transition-colors cursor-pointer ' + 
         (props.selected ? 'bg-violet-300 border-violet-400 text-white' : 'bg-white border-violet-400 text-black')
       }
       onClick={()=>props.onClick(props.id)}
     >
-      <span className={'text-xs font-bold'}>{props.item}</span>
+      <span className={'text-md font-semibold'}>{props.item}</span>
     </div>
   )
 }

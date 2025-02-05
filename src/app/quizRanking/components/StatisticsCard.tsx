@@ -278,21 +278,21 @@ export default function StatisticsCard() {
     Init();
   }, [getAllQuizInfo, userId, testFunc]);
 
-  const [iconColor, setIconColor] = useState<[string, string]>(['','']);
+  const [iconColor, setIconColor] = useState<[string, string, string]>(['','', '']);
   useEffect(()=>{
     async function RankColor(){ setIconColor(await GetUserRankColor(userId)); };
     RankColor();
   }, [userId]);
 
   return (
-    <div className='w-full min-w-[800px] max-w-[1000px] h-auto flex flex-col items-center backdrop-blur-xl rounded-lg shadow-2xl overflow-hidden pb-10'>
+    <div className='w-full min-w-[1200px] max-w-[1400px] h-auto flex flex-col items-center backdrop-blur-xl rounded-lg shadow-2xl overflow-hidden pb-10'>
       {/* Card Header */}
       <div
         className='w-full aspect-[5/1] bg-[#00000080] flex flex-col justify-center items-center mb-5'
         style={{backgroundImage: 'url("/QuizRanking/bukchon.jpg")', backgroundSize:'cover', backgroundPosition: 'center 200%', backgroundBlendMode: 'multiply'}}
       >
-        <KoreaCloudIcon width={75} height={75} color='#FFFFFF'/>
-        <span className='text-white font-bold text-xl mb-5'>문화재 퀴즈 통계</span>
+        <KoreaCloudIcon width={100} height={100} color='#FFFFFF'/>
+        <span className='text-white font-bold text-2xl m-5'>문화재 퀴즈 통계</span>
       </div>
       {/* Card Content */}
       <div className='flex flex-col items-center w-full'>
@@ -300,10 +300,10 @@ export default function StatisticsCard() {
         <div className='w-[20%] mb-5 flex justify-center'>
           <Doughnut ref={partRateChartRef} data={testData} options={testOptions}></Doughnut>
         </div>
-        {isAuth && <span className='text-black font-bold text-lg'>문화재 퀴즈에 도전한 {testData.datasets[0].data[0]}%의 유저 중 한명입니다!</span>}
-        {!isAuth && <span className='text-black font-bold text-lg'>{testData.datasets[0].data[0]}%의 유저들이 이미 문화재 퀴즈에 도전했습니다!</span>}
+        {isAuth && <div className='text-black font-bold text-xl'><span>문화재 퀴즈에 도전한</span><span className='text-[#f26381]'>{Math.trunc(testData.datasets[0].data[0])}</span><span>%의 유저 중 한명입니다!</span></div>}
+        {!isAuth && <div className='text-black font-bold text-xl'><span className='text-[#f26381]'>{Math.trunc(testData.datasets[0].data[0])}</span><span>%의 유저들이 이미 문화재 퀴즈에 도전했습니다!</span></div>}
         {/* Capsule Select Menu */}
-        <CapsuleSelectMenu className='w-[80%] min-h-[100px] m-3 flex flex-wrap justify-center gap-1' items={Object.entries(CatCode2String)} onSelectedChanged={testFunc}/>
+        <CapsuleSelectMenu className='w-[80%] min-h-[75px] m-3 flex flex-wrap justify-center gap-1' items={Object.entries(CatCode2String)} onSelectedChanged={testFunc}/>
         <div className='flex justify-center w-[90%]'>
           {/* 오답률 차트 */}
           <div className='w-[60%] aspect-[1/1.1] flex justify-center'>

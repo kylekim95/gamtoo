@@ -104,9 +104,9 @@ export default function RankingCard() {
   const desc = ["#", "랭크", "ID", "최고 점수", "시도 횟수", "날짜"];
 
   return (
-    <div className='w-full min-w-[800px] max-w-[1000px] flex flex-col items-center backdrop-blur-xl pt-5 pb-5 rounded-lg shadow-2xl'>
-      <KoreaCloudIcon width={75} height={75} color='#FFFFFF'/>
-      <span className='text-white font-bold text-xl mb-10'>문화재 퀴즈 랭킹</span>
+    <div className='w-full min-w-[1200px] max-w-[1400px] flex flex-col items-center backdrop-blur-xl pt-5 pb-5 rounded-lg shadow-2xl'>
+      <KoreaCloudIcon width={100} height={100} color='#FFFFFF'/>
+      <span className='text-white font-bold text-2xl mt-3 mb-5'>문화재 퀴즈 랭킹</span>
       <div className='w-[90%] flex place-content-around gap-1 mb-10'>
         <ImportantRankCard className='w-[22.5%] aspect-square' color='#c21616' header='이번주 점수 1위' uid={impRankings[0] ? impRankings[0].userId : ''} iconBgColor={impRankings[0] ? impRankings[0].bgColor: '#00000000'} iconColor={impRankings[0] ? impRankings[0].color : '#00000000'}/>
         <ImportantRankCard className='w-[22.5%] aspect-square' color='#c21616' header='이번주 시도 횟수 1위' uid={impRankings[1] ? impRankings[1].userId : ''} iconBgColor={impRankings[0] ? impRankings[1].bgColor: '#00000000'} iconColor={impRankings[1] ? impRankings[1].color : '#00000000'}/>
@@ -114,7 +114,7 @@ export default function RankingCard() {
         <ImportantRankCard className='w-[22.5%] aspect-square' color='#c21616' header='오늘 시도 횟수 1위' uid={impRankings[3] ? impRankings[3].userId : ''} iconBgColor={impRankings[0] ? impRankings[3].bgColor: '#00000000'} iconColor={impRankings[3] ? impRankings[3].color : '#00000000'}/>
       </div>
       <div className='w-[80%] flex justify-center mb-10'>
-        <Table<DataType> data={allQuizInfo} spacing={[1,1,3,1,1,3]} desc={desc} maxHeight={'300px'}/>
+        <Table<DataType> data={allQuizInfo} spacing={[1,1,2,1,1,3]} desc={desc} maxHeight={'400px'}/>
       </div>
     </div>
   )

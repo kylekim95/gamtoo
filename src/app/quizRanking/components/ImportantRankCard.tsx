@@ -21,7 +21,7 @@ export default function ImportantRankCard(props : ImportantRankCardProps) {
       style={{border: '1px solid ' + props.color}}
     >
       <div className='text-black border-b-2 h-[20%] flex items-center justify-center text-sm font-bold'>
-        <span className='text-xs' style={{color: props.color}}>{props.header}</span>
+        <span className='text-lg text-[#222222]'>{props.header}</span>
       </div>
       <div className={'text-black h-[60%] flex items-center justify-center text-sm font-bold '}>
         <GagsiMaskIcon color={props.iconColor} className={'h-[75%] aspect-square rounded-full border-[3px] ' + props.iconBgColor} />
@@ -32,7 +32,7 @@ export default function ImportantRankCard(props : ImportantRankCardProps) {
         className='cursor-pointer text-black h-[20%] flex items-center justify-center text-sm font-bold'
         style={{backgroundColor: props.color}}
       >
-        <span className='text-white text-xs'>상세 보기</span>
+        <span className='text-white text-lg'>상세 보기</span>
       </Link>
     </div>
   )

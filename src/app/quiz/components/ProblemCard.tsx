@@ -18,7 +18,7 @@ export default function ProblemCard(props : ProblemCardProps) {
   const [solved, setSolved] = useState(false);
 
   const refToCompIcon = createRef<HTMLDivElement>();
-
+  // 답 선택 핸들러
   function OnClickSelectBtn(selectedNum : number){
     if(selected === -1){
       refToCompIcon.current?.classList.add('animate-rotate');
@@ -29,7 +29,7 @@ export default function ProblemCard(props : ProblemCardProps) {
     props.selectAnswerCallback(props.id.toString(), selectedNum);
     setSelected(selectedNum);
   }
-
+  // 로딩이 안되어 있을 때
   if(props.problem === ''){
     return <DefaultProblemCard ref={props.ref}/>
   }
@@ -69,6 +69,7 @@ export default function ProblemCard(props : ProblemCardProps) {
   )
 }
 
+// 로딩이 안되어 있을 때
 function DefaultProblemCard(props : {ref: React.RefObject<HTMLDivElement | null>}) : React.JSX.Element {
   return (
     <div className='
