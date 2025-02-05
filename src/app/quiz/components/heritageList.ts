@@ -45,6 +45,7 @@ export async function getHeritageList(reqObj : heritageListRequest) : Promise<he
     queryString += `${key}=${value}&`;
   });
   const response = await fetch(url + queryString);
+  console.log(url + queryString.slice(0, -1));
   switch(true){
     case response.status === 200:
       const text = await response.text();
