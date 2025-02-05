@@ -258,8 +258,8 @@ export default function RankingDetail() {
   function socialData(label: string, value: string, key: React.Key | null | undefined){
     return (
       <div key={key} className='w-[20%] aspect-[1.75/1] flex flex-col justify-center items-center'>
-        <span className='font-bold text-sm'>{label}</span>
-        <span className='text-sm'>{value}</span>
+        <span className='font-bold text-md'>{label}</span>
+        <span className='text-md'>{value}</span>
       </div>
     );
   }
@@ -279,7 +279,7 @@ export default function RankingDetail() {
         </div>
         {/* 문화재 퀴즈 최근 결과 */}
         <div className='w-full flex flex-col justify-center items-center mb-4'>
-          <div className='w-[80%] font-bold text-2xl border-t-2 pt-4'>문화재 퀴즈 최근 결과</div>
+          <div className='w-[80%] font-bold text-2xl border-b-2 pt-4 pb-2'>문화재 퀴즈 최근 결과</div>
           <Swiper
             spaceBetween={10} 
             slidesPerView={3}
@@ -295,32 +295,34 @@ export default function RankingDetail() {
         </div>
         {/* 유저 통계 */}
         <div className='w-full flex flex-col justify-center items-center mb-4'>
-          <div className='w-[80%] font-bold text-2xl border-t-2 pt-4'>유저 통계</div>
+          <div className='w-[80%] font-bold text-2xl border-b-2 pt-4 pb-2'>유저 통계</div>
           <div className='w-[80%] flex flex-col justify-center items-center'>
-            <div className='w-[80%] min-h-[200px] flex justify-center items-center m-1'>
+            <div className='w-[100%] min-h-[200px] flex justify-center items-center m-1'>
               <Line data={scoresData} options={scoresOption} />
             </div>
-            <div className='w-[80%] min-h-[400px] flex justify-center items-center m-1'>
+            <div className='w-[100%] min-h-[500px] flex justify-center items-center m-1'>
               <Bar data={errRateData} options={initErrRateOptions} />
             </div>
           </div>
         </div>
         {/* 최근 평가한 문화재 */}
-        <div className='w-full flex flex-col justify-center items-center mb-4'>
-          <div className='w-[80%] font-bold text-2xl border-t-2 pt-4'>최근 평가한 문화재</div>
-          <Swiper
-            className='w-[80%] min-h-[200px]'
-            spaceBetween={20} 
-            slidesPerView={2} 
-            breakpoints={{
-              1000: {
-                slidesPerView: 3
-              }
-            }}
-          >
-            {commentsData.map((commentObj, index)=><SwiperSlide key={index} ><RecentCommentsCard className='w-[20%] min-w-[275px] aspect-[1.5/1] m-3' url={commentObj.url} name={commentObj.name} comment={commentObj.comment} /></SwiperSlide>)}
-          </Swiper>
-        </div>
+        { commentsData.length > 0 ?
+          <div className='w-full flex flex-col justify-center items-center mb-4'>
+            <div className='w-[80%] font-bold text-2xl border-b-2 pt-4 pb-2'>최근 평가한 문화재</div>
+            <Swiper
+              className='w-[80%] min-h-[200px]'
+              spaceBetween={20} 
+              slidesPerView={2} 
+              breakpoints={{
+                1000: {
+                  slidesPerView: 3
+                }
+              }}
+            >
+              {commentsData.map((commentObj, index)=><SwiperSlide key={index} ><RecentCommentsCard className='w-[20%] min-w-[275px] aspect-[1.5/1] m-3' url={commentObj.url} name={commentObj.name} comment={commentObj.comment} /></SwiperSlide>)}
+            </Swiper>
+          </div> : <div></div>
+        }
       </div>
     </div>
   )

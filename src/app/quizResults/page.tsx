@@ -26,7 +26,7 @@ export default function QuizResultsPage() {
     redirect('/');
   }
 
-  const smallCheck = <CheckIcon width={40} height={40} color={"#77B254"}/>;
+  const smallCheck = <CheckIcon width={35} height={35} color={"#77B254"}/>;
   const smallCross = <CrossedIcon width={40} height={40} color={"#FF2222"}/>;
   const dataDesc = ["#", "문제", "정답", "선택된 답", "결과"];
 

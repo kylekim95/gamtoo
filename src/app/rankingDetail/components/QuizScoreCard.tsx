@@ -17,8 +17,8 @@ export default function QuizScoreCard(props : QuizScoreCardProps) {
       <div className='w-full h-[60%] flex justify-center items-center'>
         <span className='text-[#555555] text-lg font-bold'>{props.content}</span>
       </div>
-      <div className='w-full h-[20%] flex justify-center items-center self-end self-justify-end' style={{backgroundColor: props.color}}>
-        <span className='text-white text-xs font-bold'>{props.footer}</span>
+      <div className='w-full h-[20%] flex justify-center items-center self-end self-justify-end border-t ' style={{borderColor: props.color}}>
+        <span className='text-[#222222] text-xs font-bold'>{props.footer}</span>
       </div>
     </div>
   )
