@@ -123,8 +123,8 @@ const FestivalPage = () => {
   }
   return (
     <div>
-      <div className="bg-festivalBg pt-12 pb-12 mt-2">
-        <div className="w-5/6 m-auto">
+      <div className="bg-[#F6F6F6] pt-12 pb-12 mt-2">
+        <div className="w-[1130px] m-auto">
           <p className="text-black font-bold text-3xl ml-auto mb-4">인기 행사</p>
           <div className="flex justify-between">
             {festivalItems.length === 1 ? (<div></div>): festivalItems.map((e,index) => {
@@ -135,8 +135,7 @@ const FestivalPage = () => {
                     <div className="absolute">
                       <p className="relative -top-10 left-2 italic text-white text-5xl drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">{index+1}</p>
                     </div>
-                    <p className="text-black mt-2 font-semibold text-2xl">{e.subTitle}</p>
-                    <p className="text-black">{e.subDesc_2}</p>
+                    <p className="mt-4 font-semibold text-2xl">{e.subTitle}</p>
                   </div>
                 )
               } else{
@@ -148,7 +147,7 @@ const FestivalPage = () => {
       </div>
 
       <div className="flex">
-        <div className="w-5/6 m-auto flex mt-20 mb-20 rounded-3xl border-2 border-gray-500 shadow-lg">
+        <div className="w-[1130px] m-auto flex mt-20 mb-20 rounded-3xl border-2 border-gray-500 shadow-lg">
           <div className="w-full bg-[#F6F6F6] rounded-tl-3xl rounded-bl-3xl pl-5">
             <div className="flex mt-6">
               <p className="text-black font-semibold text-xl leading-10">기간:</p>
@@ -212,20 +211,28 @@ const FestivalPage = () => {
           />
         </div>
       </div>
-      <div className="w-5/6 m-auto mb-20">
-        <p className="m-auto font-bold mb-4 text-4xl text-black text-center">검색된 문화행사</p>
+      <div className="w-[1130px] m-auto mb-20">
+        <p className="m-auto font-bold mb-6 text-4xl text-black text-center">검색된 문화행사</p>
         <div className="grid grid-cols-5 gap-2 gap-y-12">
           {festivalItems.length === 1? (<div></div>):festivalItems.map((e) => {
             return (
-              <div key={uuidv4()} className="rounded-lg p-3 border shadow-lg">
-                <img className="rounded-lg h-3/5 w-full" src={e.imageUrl} alt={""}/>
-                <div className="bg-[#FA870E] pt-2 pb-2 rounded-lg mt-2 mb-2">
-                  <p className="text-center font-semibold text-xl">{e.sido}</p>
+              <div key={uuidv4()} className="rounded-lg p-3 border shadow-lg h-[435px]">
+                <img className="rounded-lg h-4/6 w-full pretendard" src={e.imageUrl} alt={""}/>
+                <div className="bg-[#C890A7] p-2 rounded-lg mt-2 mb-2">
+                  <p className="text-center h-[28px] font-bold text-xl truncate">{e.subTitle}</p>
                 </div>
                 <p
-                  className="text-black font-semibold text-xl  h-[28px] truncate">[{e.groupName == "" ? "등록된 단체 없음" : e.groupName}]</p>
-                <p className="text-black font-semibold text-xl h-[56px] truncate ">{e.subTitle}</p>
-                <p className="text-gray-500 text-sm">{e.sDate}~{e.eDate}</p>
+                  className="text-black text-lg h-[28px] font-semibold truncate">{e.groupName == "" ? "정보 없음" : e.groupName}</p>
+                <p className="text-gray-500 text-sm mt-4">{e.sDate}~{e.eDate}</p>
+                <div className="flex">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
+                       stroke="currentColor" className="size-4 text-gray-500">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                    <path strokeLinecap="round" strokeLinejoin="round"
+                          d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"/>
+                  </svg>
+                  <p className="text-sm text-gray-500 ml-1">{e.sido}</p>
+                </div>
               </div>
             )
           })}
