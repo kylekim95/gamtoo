@@ -45,9 +45,23 @@ export default function SearchCard() {
     },
     [],
   )
-  // 검색창 토글 함수
+
+  const selectedItems = [
+    ...jjjm.map((item, index) => jjjmChecked[index] ? { category: "지정종목", label: item, checked: true } : null),
+    ...yhjm.map((item, index) => yhjmChecked[index] ? { category: "유형분류", label: item, checked: true } : null),
+    ...jy.map((item, index) => jyChecked[index] ? { category: "지역", label: item, checked: true } : null),
+    ...sd.map((item, index) => sdChecked[index] ? { category: "시대", label: item, checked: true } : null),
+  ].filter((item): item is { category: string; label: string; checked: boolean } => item !== null); 
+  
   const toggleSearch = () => {
     setIsSearchOpen((prevState) => !prevState);
+  };
+
+  const resetSearch = () => {
+    setJjjmChecked(jjjm.map(() => false));
+    setYhjmChecked(yhjm.map(() => false));
+    setJyjmChecked(jy.map(() => false));
+    setSdChecked(sd.map(() => false));
   };
 
   
@@ -75,17 +89,36 @@ export default function SearchCard() {
         <>
           <h3 className="text-black text-xl font-semibold font-pretendard">선택된 항목</h3>
           <div className="border-[0.5px] border-solid border-gray-400 w-[5vw] mb-4"></div>
-  
-          <button
-            className="font-pretendard px-3 py-2 border border-[#4F6CF3] text-[#4F6CF3] font-semibold rounded-lg hover:text-white hover:bg-[#4F6CF3] transition duration-200 mb-6">
-            검색 초기화
-          </button>
+          <div className="flex items-center gap-4 mb-6">
+  <button
+  onClick={resetSearch}
+    className="font-pretendard px-3 py-1.5 border border-[#4F6CF3] text-[#4F6CF3] font-semibold rounded-lg 
+      hover:text-white hover:bg-[#4F6CF3] transition duration-200">
+    검색 초기화
+  </button>
+  <div className="flex flex-wrap gap-2">
+    {selectedItems.length > 0 && selectedItems.map((item, index) => (
+      <label key={index} className="flex items-center gap-2 text-pink-500 text-sm font-semibold">
+        <input
+          type="checkbox"
+          checked={item.checked}
+          readOnly
+          className="w-4 h-4 appearance-none border border-pink-500 bg-white checked:bg-white 
+            checked:border-pink-500 checked:after:content-['✔'] checked:after:text-xs checked:after:text-pink-500 
+            checked:after:block checked:after:text-center checked:after:relative checked:after:-top-[1.5px]"
+        />
+        <span>{item.label}</span>
+      </label>
+    ))}
+  </div>
+</div>
+
 
           <div className="relative">
            <button
-            className="font-pretendard px-4 py-2 border border-[#FF5DAB] text-[#FF5DAB] font-semibold rounded-lg 
+            className="font-pretendard px-4 py-1.5 border border-[#FF5DAB] text-[#FF5DAB] font-semibold rounded-lg 
               hover:text-white hover:bg-[#FF5DAB] transition duration-200 
-              absolute -top-20 right-1">
+              absolute -top-16 right-1">
            검색하기
             </button>
             </div>
