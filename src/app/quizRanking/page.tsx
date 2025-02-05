@@ -7,11 +7,8 @@ import Link from 'next/link';
 import RankingCard from './components/RankingCard'
 import StatisticsCard from './components/StatisticsCard'
 import GyeongBokGungIcon from '@/components/quiz/svg/GyeongBokGungIcon'
-import { useAppSelector } from '@/lib/redux/store'
 
 export default function QuizRanking() {
-  const {isAuth, userName, userId} = useAppSelector((state) => state.authReducer.value);
-
   return (
     <div className='bg-[#F0F0F0]'>
       <div 

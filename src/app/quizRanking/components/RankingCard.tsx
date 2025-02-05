@@ -22,6 +22,7 @@ type DataType = {
 type ImpRankData = {
   userId: string;
   color : string;
+  bgColor: string;
 }
 
 export default function RankingCard() {
@@ -44,9 +45,9 @@ export default function RankingCard() {
       ]);
       //TODO : 성능 개선 필요
       weeklyData.sort((a, b)=>b[2]-a[2]);
-      ImpRankings.push({userId : weeklyData[0][0], color: ''});
+      ImpRankings.push({userId : weeklyData[0][0], color: '', bgColor:''});
       weeklyData.sort((a, b)=>b[3]-a[3]);
-      ImpRankings.push({userId : weeklyData[0][0], color: ''});
+      ImpRankings.push({userId : weeklyData[0][0], color: '', bgColor:''});
       //Daily
       const dailyData : [string, number, number, number][] = data.map<[string, number, number, number]>((elem)=>[
         elem.id, 
@@ -55,11 +56,11 @@ export default function RankingCard() {
         elem.scores.length
       ]);
       dailyData.sort((a, b)=>b[2]-a[2]);
-      ImpRankings.push({userId : dailyData[0][0], color: '' });
+      ImpRankings.push({userId : dailyData[0][0], color: '', bgColor:''});
       dailyData.sort((a, b)=>b[3]-a[3]);
-      ImpRankings.push({userId : dailyData[0][0], color: '' });
+      ImpRankings.push({userId : dailyData[0][0], color: '', bgColor:''});
 
-      const rankColorsPromise : Promise<[string, string]>[] = [];
+      const rankColorsPromise : Promise<[string, string, string]>[] = [];
       ImpRankings.forEach((impRankData : ImpRankData)=>{
         rankColorsPromise.push(GetUserRankColor(impRankData.userId));
       });
@@ -67,6 +68,7 @@ export default function RankingCard() {
       response.forEach((res, index)=>{
         if(res.status === 'fulfilled'){
           ImpRankings[index].color = res.value[0];
+          ImpRankings[index].bgColor = res.value[1];
         }
       });
       setImpRankings(ImpRankings);
@@ -77,7 +79,7 @@ export default function RankingCard() {
         const elem = data[i];
         const convData : DataType = {
           standings: i + 1,
-          rank: gagsiTalWithColor((await GetUserRankColor(elem.id))[0]),
+          rank: gagsiTalWithColor((await GetUserRankColor(elem.id))),
           id: userDetailsLink(elem.id, elem.name),
           highScore: elem.highScore,
           attempts: elem.scores.length,
@@ -89,9 +91,9 @@ export default function RankingCard() {
     });
   }, [getAllQuizInfo]);
 
-  function gagsiTalWithColor(color : string){
+  function gagsiTalWithColor(color : [string, string, string]){
     return (
-      <GagsiMaskIcon width={30} height={30} className='rounded-full' color={color} />
+      <GagsiMaskIcon width={30} height={30} className={'rounded-full border-[1px] ' + color[1] } color={color[0]} />
     )
   }
   function userDetailsLink(userId: string, userName : string){
@@ -106,10 +108,10 @@ export default function RankingCard() {
       <KoreaCloudIcon width={75} height={75} color='#FFFFFF'/>
       <span className='text-white font-bold text-xl mb-10'>문화재 퀴즈 랭킹</span>
       <div className='w-[90%] flex place-content-around gap-1 mb-10'>
-        <ImportantRankCard className='w-[22.5%] aspect-square' color='#c21616' header='이번주 점수 1위' uid={impRankings[0] ? impRankings[0].userId : ''} iconColor={impRankings[0] ? impRankings[0].color : '#00000000'}/>
-        <ImportantRankCard className='w-[22.5%] aspect-square' color='#c21616' header='이번주 시도 횟수 1위' uid={impRankings[1] ? impRankings[1].userId : ''} iconColor={impRankings[1] ? impRankings[1].color : '#00000000'}/>
-        <ImportantRankCard className='w-[22.5%] aspect-square' color='#c21616' header='오늘 점수 1위' uid={impRankings[2] ? impRankings[2].userId : ''} iconColor={impRankings[2] ? impRankings[2].color : '#00000000'}/>
-        <ImportantRankCard className='w-[22.5%] aspect-square' color='#c21616' header='오늘 시도 횟수 1위' uid={impRankings[3] ? impRankings[3].userId : ''} iconColor={impRankings[3] ? impRankings[3].color : '#00000000'}/>
+        <ImportantRankCard className='w-[22.5%] aspect-square' color='#c21616' header='이번주 점수 1위' uid={impRankings[0] ? impRankings[0].userId : ''} iconBgColor={impRankings[0] ? impRankings[0].bgColor: '#00000000'} iconColor={impRankings[0] ? impRankings[0].color : '#00000000'}/>
+        <ImportantRankCard className='w-[22.5%] aspect-square' color='#c21616' header='이번주 시도 횟수 1위' uid={impRankings[1] ? impRankings[1].userId : ''} iconBgColor={impRankings[0] ? impRankings[1].bgColor: '#00000000'} iconColor={impRankings[1] ? impRankings[1].color : '#00000000'}/>
+        <ImportantRankCard className='w-[22.5%] aspect-square' color='#c21616' header='오늘 점수 1위' uid={impRankings[2] ? impRankings[2].userId : ''} iconBgColor={impRankings[0] ? impRankings[2].bgColor: '#00000000'} iconColor={impRankings[2] ? impRankings[2].color : '#00000000'}/>
+        <ImportantRankCard className='w-[22.5%] aspect-square' color='#c21616' header='오늘 시도 횟수 1위' uid={impRankings[3] ? impRankings[3].userId : ''} iconBgColor={impRankings[0] ? impRankings[3].bgColor: '#00000000'} iconColor={impRankings[3] ? impRankings[3].color : '#00000000'}/>
       </div>
       <div className='w-[80%] flex justify-center mb-10'>
         <Table<DataType> data={allQuizInfo} spacing={[1,1,3,1,1,3]} desc={desc} maxHeight={'300px'}/>
