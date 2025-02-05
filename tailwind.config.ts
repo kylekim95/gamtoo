@@ -12,13 +12,12 @@ export default {
         'extra-wide': '0.2em', // 간격
       },
       fontFamily: {
-        pretendard: ['Pretendard-Regular', 'sans-serif'], 
+        pretendard: ['Pretendard', 'sans-serif'],
       },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
         'festivalBg': "#FFF7EF"
-
       },
       keyframes: {
         moveup: {
