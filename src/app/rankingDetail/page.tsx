@@ -104,7 +104,7 @@ export default function RankingDetail() {
     cultureId: string
   }
 
-  const [iconColor, setIconColor] = useState<[string, string]>(['','']);
+  const [iconColor, setIconColor] = useState<[string, string, string]>(['','','']);
   useEffect(()=>{
     async function Init(){
       // 탈 아이콘 랭크에 따른 색 변경 관련
