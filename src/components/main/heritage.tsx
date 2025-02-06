@@ -4,7 +4,7 @@ import CultureList from "@/components/CultureList";
 import { useState } from "react";
 
 export default function Heritage() {
-  const [category, setCategory] = useState(11);
+  const [category, setCategory] = useState(13);
 
   function handleCategory(value: number) {
     setCategory(value);
@@ -12,7 +12,7 @@ export default function Heritage() {
   return (
     <>
       {/* 버튼 전부를 감싸는 태그 */}
-      <div className="contentWrapper flex flex-row justify-between items-end border-b">
+      <div className="contentWrapper flex flex-row justify-between items-end border-b w-[90%] mx-auto">
         {/* 왼쪽 */}
         <div className="flex flex-col pb-1">
           <div className=" text-[#F09AFF]">
@@ -44,7 +44,7 @@ export default function Heritage() {
           </div>
         </div>
         {/* 오른쪽 */}
-        <div className="rightContent text-black flex flex-row gap-16 pb-[17px]">
+        <div className="rightContent text-black flex flex-row gap-14 pb-[17px] mr-2">
           <div className="flex flex-row gap-1 items-center">
             <CheckIcon className="size-5" />
             <button
@@ -78,7 +78,7 @@ export default function Heritage() {
         </div>
       </div>
       {/* 문화재 리스트 하단 부분 */}
-      <div className="flex flex-col w-[100%] items-center mt-4">
+      <div className="flex flex-col w-[90%] mx-auto items-center mt-4">
         <CultureList category={category} />
       </div>
     </>

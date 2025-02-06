@@ -2,7 +2,8 @@ import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
 import { useEffect, useState } from "react";
 import CultureCard from "./CultureCard";
 import { HeritageData } from "@/app/culture/types/HeritageData";
-import { parseStringPromise } from "xml2js"; // xml2js 임포트
+import { parseStringPromise } from "xml2js"; // xml2js 임포트\
+import debounce from "lodash/debounce";
 
 interface Category {
   category: number;
@@ -11,7 +12,6 @@ interface Category {
 export default function Card(category: Category) {
   const [page, setPage] = useState(1); // 현재 페이지
   const [paginatedItems, setPaginatedItems] = useState<HeritageData[]>([]); // 렌더링할 데이터
-  const [ccbaKdcd, setCcbaKdcd] = useState(11); // 종목코드
   const [loading, setLoading] = useState(true); // 로딩 상태
 
   // 이미지 데이터 상태 추가
@@ -24,12 +24,12 @@ export default function Card(category: Category) {
   }
 
   // 문화유산 가져오기
-  const fetchHeritageData = async (pageIndex: number) => {
+  const fetchHeritageData = async () => {
     const newItemsPerPage = calcListNum();
     setLoading(true); // 요청 시작 시 로딩 상태 활성화
     try {
       const response = await fetch(
-        `http://www.khs.go.kr/cha/SearchKindOpenapiList.do?ccbaKdcd=${ccbaKdcd}&pageIndex=${pageIndex}&pageUnit=${newItemsPerPage}`
+        `http://www.khs.go.kr/cha/SearchKindOpenapiList.do?ccbaKdcd=${category.category}&pageIndex=${page}&pageUnit=${newItemsPerPage}`
       );
       const xmlData = await response.text(); // 텍스트로 응답 받기
       const result = await parseStringPromise(xmlData); // XML을 JSON으로 변환
@@ -84,19 +84,17 @@ export default function Card(category: Category) {
   };
 
   useEffect(() => {
-    // 초기 데이터 호출
-    fetchHeritageData(page);
+    fetchHeritageData();
 
-    // resize 이벤트 발생 시 fetchHeritageData를 호출하는 핸들러를 정의합니다.
-    const handleResize = () => {
-      fetchHeritageData(page);
-    };
+    const debouncedFetch = debounce(() => {
+      fetchHeritageData();
+    }, 1000);
 
-    window.addEventListener("resize", handleResize);
+    window.addEventListener("resize", debouncedFetch);
 
-    // cleanup: 컴포넌트 언마운트 시 이벤트 리스너를 제거합니다.
     return () => {
-      window.removeEventListener("resize", handleResize);
+      debouncedFetch.cancel(); // lodash debounce 취소 메서드
+      window.removeEventListener("resize", debouncedFetch);
     };
   }, []);
 
@@ -104,12 +102,12 @@ export default function Card(category: Category) {
   useEffect(() => {
     // itemsPerPage가 0이 아닌 경우에만 데이터를 가져옵니다.
 
-    fetchHeritageData(page);
+    fetchHeritageData();
   }, [page]);
 
   // 카테고리 버튼 클릭시 종목 코드 변경
   useEffect(() => {
-    fetchHeritageData(ccbaKdcd);
+    fetchHeritageData();
     setPage(1);
   }, [category]);
 
@@ -138,7 +136,7 @@ export default function Card(category: Category) {
           </div>
 
           {/* Pagination */}
-          <div className="flex flex-row justify-center items-center m-auto bg-white pl-10">
+          <div className="flex flex-row justify-center items-center m-auto bg-white pl-10 mt-3">
             <div className="hidden sm:flex sm:flex-1 sm:items-center">
               <nav
                 aria-label="Pagination"
