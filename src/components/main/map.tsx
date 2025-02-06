@@ -9,7 +9,7 @@ export default function Map() {
       onClick={() => {
         router.push("/map");
       }}
-      className="w-[43%] mx-[1%] "
+      className="w-[43.5%] mx-[1%] "
     >
       <div className="border-b mb-7 w-[95%] mx-auto">
         <div className="flex flex-col">

@@ -48,7 +48,7 @@ export default function VideoList() {
   return (
     <>
       {/* 비디오 */}
-      <div className="w-[43%] mx-[1%]">
+      <div className="w-[43.5%] mx-[1%]">
         {/* 제목 */}
         <div className="border-b w-[95%] mx-auto">
           <div className="flex flex-col">

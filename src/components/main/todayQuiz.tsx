@@ -147,7 +147,7 @@ export default function TodayQuiz() {
       />
       {/* 제목 */}
       <div className=" absolute w-full top-[13%] left-[50%] transform -translate-x-1/2 -translate-y-1/2 z-10 pb-3">
-        <div className=" w-[88%] flex flex-col justify-center gap-2 mx-auto ">
+        <div className=" w-[87%] flex flex-col justify-center gap-2 mx-auto ">
           {/* 제목 상단*/}
           <span className="text-xl text-white">
             Today's Cultural Heritage Quiz
@@ -176,7 +176,7 @@ export default function TodayQuiz() {
           </div>
         </div>
       </div>
-      <div className="w-[88%] mx-auto flex flex-row items-center justify-between relative top-[27%] ">
+      <div className="w-[87%] mx-auto flex flex-row items-center justify-between relative top-[27%] ">
         {" "}
         {/* 하단 부분 */}
         <div className="relative w-[62%] rounded-xl overflow-hidden ">
