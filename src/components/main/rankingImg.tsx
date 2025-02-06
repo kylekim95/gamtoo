@@ -66,7 +66,7 @@ export default function Ranking() {
     );
   }
   return (
-    <div className="w-[95%] h-[300px] bg-white rounded-md flex flex-col">
+    <div className="w-[100%] h-[300px] bg-white rounded-md flex flex-col overflow-hidden">
       <div className="flex flex-row justify-between items-center h-[60px] border-b py-2 text-center font-semibold">
         <div className="w-1/5 ">랭킹</div>
         <div className="w-1/5 ">등급</div>

@@ -48,9 +48,9 @@ export default function VideoList() {
   return (
     <>
       {/* 비디오 */}
-      <div className="w-[47%] mx-[1%]">
+      <div className="w-[43.5%] mx-[1%]">
         {/* 제목 */}
-        <div className=" border-b">
+        <div className="border-b w-[95%] mx-auto">
           <div className="flex flex-col">
             {/* 아이콘 & 동영상 텍스트 */}
             <div className=" text-[#F09AFF]">VIDEO</div>
@@ -85,11 +85,11 @@ export default function VideoList() {
           {items.map((item, index) => (
             <div
               key={index}
-              className="relative mt-7 w-[45%] shadow-[5px_5px_5px_#ccc8c8] rounded-lg overflow-hidden"
+              className="relative mt-7 w-[46%] shadow-[5px_5px_5px_#ccc8c8] rounded-lg overflow-hidden"
             >
               {playingIndex === index ? (
                 <iframe
-                  className="w-full h-[240px] rounded-lg"
+                  className="w-full h-[220px] rounded-lg"
                   src={item.videoUrl.replace("?si=", "?")}
                   title={item.title}
                   allowFullScreen
@@ -100,7 +100,7 @@ export default function VideoList() {
                   onClick={() => setPlayingIndex(index)}
                 >
                   <img
-                    className="w-full h-[240px] object-cover"
+                    className="w-full h-[220px] object-cover"
                     src={item.imgUrl}
                     alt={item.title}
                   />
@@ -116,7 +116,7 @@ export default function VideoList() {
                   </div>
                 </div>
               )}
-              <div className="flex flex-col items-center ml-2 h-[65px]">
+              <div className="flex flex-col items-center ml-2 h-[60px]">
                 <div className="flex flex-row gap-3 items-center text-base text-black font-semibold h-[60px]">
                   <VideoCameraIcon className="size-5" />
                   {item.title}
