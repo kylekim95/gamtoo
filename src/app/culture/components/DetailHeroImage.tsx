@@ -22,7 +22,7 @@ return(
 <div className="relative">
 <div className="absolute inset-0 bg-black opacity-50"></div>
 <img
-  src={imageUrl || 'https://via.placeholder.com/150'}
+  src={imageUrl || "이미지가 없습니다"}
   alt="CultureImage"
   className="bg-slate-300 w-full h-96 object-cover"
 />

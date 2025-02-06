@@ -6,28 +6,28 @@ import ButtonGroup from "./buttonGroup";
 
 export default function Navigation() {
   return (
-    <div className="z-0 relative w-full h-[450px]">
-      <Image
-        src="https://cdn.pixabay.com/photo/2022/10/08/14/03/gyeongbokgung-palace-7507027_1280.jpg"
-        alt="Gyeongbokgung Palace"
-        fill // 부모 컨테이너를 채우도록 설정
-        priority // LCP로 감지된 이미지에 우선순위 부여
-        style={{
-          objectFit: "cover",
-          objectPosition: "top", // 상단 중심 정렬
-        }}
-      />
+    <div className="z-0 relative overflow-hidden w-full h-[450px] ">
+      <div className="w-full h-full flex items-center md:mt-48 mt-0 justify-center scale-150">
+        <img
+          className="brightness-50"
+          src="https://cdn.pixabay.com/photo/2022/10/08/14/03/gyeongbokgung-palace-7507027_1280.jpg"
+          alt="Gyeongbokgung Palace"
+          style={{
+            objectFit: "contain",
+            objectPosition: "center", // 상단 중심 정렬
+          }}
+        />
+      </div>
       {/* 제목 */}
       <div className="flex flex-col gap-5 justify-center items-center absolute top-[45%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 text-5xl text-white">
         <div className="">
-          {" "}
           <span className="font-semibold text-6xl">감투 </span>
           <span className="font-semibold text-2xl"> : [ 감춰진 역사 투어]</span>
         </div>
         {/* 검색창 */}
         <div className="relative flex flex-row">
           <input
-            className="opacity-75 w-[550px] px-8 rounded-2xl h-10  text-lg font-semibold text-black"
+            className="opacity-75 w-[550px] px-8 rounded-2xl h-10 text-lg font-semibold text-black"
             placeholder="검색어를 입력해주세요"
             type="text"
           />{" "}

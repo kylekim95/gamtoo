@@ -11,7 +11,7 @@ interface CultureCardProps {
 export default function CultureCard({ item, imageData }: CultureCardProps) {
   const router = useRouter();
   return (
-    <div className="w-[100%] flex flex-row justify-between items-center ">
+    <div className="w-[100%] flex flex-row justify-center items-center gap-[4.5%]">
       {item &&
         item.map((item: HeritageData, index: number) => (
           // 카드 한장의 너비와 높이를 차지하는 영역

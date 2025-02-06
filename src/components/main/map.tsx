@@ -9,9 +9,9 @@ export default function Map() {
       onClick={() => {
         router.push("/map");
       }}
-      className="w-[47%] mx-[1%] "
+      className="w-[43.5%] mx-[1%] "
     >
-      <div className="border-b mb-7">
+      <div className="border-b mb-7 w-[95%] mx-auto">
         <div className="flex flex-col">
           <div className=" text-[#F09AFF]">
             Full view of National Heritage Location
@@ -44,7 +44,7 @@ export default function Map() {
         </div>
       </div>
       {/* 지도 */}
-      <div className="relative w-[100%] h-[87%] hover:cursor-pointer">
+      <div className="relative w-[95%] h-[87%] hover:cursor-pointer mx-auto rounded-lg overflow-hidden">
         <Image
           src={mapImage}
           alt=""

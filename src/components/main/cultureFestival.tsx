@@ -166,7 +166,7 @@ export default function CultureFestival() {
   return (
     <>
       {/* 상단 부분 */}
-      <div className="contentWrapper flex flex-row justify-between items-end border-b">
+      <div className="contentWrapper flex flex-row justify-between items-end border-b w-[90%] mx-auto">
         {/* 왼쪽 */}
         <div className="flex flex-col pb-1">
           <div className="flex flex-col pb-1">
@@ -196,13 +196,13 @@ export default function CultureFestival() {
           </div>
         </div>
         {/* 오른쪽 */}
-        <div className="flex flex-row items-center gap-7 mr-5 text-black">
+        <div className="flex flex-row items-center gap-7 mr-2 text-black">
           <CheckIcon className="size-5" />
           <span className="">모든 행사</span>
         </div>
       </div>
       {/* 하단 및 날짜 선택 등 기타 컴포넌트 */}
-      <div className="flex flex-row gap-11 mt-8 w-full h-[340px]">
+      <div className="flex flex-row gap-11 mt-8 w-[90%] h-[340px] mx-auto">
         {/* 날짜 조회 */}
         <div className="flex flex-col justify-center items-center w-[10%]">
           <button onClick={handleNextMonth} className="w-11">
@@ -216,8 +216,8 @@ export default function CultureFestival() {
           </button>
         </div>
         {/* 행사 카드 */}
-        <div className="w-[85%] h-[340px] overflow-x-auto">
-          <div className="flex flex-row gap-4">
+        <div className="w-[95%] h-[340px] overflow-x-auto">
+          <div className="flex flex-row gap-[5.5%]">
             {loading ? (
               // 데이터 로딩 중일 때
               <div className="flex flex-col gap-9 mx-auto items-center">
@@ -228,7 +228,7 @@ export default function CultureFestival() {
               // 로딩이 끝났고 데이터가 있을 때
               currentData.map((item, index) => (
                 <div
-                  className="flex-shrink-0 flex flex-col w-[280px] h-[320px] rounded-md shadow-[5px_5px_5px_#ccc8c8]"
+                  className="flex-shrink-0 flex flex-col w-[280px] h-[320px] overflow-hidden rounded-md shadow-[5px_5px_5px_#ccc8c8]"
                   key={index}
                   style={{
                     scrollbarWidth: "none",
