@@ -277,39 +277,23 @@ export default function Custom404() {
         }}
       />
       {/* 제목 */}
-      <div className="flex flex-col gap-5 justify-center items-center absolute top-[30%] left-[20%] transform -translate-x-1/2 -translate-y-1/2 z-10 text-5xl text-white w-[500px]">
-        {/* <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-5 justify-center items-center absolute top-[15%] left-[15%] transform -translate-x-1/2 -translate-y-1/2 z-10 text-5xl text-white w-[500px]">
+        <span className="font-semibold text-[70px] font-pretendard">
           {" "}
-          
-          <span className="font-semibold text-xl">
-            {" "}
-            죄송합니다. 페이지를 찾을 수 없습니다.
-          </span>
-          <span className="font-semibold text-xl">
-            {" "}
-            존재하지 않는 주소를 입력하셨거나{" "}
-          </span>
-          <span className="font-semibold text-xl">
-            {" "}
-            요청하신 페이지의 주소가 변경, 삭제되어 찾을 수 없습니다.
-          </span>
-        </div> */}
-        <span className="font-semibold text-5xl"> 404 Error </span>
-        <span className="font-medium text-lg mb-6">
-          {" "}
-          페이지를 찾을 수 없습니다{" "}
+          404 Error{" "}
         </span>
-        <NotFoundIcon />
         {/* 검색창 */}
         <div className="">
           <div
             onClick={() => {
               router.push("/");
             }}
-            className="flex flex-row justify-center items-center gap-4 rounded-md border-2 p-1 w-[200px] h-[50px] hover:cursor-pointer"
+            className="flex flex-row justify-center items-center gap-4 rounded-md border-2 p-1 w-[200px] h-[60px] hover:cursor-pointer"
           >
             <HomeIcon className="size-8" />
-            <span className="text-base">Go Home</span>
+            <span className="text-lg font-semibold font-pretendard">
+              Go Home
+            </span>
           </div>
         </div>
       </div>

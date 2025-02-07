@@ -21,13 +21,16 @@ export default function Navigation() {
       {/* 제목 */}
       <div className="flex flex-col gap-5 justify-center items-center absolute top-[45%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 text-5xl text-white">
         <div className="">
-          <span className="font-semibold text-6xl">감투 </span>
-          <span className="font-semibold text-2xl"> : [ 감춰진 역사 투어]</span>
+          <span className="font-semibold text-6xl font-pretendard">감투 </span>
+          <span className="font-semibold text-2xl font-pretendard">
+            {" "}
+            : [ 감춰진 역사 투어]
+          </span>
         </div>
         {/* 검색창 */}
         <div className="relative flex flex-row">
           <input
-            className="opacity-75 w-[550px] px-8 rounded-2xl h-10 text-lg font-semibold text-black"
+            className="opacity-75 w-[550px] px-8 rounded-2xl h-10 text-lg font-semibold font-pretendard text-black"
             placeholder="검색어를 입력해주세요"
             type="text"
           />{" "}

@@ -43,9 +43,13 @@ export default function ButtonGroup() {
             }}
             className="flex flex-col justify-center items-start w-[170px] h-20 p-4"
           >
-            <span className="text-xl font-semibold">{text}</span>
+            <span className="text-xl font-semibold font-pretendard">
+              {text}
+            </span>
             <div className="flex gap-1 justify-center items-center">
-              <span className="font-semibold text-xs">자세히보기</span>
+              <span className="font-semibold font-pretendard text-xs">
+                자세히보기
+              </span>
               <ArrowRightCircleIcon className="size-6 stroke-[2]" />
             </div>
           </button>
