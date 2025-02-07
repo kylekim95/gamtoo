@@ -11,7 +11,7 @@ export default function Map() {
       }}
       className="w-[43.5%] mx-[1%] "
     >
-      <div className="border-b mb-7 w-[95%] mx-auto">
+      <div className="border-b mb-7 w-[95%] mx-auto font-pretendard">
         <div className="flex flex-col">
           <div className=" text-[#F09AFF]">
             Full view of National Heritage Location

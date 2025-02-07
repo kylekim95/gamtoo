@@ -50,11 +50,11 @@ export default function CultureCard({ item, imageData }: CultureCardProps) {
             </div>
 
             {/* 유형, 이름, 주소를 세로로 정렬하기 위해 flex flex-col 사용 */}
-            <div className="flex flex-col justify-center gap-1 ml-2">
+            <div className="flex flex-col justify-center gap-1 ml-2 font-pretendard">
               <span className="text-[#4F6CF3] text-xs font-bold">
                 {item.ccmaName}
               </span>
-              <span className="text-black text-base font-bold">
+              <span className="text-black text-base font-bold font-pretendard">
                 {item.ccbaMnm1}
               </span>
               <div className="flex flex-row items-center">

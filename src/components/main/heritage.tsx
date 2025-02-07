@@ -15,7 +15,7 @@ export default function Heritage() {
       <div className="contentWrapper flex flex-row justify-between items-end border-b w-[90%] mx-auto">
         {/* 왼쪽 */}
         <div className="flex flex-col pb-1">
-          <div className=" text-[#F09AFF]">
+          <div className="font-pretendard text-[#F09AFF]">
             A REPRESENTATIVE CULTURAL HERITAGE
           </div>
           <div className="flex flex-row items-center gap-9">
@@ -35,17 +35,20 @@ export default function Heritage() {
                   d="M18.447 14.052c-.328.291-.352.354-.352 1.156 0 .959.097 1.178.607 1.407.45.198 2.587.219 3.036.02.51-.218.753-.75.704-1.573-.036-.646-.085-.74-.437-1.01-.389-.292-.425-.303-1.797-.303-1.385 0-1.409 0-1.761.303Zm2.562 1.208c0 .25-.036.26-.728.26-.693 0-.729-.01-.729-.26s.036-.26.729-.26c.692 0 .728.01.728.26ZM29.558 13.853c-.498.167-.656.51-.656 1.407 0 1.344.316 1.553 2.356 1.49 1.215-.031 1.3-.042 1.615-.323.316-.271.34-.344.34-1.178 0-.875-.012-.896-.4-1.198-.389-.292-.425-.302-1.7-.292-.717 0-1.421.042-1.555.094Zm2.259 1.407c0 .25-.037.26-.729.26s-.728-.01-.728-.26.036-.26.728-.26.729.01.729.26ZM40.317 13.884c-.437.188-.607.553-.607 1.345 0 1.334.376 1.584 2.344 1.521 1.311-.031 1.323-.031 1.676-.375.315-.302.352-.406.352-1.073 0-.834-.194-1.24-.668-1.428-.425-.167-2.708-.156-3.097.01Zm2.307 1.376c0 .25-.036.26-.728.26s-.729-.01-.729-.26.037-.26.729-.26.728.01.728.26Z"
                 />
               </svg>
-              <span className="font-semibold text-3xl text-black">문화재</span>
+              <span className="font-semibold font-pretendard text-3xl text-black">
+                문화재
+              </span>
             </div>
-            <span className="font-semibold text-base text-black">
+            <span className="font-semibold font-pretendard text-base text-black">
               우리 나라의 자랑스러운{" "}
-              <span className="text-[#F09AFF]">유산</span>들을 살펴보세요{" "}
+              <span className="font-pretendard text-[#F09AFF]">유산</span>들을
+              살펴보세요{" "}
             </span>
           </div>
         </div>
         {/* 오른쪽 */}
         <div className="rightContent text-black flex flex-row gap-14 pb-[17px] mr-2">
-          <div className="flex flex-row gap-1 items-center">
+          <div className="flex flex-row gap-1 items-center font-pretendard">
             <CheckIcon className="size-5" />
             <button
               onClick={() => {
@@ -55,7 +58,7 @@ export default function Heritage() {
               사적
             </button>
           </div>
-          <div className="flex flex-row gap-1 items-center">
+          <div className="flex flex-row gap-1 items-center font-pretendard">
             <CheckIcon className="size-5" />
             <button
               onClick={() => {
@@ -65,7 +68,7 @@ export default function Heritage() {
               국보
             </button>
           </div>
-          <div className="flex flex-row gap-1 items-center">
+          <div className="flex flex-row gap-1 items-center font-pretendard">
             <CheckIcon className="size-5" />
             <button
               onClick={() => {

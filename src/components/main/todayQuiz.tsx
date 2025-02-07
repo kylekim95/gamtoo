@@ -133,7 +133,7 @@ export default function TodayQuiz() {
   };
 
   return (
-    <div className="z-0 relative w-[100%] h-[550px] m-auto mt-10">
+    <div className="z-0 relative w-[100%] h-[550px] m-auto mt-10 font-pretendard">
       <Image
         src="https://cdn.pixabay.com/photo/2019/01/15/12/44/gyeongbok-palace-3933996_1280.jpg"
         alt="Gyeongbokgung Palace"

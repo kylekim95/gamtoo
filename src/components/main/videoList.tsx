@@ -54,7 +54,7 @@ export default function VideoList() {
           <div className="flex flex-col">
             {/* 아이콘 & 동영상 텍스트 */}
             <div className=" text-[#F09AFF]">VIDEO</div>
-            <div className="flex flex-row items-end gap-4">
+            <div className="font-pretendard flex flex-row items-end gap-4">
               <div className="flex flex-row items-center gap-1">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -117,7 +117,7 @@ export default function VideoList() {
                 </div>
               )}
               <div className="flex flex-col items-center ml-2 h-[60px]">
-                <div className="flex flex-row gap-3 items-center text-base text-black font-semibold h-[60px]">
+                <div className="flex flex-row gap-3 items-center text-base text-black font-semibold h-[60px] font-pretendard">
                   <VideoCameraIcon className="size-5" />
                   {item.title}
                 </div>
