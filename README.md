@@ -1,1 +1,79 @@
 # gamtoo
+
+<br><br><br>
+
+## 🖥️ 프로젝트 개요
+- 기간 : 2024.12.16 ~ 2024.12.19
+- 이 프로젝트는 주요 기능을 바닐라 JS와 hisdtory API를 활용하여 구현한 프로젝트입니다.
+- 문서 생성, 삭제, 편집, 검색, 애니메이션 같은 주요 기능을 구현하면서 SPA의 기본 구조를 설계하는 데 초점을 맞추었습니다.
+<br><br><br>
+
+## 🎯 프로젝트 목표
+- Vanilla JavaScript만을 활용하여 SPA를 설계하고 구현
+- HISTORY API를 활용한 페이지 전환과 상태 관리 학습
+- JavaScript의 이벤트 리스너의 활용과 비동기 통신에 대한 이해
+- 팀원들과의 원활한 소통을 위한 협업 플렛폼 활용 
+<br><br><br>
+
+## 👥 팀원 소개 및 역할
+<center>
+<table>
+  <tbody>
+    <tr>
+      <td align="center"><img src="https://github.com/user-attachments/assets/afbe467c-8dc7-4bbe-bb3b-6e4eab5f5536" width="100px;" height="130px"/></td>
+    </tr>
+    <center>
+    <tr>
+      <td><a href="https://github.com/kimyougmin">김영민</a></td>
+      <td><a href="https://github.com/kdh990315">김동현</a></td>
+      <td><a href="https://github.com/erase0250">김지우</a></td>
+      <td><a href="https://github.com/Castillou">전성우</a></td>
+      <td><a href="https://github.com/hhj4569">한형주</a></td>
+    </tr>
+      <tr>
+      <td><a>· 팀 리드 및 협업 관리<br>· 문서 불러오기 및 출력 기능</a></td>
+      <td><a>· 키워드 검색 기능</a></td>
+      <td><a>· 글 수정 기능<br>· 토스트 모달 구현</a></td>
+      <td><a>· 글 삭제 기능</a></td>
+      <td><a>· 새로운 글 추가 기능</a></td>
+    </tr>
+  </tbody>
+</table>
+</center>
+<br><br><br>
+
+## ⚙️ 주요 기능
+- 상위 및 하위 문서 추가, 저장, 삭제, 편집 기능
+- 모달, 애니메이션 기능
+<img src="https://github.com/user-attachments/assets/b667746a-67b8-4247-b9d7-517b223f0491"  />
+<br><br><br>
+
+- 검색 기능
+<img src="https://github.com/user-attachments/assets/b6f70f95-92af-4484-b788-ee632b6b8fbf" width="1100" />
+<br><br><br>
+
+## 🛠️ 기술 스택
+<img src="https://img.shields.io/badge/html5-E34F26?style=for-the-badge&logo=html5&logoColor=white"> <img src="https://img.shields.io/badge/css-1572B6?style=for-the-badge&logo=css3&logoColor=white"> <img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"> 
+<img src="https://img.shields.io/badge/Vercel-%23000000?style=for-the-badge&logo=vercel&logoColor=white"/>
+ <img alt="GitHub" src ="https://img.shields.io/badge/GitHub-181717.svg?&style=for-the-badge&logo=GitHub&logoColor=white"/> ![Notion](https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white) ![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white)
+<br><br><br>
+
+## 📁 폴더 구조
+```bash
+├── src
+│   ├── api
+│   │   ├── api.js
+│   ├── components
+│   │   ├── App.js
+│   │   ├── PostEditBody.js
+│   │   ├── PostEditHeader.js
+│   │   ├── PostEditPage.js
+│   │   ├── PostHeader.js
+│   │   ├── PostIndexPage.js
+│   │   ├── PostList.js
+│   │   ├── main.js            
+│   ├── public
+│   ├── utilly
+│   │   ├── index.css
+├── index.html
+``` 
