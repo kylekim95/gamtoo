@@ -2,7 +2,6 @@
 ![111 (1)](https://github.com/user-attachments/assets/8ba9a856-0e46-4cc1-a28a-386d536320e7)
 <br><br><br>
 
-
 ## 🖥️ 프로젝트 개요
 - 기간 : 2025.01.06 ~ 2025.02.07
 - 이 프로젝트는 TypeScript와 React, 국가유산청 OPEN API와 카카오지도 API를 사용하여 개발되었습니다.
@@ -28,14 +27,14 @@
     <tr>
       <td><a href="https://github.com/kimyougmin">김영민</a></td>
       <td><a href="https://github.com/chaeee1">배채연</a></td>
-      <td><a href="https://github.com/erase0250">김지우</a></td>
+      <td><a href="https://github.com/lee123so">이희수</a></td>
       <td><a href="https://github.com/Castillou">전성우</a></td>
       <td><a href="https://github.com/hhj4569">한형주</a></td>
     </tr>
       <tr>
       <td><a>· 팀 리드 및 협업 관리<br>· 행사 페이지 제작 및 전역 상태 관리 로직</a></td>
       <td><a>· 국가유산 이름 및 카테고리별 검색 기능<br>. 국가유산 상세정보 제공 및 위치 마커</a></td>
-      <td><a>· 글 수정 기능<br>· 토스트 모달 구현</a></td>
+      <td><a>· Q&A 등록/수정/삭제/좋아요/댓글기능<br>·지도 길찾기,지도마커,인포윈도우기능,지도 재설정</a></td>
       <td><a>· 글 삭제 기능</a></td>
       <td><a>· 새로운 글 추가 기능</a></td>
     </tr>
@@ -59,24 +58,30 @@
     - 위의 데이터를 제작한 표 컴포넌트로 표시하는 기능
     - 전체 유저 및 로그인 된 사용자의 문화재 분류별 퀴즈 오답률 데이터를 계산하는 기능
     - 전체 유저의 최고 점수 분포도 및 로그인 된 사용자의 분포에서의 위치를 계산하는 기능
-    - 위의 데이터를 Chart.js, reat-chart-2로 표시하는 기능
+    - 위의 데이터를 Chart.js, react-chart-2로 표시하는 기능
   - 퀴즈 유저 상세 페이지
     - 특정 유저의 퀴즈 랭크, 가입 정보, 댓글 및 좋아요 수를 표시하는 기능
     - 전체 유저 및 특정 유저의 문화재 분류별 퀴즈 오답률 데이터를 계산하는 기능
     - 특정 유저의 1주일 내의 퀴즈 결과 정보를 표시하는 기능
     - 특정 유저의 1주일 동안 일별 최고 점수를 라인 차트로 표시하는 기능
     - 특정 유저가 작성한 댓글을 표시하는 기능
-<br><br><br>
 
+- **문화재 지도 기능**
+  - 지도에 국가유산 위치 마커 표시
+  - 마커 클릭 시 해당 문화재의 상세 정보 페이지로 이동 가능
+  - 길찾기 기능 제공 (사용자 위치 기반 경로 탐색)
+  - 예상 택시 요금 및 톨게이트 비용 계산 기능 제공
+  
 - 검색 기능
 <img src="https://github.com/user-attachments/assets/b6f70f95-92af-4484-b788-ee632b6b8fbf" width="1100" />
 <br><br><br>
 
 ## 🛠️ 기술 스택
-<img src="https://img.shields.io/badge/html5-E34F26?style=for-the-badge&logo=html5&logoColor=white"> <img src="https://img.shields.io/badge/css-1572B6?style=for-the-badge&logo=css3&logoColor=white"> <img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"> 
+<img src="https://img.shields.io/badge/html5-E34F26?style=for-the-badge&logo=html5&logoColor=white"> <img src="https://img.shields.io/badge/css-1572B6?style=for-the-badge&logo=css3&logoColor=white"> <img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black">
 <img src="https://img.shields.io/badge/Vercel-%23000000?style=for-the-badge&logo=vercel&logoColor=white"/>
  <img alt="GitHub" src ="https://img.shields.io/badge/GitHub-181717.svg?&style=for-the-badge&logo=GitHub&logoColor=white"/> ![Notion](https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white) ![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white)
 <br><br><br>
+
 
 ## 📁 폴더 구조
 ```bash
