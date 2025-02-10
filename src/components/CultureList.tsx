@@ -126,7 +126,7 @@ export default function Card(category: Category) {
       {loading ? (
         // 로딩 상태일 때 표시할 UI (예: 스피너 또는 메시지)
         <div className="flex justify-center items-center h-[388px]">
-          <p>Loading...</p>
+          <p className="font-pretendard">Loading...</p>
         </div>
       ) : (
         <>
@@ -153,7 +153,7 @@ export default function Card(category: Category) {
                     onClick={() => setPage(i + 1)}
                     key={i}
                     aria-current="page"
-                    className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 hover:bg-gray-50 hover:cursor-pointer"
+                    className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 hover:bg-gray-50 hover:cursor-pointer font-pretendard"
                   >
                     {i + 1}
                   </span>

@@ -170,8 +170,10 @@ export default function CultureFestival() {
         {/* 왼쪽 */}
         <div className="flex flex-col pb-1">
           <div className="flex flex-col pb-1">
-            <div className=" text-[#F09AFF]">CULTURAL HERITAGE EVENT</div>
-            <div className="flex flex-row items-end gap-4">
+            <div className="font-pretendard text-[#F09AFF]">
+              CULTURAL HERITAGE EVENT
+            </div>
+            <div className="font-pretendard flex flex-row items-end gap-4">
               <div className="flex flex-row items-center gap-1">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -198,7 +200,7 @@ export default function CultureFestival() {
         {/* 오른쪽 */}
         <div className="flex flex-row items-center gap-7 mr-2 text-black">
           <CheckIcon className="size-5" />
-          <span className="">모든 행사</span>
+          <span className="font-pretendard">모든 행사</span>
         </div>
       </div>
       {/* 하단 및 날짜 선택 등 기타 컴포넌트 */}
@@ -208,7 +210,7 @@ export default function CultureFestival() {
           <button onClick={handleNextMonth} className="w-11">
             <ChevronUpIcon className="size-11 text-black" />
           </button>
-          <span className="text-black text-xl">
+          <span className="text-black text-xl font-pretendard">
             {selectedDate.format("YYYY.MM")}
           </span>
           <button onClick={handlePreviousMonth} className="w-11">
@@ -217,7 +219,7 @@ export default function CultureFestival() {
         </div>
         {/* 행사 카드 */}
         <div className="w-[95%] h-[340px] overflow-x-auto">
-          <div className="flex flex-row gap-[5.5%]">
+          <div className="font-pretendard flex flex-row gap-[5.5%]">
             {loading ? (
               // 데이터 로딩 중일 때
               <div className="flex flex-col gap-9 mx-auto items-center">
