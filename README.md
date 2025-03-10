@@ -28,8 +28,6 @@
       <td><a href="https://github.com/kimyougmin">김영민</a></td>
       <td><a href="https://github.com/chaeee1">배채연</a></td>
       <td><a href="https://github.com/lee123so">이희수</a></td>
-      <td><a href="https://github.com/Castillou">전성우</a></td>
-      <td><a href="https://github.com/hhj4569">한형주</a></td>
     </tr>
       <tr>
       <td><a>· 팀 리드 및 협업 관리<br>· 행사 페이지 제작 및 전역 상태 관리 로직</a></td>
@@ -71,9 +69,7 @@
   - 마커 클릭 시 해당 문화재의 상세 정보 페이지로 이동 가능
   - 길찾기 기능 제공 (사용자 위치 기반 경로 탐색)
   - 예상 택시 요금 및 톨게이트 비용 계산 기능 제공
-  
-- 검색 기능
-<img src="https://github.com/user-attachments/assets/b6f70f95-92af-4484-b788-ee632b6b8fbf" width="1100" />
+
 <br><br><br>
 
 ## 🛠️ 기술 스택
