@@ -28,12 +28,13 @@
       <td><a href="https://github.com/kimyougmin">김영민</a></td>
       <td><a href="https://github.com/chaeee1">배채연</a></td>
       <td><a href="https://github.com/lee123so">이희수</a></td>
+      <td><a href="https://github.com/kylekim95">김상엽</a></td>
     </tr>
       <tr>
       <td><a>· 팀 리드 및 협업 관리<br>· 행사 페이지 제작 및 전역 상태 관리 로직</a></td>
       <td><a>· 국가유산 이름 및 카테고리별 검색 기능<br>. 국가유산 상세정보 제공 및 위치 마커</a></td>
       <td><a>· Q&A 등록/수정/삭제/좋아요/댓글기능<br>·지도 길찾기,지도마커,인포윈도우기능,지도 재설정</a></td>
-      <td><a>· 글 삭제 기능</a></td>
+      <td><a>· 국가유산 퀴즈 관련 기능 전체</a></td>
       <td><a>· 새로운 글 추가 기능</a></td>
     </tr>
   </tbody>
